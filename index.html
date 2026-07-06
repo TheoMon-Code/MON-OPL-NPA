@@ -213,6 +213,7 @@
     .kpi-label{font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;letter-spacing:0.7px;text-transform:uppercase}
     .kpi-val{font-size:26px;font-weight:800;color:#1d1d1b;line-height:1}
     .kpi-val.blue{color:var(--blue1)}.kpi-val.green{color:var(--green)}.kpi-val.red{color:var(--red)}
+    .kpi-val.amber{color:#f39200}
     .kpi-sub{font-size:11px;color:var(--text3);margin-top:6px}
     .panels{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
     .panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.25rem;box-shadow:0 2px 8px rgba(0,110,175,0.05)}
@@ -727,6 +728,46 @@
   </div>
 </div>
 
+<!-- TV MODE (warehouse screen — open with #tv) -->
+<div class="screen" id="s-tv">
+  <div style="min-height:100vh;background:linear-gradient(160deg,#081422 0%,#0d2138 60%,#0f2a4a 100%);color:#fff;padding:2.5rem 3rem;box-sizing:border-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
+      <div style="display:flex;align-items:center;gap:14px">
+        <img src="logo.png" alt="" style="height:40px;filter:brightness(0) invert(1)" onerror="this.style.display='none'">
+        <div>
+          <div style="font-size:24px;font-weight:800" id="tv-title">OPL Quiz — วันนี้</div>
+          <div style="font-size:13px;color:#7fa8c8" id="tv-date"></div>
+        </div>
+      </div>
+      <div style="font-size:40px;font-weight:800;font-variant-numeric:tabular-nums" id="tv-clock">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.5rem 2rem;margin-bottom:1.5rem">
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:12px">
+        <span style="font-size:56px;font-weight:800;line-height:1" id="tv-count">— / —</span>
+        <span style="font-size:22px;font-weight:700;color:#4eb2e5" id="tv-pct">—%</span>
+        <span style="font-size:14px;color:#7fa8c8" id="tv-completed-label">ทำแบบทดสอบแล้ววันนี้</span>
+      </div>
+      <div style="height:14px;background:rgba(255,255,255,0.10);border-radius:7px;overflow:hidden">
+        <div id="tv-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#006eaf,#4eb2e5);border-radius:7px;transition:width 1s"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem">
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-dept-title">ตามแผนก</div>
+        <div id="tv-dept"></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-streak-title">🔥 สตรีคสูงสุด</div>
+        <div id="tv-streaks"></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-latest-title">✅ ล่าสุด</div>
+        <div id="tv-latest"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ALREADY DONE TODAY -->
 <div class="screen" id="s-done">
   <div class="done-wrap">
@@ -763,6 +804,7 @@
           <div class="streak-num" id="r-streak-num">0</div>
           <div class="streak-label" id="r-streak-label">day streak</div>
           <div class="streak-sub" id="r-streak-sub">Keep it up!</div>
+          <div id="r-milestones" style="display:none;margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"></div>
         </div>
       </div>
     </div>
@@ -1176,7 +1218,7 @@
           <button id="skill-matrix-btn" onclick="generateSkillMatrix()" style="display:flex;align-items:center;gap:8px;background:#006eaf;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation">
             ⬇️ Generate &amp; Download Excel
           </button>
-          <span id="skill-matrix-status" style="font-size:12px;color:var(--text3)">Generated CSV opens in Excel</span>
+          <span id="skill-matrix-status" style="font-size:12px;color:var(--text3)">Downloads as .xlsx (3 sheets)</span>
         </div>
       </div>
 
@@ -1222,6 +1264,10 @@
           <option value="Night">Night</option>
         </select>
       </div>
+    </div>
+    <div class="emp-form-field" id="ef-pwd-field" style="display:none">
+      <label class="emp-form-label" for="ef-pwd">Manager password <span style="font-weight:400;text-transform:none">(leave blank = shared default)</span></label>
+      <input class="emp-form-input modal-input" id="ef-pwd" type="text" placeholder="Individual password" autocomplete="off">
     </div>
     <div class="modal-error" id="edit-emp-error"></div>
     <button class="modal-btn" onclick="saveEditEmployee()">Save changes</button>
@@ -1406,6 +1452,8 @@ d_importEmp:{th:'📥 นำเข้าพนักงานจาก Excel',en
 d_allEmp:{th:'พนักงานทั้งหมด',en:'All employees'},
 d_todayWord:{th:'วันนี้',en:'Today'},d_resultsFor:{th:'ผลของ',en:'Results for'},d_todayResults:{th:'ผลของวันนี้',en:"Today's results"},
 d_completedWord:{th:'ทำแล้ว',en:'completed'},d_pendingWord:{th:'รอทำ',en:'pending'},d_moreWord:{th:'อีก {n} คน',en:'+{n} more'},d_pendingLabel:{th:'รอทำ:',en:'Pending:'},d_allDone:{th:'✅ พนักงานทุกคนทำแล้ว!',en:'✅ All employees done!'},d_employeesWord:{th:'พนักงาน',en:'employees'},
+sessionExpired:{th:'หมดเวลาเซสชัน — กรุณาเข้าสู่ระบบใหม่',en:'Session expired — please log in again'},
+ms3:{th:'3 วัน',en:'3 days'},ms7:{th:'1 สัปดาห์',en:'1 week'},ms14:{th:'2 สัปดาห์',en:'2 weeks'},ms30:{th:'1 เดือน',en:'1 month'},
 st_Passed:{th:'ผ่าน',en:'Passed'},st_Partial:{th:'บางส่วน',en:'Partial'},st_Failed:{th:'ไม่ผ่าน',en:'Failed'},st_Pending:{th:'รอทำ',en:'Pending'}
 };
 function t(k){const e=I18N[k]||{};return e[appLang]||e.th||k;}
@@ -1495,13 +1543,72 @@ function _onSessionExpired(){
     const modal=document.getElementById('modal-pwd');
     if(modal)modal.classList.remove('active');
     go('s-login');
-    showToast('Session expirée — veuillez vous reconnecter');
+    showToast(t('sessionExpired'));
   } else {
     // Logout employee
     goToLogin();
-    showToast('Session expirée');
+    showToast(t('sessionExpired'));
   }
 }
+
+// ── TV MODE (warehouse screen — open the app URL followed by #tv) ────────────
+let _tvTimer=null;
+function startTV(){
+  document.querySelector('.topbar').style.display='none';
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.getElementById('s-tv').classList.add('active');
+  loadTV();
+  _tvTimer=setInterval(loadTV,60000);
+  setInterval(()=>{const c=document.getElementById('tv-clock');if(c)c.textContent=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});},1000);
+}
+async function loadTV(){
+  try{
+    const today=new Date().toISOString().split('T')[0];
+    const cutoff=new Date(Date.now()-40*86400000).toISOString().split('T')[0];
+    const [emps,todayRes,hist]=await Promise.all([
+      sbGet('employees?is_manager=eq.false&is_active=eq.true&select=badge_number,name,department'),
+      sbGet('quiz_results?quiz_date=eq.'+today+'&select=badge_number,score,created_at&order=created_at.desc'),
+      sbGet('quiz_results?quiz_date=gte.'+cutoff+'&select=badge_number,quiz_date')
+    ]);
+    const nameOf={};emps.forEach(e=>nameOf[e.badge_number]=e.name);
+    document.getElementById('tv-date').textContent=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    // Completion
+    const doneSet=new Set(todayRes.map(r=>r.badge_number));
+    const doneCount=[...doneSet].filter(b=>nameOf[b]).length;
+    const total=emps.length;
+    const pct=total?Math.round(doneCount/total*100):0;
+    document.getElementById('tv-count').textContent=doneCount+' / '+total;
+    document.getElementById('tv-pct').textContent=pct+'%';
+    document.getElementById('tv-bar').style.width=pct+'%';
+    // By department
+    const byDept={};
+    emps.forEach(e=>{const d=e.department||'—';byDept[d]=byDept[d]||{total:0,done:0};byDept[d].total++;if(doneSet.has(e.badge_number))byDept[d].done++;});
+    document.getElementById('tv-dept').innerHTML=Object.entries(byDept).map(([d,v])=>{
+      const p=v.total?Math.round(v.done/v.total*100):0;
+      return `<div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px"><span style="font-weight:700">${d}</span><span style="color:#7fa8c8">${v.done}/${v.total} · ${p}%</span></div>
+        <div style="height:9px;background:rgba(255,255,255,0.10);border-radius:5px;overflow:hidden"><div style="height:100%;width:${p}%;background:${p>=80?'#2fbf71':p>=40?'#f39200':'#4eb2e5'};border-radius:5px;transition:width 1s"></div></div>
+      </div>`;
+    }).join('');
+    // Top streaks
+    const datesBy={};hist.forEach(r=>{if(!nameOf[r.badge_number])return;(datesBy[r.badge_number]=datesBy[r.badge_number]||[]).push(r.quiz_date);});
+    const streaks=Object.entries(datesBy).map(([b,ds])=>({b,s:computeStreak(ds)})).filter(x=>x.s>=1).sort((a,c)=>c.s-a.s).slice(0,8);
+    document.getElementById('tv-streaks').innerHTML=streaks.length?streaks.map((x,i)=>
+      `<div style="display:flex;align-items:center;gap:10px;font-size:15px;padding:6px 0;${i<streaks.length-1?'border-bottom:1px solid rgba(255,255,255,0.07)':''}">
+        <span style="width:20px;color:#7fa8c8;font-weight:700">${i+1}</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${nameOf[x.b]}</span>
+        <span style="font-weight:800;color:#f5a623">🔥 ${x.s}</span>
+      </div>`).join(''):'<div style="color:#7fa8c8;font-size:13px">—</div>';
+    // Latest completions
+    const latest=todayRes.filter(r=>nameOf[r.badge_number]).slice(0,8);
+    document.getElementById('tv-latest').innerHTML=latest.length?latest.map((r,i)=>
+      `<div style="display:flex;align-items:center;gap:10px;font-size:15px;padding:6px 0;${i<latest.length-1?'border-bottom:1px solid rgba(255,255,255,0.07)':''}">
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${nameOf[r.badge_number]}</span>
+        <span style="font-weight:800;color:${r.score>=3?'#2fbf71':r.score>=2?'#f39200':'#ff6b6b'}">${r.score}/3</span>
+      </div>`).join(''):'<div style="color:#7fa8c8;font-size:13px">—</div>';
+  }catch(e){console.error('TV error',e);}
+}
+if(location.hash==='#tv'){startTV();}
 
 // ── DARK MODE ─────────────────────────────────────────────────────────────────
 function toggleDark(){
@@ -1525,7 +1632,8 @@ function closePasswordModal(){
 }
 async function checkPassword(){
   const pwd=document.getElementById('pwd-input').value;
-  if(pwd===MGR_PASSWORD){
+  const expected=(user&&user.mgr_password)?user.mgr_password:MGR_PASSWORD;
+  if(pwd===expected){
     document.getElementById('modal-pwd').classList.remove('active');
     go('s-dash');
     _startSessionTimer(true);
@@ -1938,10 +2046,17 @@ function applyFilters(){
   const avgScore=completed>0?(done.reduce((s,e)=>s+e.score,0)/completed).toFixed(1):'—';
   document.getElementById('kpi-completed').textContent=completed;
   document.getElementById('kpi-total').textContent='/ '+total+' employees';
-  document.getElementById('kpi-pass').textContent=passRate+'%';
+  const _passEl=document.getElementById('kpi-pass');
+  _passEl.textContent=passRate+'%';
+  _passEl.className='kpi-val '+(completed===0?'':passRate>=80?'green':passRate>=50?'amber':'red');
   document.getElementById('kpi-pass-n').textContent=passed+' perfect scores';
-  document.getElementById('kpi-avg').textContent=avgScore;
-  document.getElementById('kpi-failed').textContent=done.filter(e=>e.score<2).length;
+  const _avgEl=document.getElementById('kpi-avg');
+  _avgEl.textContent=avgScore;
+  _avgEl.className='kpi-val '+(completed===0?'':parseFloat(avgScore)>=2.7?'green':parseFloat(avgScore)>=2?'amber':'red');
+  const _failN=done.filter(e=>e.score<2).length;
+  const _failEl=document.getElementById('kpi-failed');
+  _failEl.textContent=_failN;
+  _failEl.className='kpi-val '+(_failN>0?'red':completed>0?'green':'red');
   document.getElementById('tracking-sub').textContent=`${completed} ${t('d_completedWord')} · ${total-completed} ${t('d_pendingWord')}`;
 
   renderTable(filtered);
@@ -2710,34 +2825,34 @@ async function generateSkillMatrix(){
   }
 }
 
-function downloadSkillMatrixCSV(data, fromDate){
+async function downloadSkillMatrixCSV(data, fromDate){
   const {analysis, emp_stats, opl_errors, period_label}=data;
-  const esc=v=>{if(v==null)return'';const s=String(v);return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;};
-
+  try{await ensureXLSX();}catch(err){showToast('⚠️ '+err.message);return;}
+  const wb=XLSX.utils.book_new();
   // Sheet 1 — Summary
-  const sum=['SKILL MATRIX — '+period_label,'','OVERALL ASSESSMENT',analysis.overall_assessment||'','',
-    'SUMMARY STATS',
-    'Total quizzes,'+((analysis.summary_stats||{}).total_quizzes||emp_stats.reduce((s,e)=>s+e.quizzes,0)),
-    'Avg score,'+((analysis.summary_stats||{}).avg_score||'—'),
-    'Perfect score %,'+((analysis.summary_stats||{}).perfect_score_pct||'—')+'%',
-    '','EMPLOYEE PERFORMANCE',
-    'Name,Department,Position,Quizzes taken,Avg score,Pass rate %',
-    ...emp_stats.map(e=>[esc(e.name),esc(e.department),esc(e.position||'—'),e.quizzes,e.avg_score,e.pass_rate_pct+'%'].join(',')),
-    '','AT-RISK EMPLOYEES (need attention)',
-    'Name,Badge,Reason',
-    ...((analysis.at_risk_employees||[]).map(e=>[esc(e.name),esc(e.badge),esc(e.reason)].join(','))),
-    '','OPL TOPICS — ERROR RATES',
-    'OPL Reference,Total attempts,Wrong answers,Error rate %,Recommendation',
-    ...Object.entries(opl_errors).map(([ref,d])=>[esc(ref),d.total,d.wrong,Math.round(d.wrong/d.total*100)+'%',esc((analysis.weak_opl_topics||[]).find(t=>t.reference===ref)?.recommendation||'')].join(','))
-  ].join('\n');
-
-  const blob=new Blob(['﻿'+sum],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='skill-matrix_'+fromDate+'.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+  const st=analysis.summary_stats||{};
+  const s1=[['SKILL MATRIX — '+period_label],[],
+    ['Total quizzes',st.total_quizzes||emp_stats.reduce((a,e)=>a+e.quizzes,0)],
+    ['Average score',st.avg_score||'—'],
+    ['Perfect score %',(st.perfect_score_pct!=null?st.perfect_score_pct+'%':'—')],[],
+    ['AT-RISK EMPLOYEES'],['Name','Badge','Reason'],
+    ...((analysis.at_risk_employees||[]).map(e=>[e.name,e.badge,e.reason]))];
+  const ws1=XLSX.utils.aoa_to_sheet(s1);
+  ws1['!cols']=[{wch:28},{wch:14},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Summary');
+  // Sheet 2 — Employees
+  const s2=[['Name','Department','Position','Quizzes taken','Avg score','Pass rate %'],
+    ...emp_stats.map(e=>[e.name,e.department,e.position||'—',e.quizzes,e.avg_score,e.pass_rate_pct])];
+  const ws2=XLSX.utils.aoa_to_sheet(s2);
+  ws2['!cols']=[{wch:26},{wch:10},{wch:24},{wch:12},{wch:10},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Employees');
+  // Sheet 3 — By OPL
+  const s3=[['OPL Reference','Total attempts','Wrong answers','Error rate %'],
+    ...Object.entries(opl_errors).map(([ref,d])=>[ref,d.total,d.wrong,Math.round(d.wrong/d.total*100)])];
+  const ws3=XLSX.utils.aoa_to_sheet(s3);
+  ws3['!cols']=[{wch:20},{wch:14},{wch:14},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws3,'By OPL');
+  XLSX.writeFile(wb,'skill-matrix_'+fromDate+'.xlsx');
 }
 
 // ── TODAY COMPLETION STRIP ────────────────────────────────────────────────────
@@ -2840,6 +2955,16 @@ async function showStreakOnResult(){
     if(streak<1)return;
     const wrap=document.getElementById('r-streak-wrap');
     document.getElementById('r-streak-num').textContent=streak;
+    // Milestone badges — earned vs locked
+    const _ms=[[3,'🥉','ms3'],[7,'🥈','ms7'],[14,'🥇','ms14'],[30,'🏆','ms30']];
+    const _msEl=document.getElementById('r-milestones');
+    if(_msEl){
+      _msEl.innerHTML=_ms.map(([d,icon,key])=>{
+        const got=streak>=d;
+        return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;border-radius:20px;padding:3px 9px;${got?'background:#fff3e0;border:1px solid #f5c168;color:#9a5b00':'background:#f2f5f9;border:1px solid #e2e8f0;color:#b7c3d2;filter:grayscale(1);opacity:.75'}">${icon} ${t(key)}</span>`;
+      }).join('');
+      _msEl.style.display='flex';
+    }
     document.getElementById('r-streak-label').textContent=t('streakLabel');
     if(streak>=7)document.getElementById('r-streak-sub').innerHTML=t('streak7');
     else if(streak>=3)document.getElementById('r-streak-sub').textContent=t('streak3');
@@ -3101,7 +3226,7 @@ let allEmployees=[];
 
 async function loadEmployees(){
   try{
-    allEmployees=await sbGet('employees?order=name&select=badge_number,name,department,position,shift,is_manager,is_active');
+    allEmployees=await sbGet('employees?order=name&select=badge_number,name,department,position,shift,is_manager,is_active,mgr_password');
     document.getElementById('emp-mgmt-count').textContent=allEmployees.filter(e=>!e.is_manager).length+' employees · '+allEmployees.filter(e=>e.is_manager).length+' manager(s)';
   }catch(e){allEmployees=[];}
 }
@@ -3208,6 +3333,8 @@ function openEditEmployee(badge){
   document.getElementById('ef-dept').value=e.department||'WH';
   document.getElementById('ef-position').value=e.position||'';
   document.getElementById('ef-shift').value=e.shift||'';
+  document.getElementById('ef-pwd-field').style.display=e.is_manager?'block':'none';
+  document.getElementById('ef-pwd').value=e.mgr_password||'';
   document.getElementById('edit-emp-error').style.display='none';
   document.getElementById('edit-emp-modal').classList.add('active');
 }
@@ -3220,7 +3347,10 @@ async function saveEditEmployee(){
   const shift=document.getElementById('ef-shift').value;
   if(!name){document.getElementById('edit-emp-error').textContent='Name is required';document.getElementById('edit-emp-error').style.display='block';return;}
   try{
-    const r=await sbPatch('employees?badge_number=eq.'+encodeURIComponent(badge),{name,department:dept,position:pos||null,shift:shift||null});
+    const payload={name,department:dept,position:pos||null,shift:shift||null};
+    const emp=allEmployees.find(e=>e.badge_number===badge);
+    if(emp&&emp.is_manager)payload.mgr_password=document.getElementById('ef-pwd').value.trim()||null;
+    const r=await sbPatch('employees?badge_number=eq.'+encodeURIComponent(badge),payload);
     if(r.ok){
       document.getElementById('edit-emp-modal').classList.remove('active');
       showToast('Employee updated ✓');
