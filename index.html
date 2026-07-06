@@ -1877,7 +1877,6 @@ async function loadDash(){
     updateLastUpdatedLabel();
     startAutoRefresh();
     // Restore last active tab
-    try{const t=localStorage.getItem('mon-dash-tab');if(t&&t!=='overview')showDashTab(t);}catch(e){}
   }catch(e){console.error(e);showToast('Error loading dashboard');}
 }
 
@@ -1958,7 +1957,7 @@ function renderTable(data){
       <td style="color:#a0aec0;font-size:11px;font-family:monospace">${e.badge}</td>
       <td><span style="display:inline-flex;align-items:center;vertical-align:middle">${avatarHtml}${e.name}</span></td>
       <td style="color:#8a9ab5;font-weight:400">${e.department}</td>
-      <td style="font-size:11px;color:var(--text2)">${e.position}</td>
+      <td style="font-size:11px;color:var(--text2);max-width:170px" title="${e.position}">${e.position}</td>
       <td style="font-size:11px;white-space:nowrap">${shiftCell}</td>
       <td>${e.score!==null?`<span class="pill ${pc[e.status]}">${e.score}/3</span>`:'<span class="pill pill-n">—</span>'}</td>
       <td style="text-align:center">${streakCell}</td>
