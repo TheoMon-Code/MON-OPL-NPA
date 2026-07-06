@@ -783,11 +783,11 @@
   <div class="dash-nav">
     <div class="dash-nav-inner" style="justify-content:space-between">
       <div style="display:flex">
-        <button class="dnav-tab active" id="dnt-overview"   onclick="showDashTab('overview')">📊 Overview</button>
-        <button class="dnav-tab"        id="dnt-analytics"  onclick="showDashTab('analytics')">📈 Analytics</button>
-        <button class="dnav-tab"        id="dnt-questions"  onclick="showDashTab('questions')">📚 Questions <span id="qbank-nav-badge" class="qbank-nav-badge" style="display:none"></span></button>
-        <button class="dnav-tab"        id="dnt-employees"  onclick="showDashTab('employees')">👥 Employees</button>
-        <button class="dnav-tab"        id="dnt-reports"    onclick="showDashTab('reports')">📋 Reports</button>
+        <button class="dnav-tab active" id="dnt-overview"   onclick="showDashTab('overview')">📊 <span data-i18n="tabOverview">Overview</span></button>
+        <button class="dnav-tab"        id="dnt-analytics"  onclick="showDashTab('analytics')">📈 <span data-i18n="tabAnalytics">Analytics</span></button>
+        <button class="dnav-tab"        id="dnt-questions"  onclick="showDashTab('questions')">📚 <span data-i18n="tabQuestions">Questions</span> <span id="qbank-nav-badge" class="qbank-nav-badge" style="display:none"></span></button>
+        <button class="dnav-tab"        id="dnt-employees"  onclick="showDashTab('employees')">👥 <span data-i18n="tabEmployees">Employees</span></button>
+        <button class="dnav-tab"        id="dnt-reports"    onclick="showDashTab('reports')">📋 <span data-i18n="tabReports">Reports</span></button>
       </div>
     </div>
   </div>
@@ -795,11 +795,11 @@
   <!-- ═══ BOTTOM MOBILE NAV ═══ -->
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
     <div class="mobile-bottom-nav-inner">
-      <button class="mbn-tab active" id="mbn-overview"   onclick="showDashTab('overview')"><span class="mbn-icon">📊</span>Overview</button>
-      <button class="mbn-tab"        id="mbn-analytics"  onclick="showDashTab('analytics')"><span class="mbn-icon">📈</span>Analytics</button>
-      <button class="mbn-tab"        id="mbn-questions"  onclick="showDashTab('questions')"><span class="mbn-icon">📚</span>Questions<span class="mbn-badge" id="mbn-q-badge" style="display:none"></span></button>
-      <button class="mbn-tab"        id="mbn-employees"  onclick="showDashTab('employees')"><span class="mbn-icon">👥</span>Employees</button>
-      <button class="mbn-tab"        id="mbn-reports"    onclick="showDashTab('reports')"><span class="mbn-icon">📋</span>Reports</button>
+      <button class="mbn-tab active" id="mbn-overview"   onclick="showDashTab('overview')"><span class="mbn-icon">📊</span><span data-i18n="tabOverview">Overview</span></button>
+      <button class="mbn-tab"        id="mbn-analytics"  onclick="showDashTab('analytics')"><span class="mbn-icon">📈</span><span data-i18n="tabAnalytics">Analytics</span></button>
+      <button class="mbn-tab"        id="mbn-questions"  onclick="showDashTab('questions')"><span class="mbn-icon">📚</span><span data-i18n="tabQuestions">Questions</span><span class="mbn-badge" id="mbn-q-badge" style="display:none"></span></button>
+      <button class="mbn-tab"        id="mbn-employees"  onclick="showDashTab('employees')"><span class="mbn-icon">👥</span><span data-i18n="tabEmployees">Employees</span></button>
+      <button class="mbn-tab"        id="mbn-reports"    onclick="showDashTab('reports')"><span class="mbn-icon">📋</span><span data-i18n="tabReports">Reports</span></button>
     </div>
   </nav>
 
@@ -808,19 +808,19 @@
     <div class="dash-wrap">
       <div class="dash-header">
         <div>
-          <div class="dash-title">Overview</div>
+          <div class="dash-title" data-i18n="d_overview">Overview</div>
           <div class="dash-sub" id="dash-date-label">Loading...</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <span id="last-updated-label" style="font-size:11px;color:#8a9ab5;white-space:nowrap"></span>
           <button onclick="manualRefreshOverview()" title="Refresh now" style="background:transparent;border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:13px;cursor:pointer;color:var(--text3)" id="refresh-btn">🔄</button>
           <input type="date" id="date-picker" class="date-picker-input" onchange="onDateChange()">
-          <button class="export-btn" onclick="exportExcel()">📥 Export CSV</button>
+          <button class="export-btn" onclick="exportExcel()" data-i18n="d_exportCsv">📥 Export CSV</button>
         </div>
       </div>
       <!-- TODAY COMPLETION STRIP -->
       <div id="today-strip" style="display:flex;align-items:center;gap:14px;background:#f0f7ff;border:1.5px solid #b3d9f5;border-radius:10px;padding:10px 16px;margin-bottom:14px;flex-wrap:wrap">
-        <span style="font-size:12px;font-weight:700;color:#004990;white-space:nowrap;letter-spacing:.3px">📅 Today</span>
+        <span style="font-size:12px;font-weight:700;color:#004990;white-space:nowrap;letter-spacing:.3px" data-i18n="d_todayStrip">📅 Today</span>
         <div style="flex:1;min-width:130px">
           <div style="height:7px;background:#dde8f5;border-radius:4px;overflow:hidden">
             <div id="today-bar" style="height:100%;background:linear-gradient(90deg,#006eaf,#4eb2e5);border-radius:4px;transition:width 0.6s;width:0%"></div>
@@ -832,64 +832,64 @@
       <!-- FILTER BAR -->
       <div class="filter-bar">
         <select class="filter-select" id="f-dept" onchange="applyFilters()">
-          <option value="">All Departments</option>
+          <option value="" data-i18n="d_allDepts">All Departments</option>
           <option value="WH">WH — Warehouse</option>
           <option value="PD">PD — Production</option>
         </select>
         <select class="filter-select" id="f-shift" onchange="applyFilters()">
-          <option value="">All Shifts</option>
+          <option value="" data-i18n="d_allShifts">All Shifts</option>
           <option value="Morning">☀️ Morning</option>
           <option value="Afternoon">🌤 Afternoon</option>
           <option value="Night">🌙 Night</option>
         </select>
         <select class="filter-select" id="f-position" onchange="applyFilters()">
-          <option value="">All Positions</option>
+          <option value="" data-i18n="d_allPos">All Positions</option>
         </select>
-        <button class="filter-reset" id="filter-reset-btn" onclick="resetFilters()">✕ Clear filters</button>
+        <button class="filter-reset" id="filter-reset-btn" onclick="resetFilters()" data-i18n="d_clearFilters">✕ Clear filters</button>
         <span class="filter-count" id="filter-count"></span>
       </div>
       <!-- KPIs -->
       <div class="kpi-grid">
-        <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Completed</div><div class="kpi-val blue" id="kpi-completed">—</div><div class="kpi-sub" id="kpi-total">loading...</div></div>
-        <div class="kpi"><div class="kpi-accent green"></div><div class="kpi-label">Pass rate (3/3)</div><div class="kpi-val green" id="kpi-pass">—</div><div class="kpi-sub" id="kpi-pass-n">—</div></div>
-        <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Avg. score</div><div class="kpi-val" id="kpi-avg">—</div><div class="kpi-sub">out of 3.0</div></div>
-        <div class="kpi"><div class="kpi-accent red"></div><div class="kpi-label">Need attention</div><div class="kpi-val red" id="kpi-failed">—</div><div class="kpi-sub">score below 2</div></div>
+        <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label" data-i18n="d_kpiCompleted">Completed</div><div class="kpi-val blue" id="kpi-completed">—</div><div class="kpi-sub" id="kpi-total">loading...</div></div>
+        <div class="kpi"><div class="kpi-accent green"></div><div class="kpi-label" data-i18n="d_kpiPass">Pass rate (3/3)</div><div class="kpi-val green" id="kpi-pass">—</div><div class="kpi-sub" id="kpi-pass-n">—</div></div>
+        <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label" data-i18n="d_kpiAvg">Avg. score</div><div class="kpi-val" id="kpi-avg">—</div><div class="kpi-sub" data-i18n="d_outOf3">out of 3.0</div></div>
+        <div class="kpi"><div class="kpi-accent red"></div><div class="kpi-label" data-i18n="d_kpiAttn">Need attention</div><div class="kpi-val red" id="kpi-failed">—</div><div class="kpi-sub" data-i18n="d_below2">score below 2</div></div>
       </div>
       <!-- PANELS: TABLE + BREAKDOWNS -->
       <div class="panels">
         <div class="panel">
           <div class="panel-header">
-            <div><div class="panel-title">Employee tracking</div><div class="panel-sub" id="tracking-sub">Results</div></div>
+            <div><div class="panel-title" data-i18n="d_empTracking">Employee tracking</div><div class="panel-sub" id="tracking-sub">Results</div></div>
             <div class="tab-row">
-              <button class="tab active" id="tab-all"     onclick="setStatusFilter('all',this)">All</button>
-              <button class="tab"        id="tab-failed"  onclick="setStatusFilter('Failed',this)">Failed</button>
-              <button class="tab"        id="tab-pending" onclick="setStatusFilter('Pending',this)">Pending</button>
+              <button class="tab active" id="tab-all"     onclick="setStatusFilter('all',this)" data-i18n="d_all">All</button>
+              <button class="tab"        id="tab-failed"  onclick="setStatusFilter('Failed',this)" data-i18n="d_failed">Failed</button>
+              <button class="tab"        id="tab-pending" onclick="setStatusFilter('Pending',this)" data-i18n="d_pendingTab">Pending</button>
             </div>
           </div>
           <div class="table-scroll">
-            <table class="emp-table">
+            <table class="emp-table" style="table-layout:fixed;width:100%">
               <thead><tr>
-                <th style="width:90px">Badge</th>
-                <th>Name</th>
-                <th style="width:48px">Dept</th>
-                <th style="width:85px">Position</th>
-                <th style="width:85px">Shift</th>
-                <th style="width:54px">Score</th>
-                <th style="width:56px">Streak</th>
-                <th style="width:48px;text-align:center">Trend</th>
-                <th style="width:76px">Status</th>
+                <th style="width:78px" data-i18n="d_thBadge">Badge</th>
+                <th data-i18n="d_thName">Name</th>
+                <th style="width:46px" data-i18n="d_thDept">Dept</th>
+                <th style="width:140px" data-i18n="d_thPosition">Position</th>
+                <th style="width:64px" data-i18n="d_thShift">Shift</th>
+                <th style="width:56px" data-i18n="d_thScore">Score</th>
+                <th style="width:56px" data-i18n="d_thStreak">Streak</th>
+                <th style="width:46px;text-align:center" data-i18n="d_thTrend">Trend</th>
+                <th style="width:86px" data-i18n="d_thStatus">Status</th>
               </tr></thead>
               <tbody id="emp-tbody"><tr><td colspan="9" style="color:#8a9ab5;text-align:center;padding:1.5rem">Loading...</td></tr></tbody>
             </table>
           </div>
         </div>
         <div class="panel">
-          <div class="panel-title">By department</div>
-          <div class="panel-sub">Completion for selected date</div>
+          <div class="panel-title" data-i18n="d_byDept">By department</div>
+          <div class="panel-sub" data-i18n="d_complSel">Completion for selected date</div>
           <div id="dept-breakdown" style="margin-top:.75rem"><div style="color:#8a9ab5;font-size:13px">Loading...</div></div>
           <div class="breakdown-section">
-            <div class="panel-title">By shift</div>
-            <div class="panel-sub">Completion for selected date</div>
+            <div class="panel-title" data-i18n="d_byShift">By shift</div>
+            <div class="panel-sub" data-i18n="d_complSel">Completion for selected date</div>
             <div id="shift-breakdown" style="margin-top:.75rem"><div style="color:#8a9ab5;font-size:13px">Loading...</div></div>
           </div>
         </div>
@@ -901,12 +901,12 @@
   <div class="dt-content" id="dt-analytics">
     <div class="dash-wrap">
       <div class="dash-header">
-        <div><div class="dash-title">Analytics</div><div class="dash-sub">Performance trends &amp; weak points</div></div>
+        <div><div class="dash-title" data-i18n="tabAnalytics">Analytics</div><div class="dash-sub" data-i18n="d_analyticsSub">Performance trends &amp; weak points</div></div>
       </div>
       <!-- WEEKLY TREND -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">📈 Score trend</div><div class="panel-sub" id="chart-range-label">Average score per day — last 7 days</div></div>
+          <div><div class="panel-title" data-i18n="d_scoreTrend">📈 Score trend</div><div class="panel-sub" id="chart-range-label">Average score per day — last 7 days</div></div>
           <div style="display:flex;align-items:center;gap:6px">
             <button class="opl-filter-btn active" id="chart-btn-7"  onclick="setChartRange(7)">7 days</button>
             <button class="opl-filter-btn"        id="chart-btn-30" onclick="setChartRange(30)">30 days</button>
@@ -918,7 +918,7 @@
       <!-- OPL PERFORMANCE -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">📋 OPL Performance</div><div class="panel-sub">Error rate by Working Instruction — click to see who failed</div></div>
+          <div><div class="panel-title" data-i18n="d_oplPerf">📋 OPL Performance</div><div class="panel-sub" data-i18n="d_oplPerfSub">Error rate by Working Instruction — click to see who failed</div></div>
           <div style="display:flex;gap:4px">
             <button class="opl-filter-btn active" data-t="0"  onclick="renderOplPanel(0)">All</button>
             <button class="opl-filter-btn"        data-t="30" onclick="renderOplPanel(30)">&gt;30%</button>
@@ -929,15 +929,15 @@
       </div>
       <!-- WEAK QUESTIONS -->
       <div class="panel" style="margin-bottom:12px">
-        <div class="panel-title">⚠️ Most failed questions</div>
-        <div class="panel-sub">All time — questions with highest error rate</div>
+        <div class="panel-title" data-i18n="d_mostFailed">⚠️ Most failed questions</div>
+        <div class="panel-sub" data-i18n="d_mostFailedSub">All time — questions with highest error rate</div>
         <div id="weak-questions" style="margin-top:.75rem"><div style="color:#8a9ab5;font-size:13px">Loading...</div></div>
       </div>
 
       <!-- EMPLOYEE SCORE HISTORY -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">👤 Employee score history</div><div class="panel-sub">Personal score trend — last 30 days</div></div>
+          <div><div class="panel-title" data-i18n="d_empHist">👤 Employee score history</div><div class="panel-sub" data-i18n="d_empHistSub">Personal score trend — last 30 days</div></div>
           <select id="emp-chart-select" onchange="renderEmployeeChart(this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;max-width:200px">
             <option value="">— Select employee —</option>
           </select>
@@ -948,15 +948,15 @@
       <!-- HEATMAP DAY OF WEEK -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">📅 Score by day of week</div><div class="panel-sub">Average score per weekday — all time</div></div>
+          <div><div class="panel-title" data-i18n="d_dayOfWeek">📅 Score by day of week</div><div class="panel-sub" data-i18n="d_dayOfWeekSub">Average score per weekday — all time</div></div>
         </div>
         <div id="heatmap-chart"><div class="chart-no-data">Loading...</div></div>
       </div>
 
       <!-- SHIFT COMPARISON -->
       <div class="panel">
-        <div class="panel-title">🔄 Shift comparison</div>
-        <div class="panel-sub">Average score and participation by shift</div>
+        <div class="panel-title" data-i18n="d_shiftComp">🔄 Shift comparison</div>
+        <div class="panel-sub" data-i18n="d_shiftCompSub">Average score and participation by shift</div>
         <div id="shift-comparison" style="margin-top:.75rem"><div style="color:#8a9ab5;font-size:13px">Loading...</div></div>
       </div>
     </div>
@@ -966,13 +966,13 @@
   <div class="dt-content" id="dt-questions">
     <div class="dash-wrap">
       <div class="dash-header">
-        <div><div class="dash-title">Questions</div><div class="dash-sub">Validate pending questions &amp; import new ones via Excel</div></div>
+        <div><div class="dash-title" data-i18n="tabQuestions">Questions</div><div class="dash-sub" data-i18n="d_questionsSub">Validate pending questions &amp; import new ones via Excel</div></div>
       </div>
 
       <!-- EXCEL IMPORT -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">📥 Import questions from Excel</div><div class="panel-sub">Upload a .xlsx file — imported questions go to the bank for validation before entering the quiz</div></div>
+          <div><div class="panel-title" data-i18n="d_importQ">📥 Import questions from Excel</div><div class="panel-sub" data-i18n="d_importQSub">Upload a .xlsx file — imported questions go to the bank for validation before entering the quiz</div></div>
           <a href="#" onclick="downloadImportTemplate(event)" style="font-size:12px;color:var(--blue1);text-decoration:none;font-weight:600;white-space:nowrap">⬇ Template</a>
         </div>
         <div class="import-zone" id="import-zone" onclick="document.getElementById('xlsx-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleImportDrop(event)">
@@ -994,7 +994,7 @@
       <!-- QUESTION BANK -->
       <div class="panel">
         <div class="panel-header">
-          <div><div class="panel-title">📚 Question Bank</div><div class="panel-sub">Approve → enters quiz pool immediately · Reject → deleted permanently</div></div>
+          <div><div class="panel-title" data-i18n="d_qBank">📚 Question Bank</div><div class="panel-sub" data-i18n="d_qBankSub">Approve → enters quiz pool immediately · Reject → deleted permanently</div></div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <button onclick="exportQuestions()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px">⬇️ Export</button>
             <button id="approve-all-btn" onclick="approveAllQuestions()" style="display:none;background:#008d36;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">✅ Approve all</button>
@@ -1010,7 +1010,7 @@
   <div class="dt-content" id="dt-employees">
     <div class="dash-wrap">
       <div class="dash-header">
-        <div><div class="dash-title">Employees</div><div class="dash-sub">Add, edit or remove employees</div></div>
+        <div><div class="dash-title" data-i18n="tabEmployees">Employees</div><div class="dash-sub" data-i18n="d_employeesSub">Add, edit or remove employees</div></div>
         <button class="export-btn" onclick="document.getElementById('add-emp-form').style.display=document.getElementById('add-emp-form').style.display==='none'?'block':'none'">+ Add employee</button>
       </div>
 
@@ -1060,7 +1060,7 @@
       <!-- IMPORT EMPLOYEES FROM EXCEL -->
       <div class="panel" style="margin-bottom:12px">
         <div class="panel-header">
-          <div><div class="panel-title">📥 Import employees from Excel</div><div class="panel-sub">Upload .xlsx — columns: Badge, Name, Department, Position, Shift, Role</div></div>
+          <div><div class="panel-title" data-i18n="d_importEmp">📥 Import employees from Excel</div><div class="panel-sub" data-i18n="d_importEmpSub">Upload .xlsx — columns: Badge, Name, Department, Position, Shift, Role</div></div>
           <a href="#" onclick="downloadEmpTemplate(event)" style="font-size:12px;color:var(--blue1);text-decoration:none;font-weight:600;white-space:nowrap">⬇ Template</a>
         </div>
         <div class="import-zone" id="emp-import-zone" onclick="document.getElementById('emp-xlsx-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleEmpImportDrop(event)">
@@ -1082,7 +1082,7 @@
       <!-- EMPLOYEE LIST -->
       <div class="panel">
         <div class="panel-header">
-          <div><div class="panel-title">All employees</div><div class="panel-sub" id="emp-mgmt-count">Loading...</div></div>
+          <div><div class="panel-title" data-i18n="d_allEmp">All employees</div><div class="panel-sub" id="emp-mgmt-count">Loading...</div></div>
           <input class="filter-select" id="emp-search" placeholder="🔍 Search name or badge..." style="min-width:180px" oninput="filterEmpTable()">
         </div>
         <div class="table-scroll">
@@ -1109,8 +1109,8 @@
     <div class="dash-wrap">
       <div class="dash-header">
         <div>
-          <div class="dash-title">📋 Reports</div>
-          <div class="dash-subtitle">Generate Skill Matrix reports and track employee progress over time</div>
+          <div class="dash-title" data-i18n="d_reports">📋 Reports</div>
+          <div class="dash-subtitle" data-i18n="d_reportsSub">Generate Skill Matrix reports and track employee progress over time</div>
         </div>
       </div>
 
@@ -1375,7 +1375,37 @@ synced:{th:'ผลการทดสอบ {n} รายการถูกส่
 streakLabel:{th:'วันติดต่อกัน',en:'day streak'},
 streak7:{th:'🏆 ยอดเยี่ยม — ครบ 1 สัปดาห์!<br><span class="streak-badge">แชมป์ประจำสัปดาห์</span>',en:'🏆 Amazing — a full week!<br><span class="streak-badge">Weekly champion</span>'},
 streak3:{th:'ทำได้ดีมาก — สู้ต่อไป!',en:'Great job — keep going!'},
-streak1:{th:'กลับมาพรุ่งนี้เพื่อต่อสถิติของคุณ!',en:'Come back tomorrow to keep your streak!'}
+streak1:{th:'กลับมาพรุ่งนี้เพื่อต่อสถิติของคุณ!',en:'Come back tomorrow to keep your streak!'},
+tabOverview:{th:'ภาพรวม',en:'Overview'},tabAnalytics:{th:'วิเคราะห์',en:'Analytics'},tabQuestions:{th:'คำถาม',en:'Questions'},tabEmployees:{th:'พนักงาน',en:'Employees'},tabReports:{th:'รายงาน',en:'Reports'},
+d_overview:{th:'ภาพรวม',en:'Overview'},
+d_analyticsSub:{th:'แนวโน้มผลงานและจุดที่ต้องพัฒนา',en:'Performance trends &amp; weak points'},
+d_questionsSub:{th:'ตรวจสอบคำถามที่รอดำเนินการและนำเข้าคำถามใหม่จาก Excel',en:'Validate pending questions &amp; import new ones via Excel'},
+d_employeesSub:{th:'เพิ่ม แก้ไข หรือลบพนักงาน',en:'Add, edit or remove employees'},
+d_reports:{th:'📋 รายงาน',en:'📋 Reports'},
+d_reportsSub:{th:'สร้างรายงาน Skill Matrix และติดตามความก้าวหน้าของพนักงาน',en:'Generate Skill Matrix reports and track employee progress over time'},
+d_exportCsv:{th:'📥 ส่งออก CSV',en:'📥 Export CSV'},
+d_todayStrip:{th:'📅 วันนี้',en:'📅 Today'},
+d_allDepts:{th:'ทุกแผนก',en:'All Departments'},d_allShifts:{th:'ทุกกะ',en:'All Shifts'},d_allPos:{th:'ทุกตำแหน่ง',en:'All Positions'},
+d_clearFilters:{th:'✕ ล้างตัวกรอง',en:'✕ Clear filters'},
+d_kpiCompleted:{th:'ทำแล้ว',en:'Completed'},d_kpiPass:{th:'อัตราผ่าน (3/3)',en:'Pass rate (3/3)'},d_kpiAvg:{th:'คะแนนเฉลี่ย',en:'Avg. score'},d_kpiAttn:{th:'ต้องติดตาม',en:'Need attention'},
+d_outOf3:{th:'จากคะแนนเต็ม 3.0',en:'out of 3.0'},d_below2:{th:'คะแนนต่ำกว่า 2',en:'score below 2'},
+d_empTracking:{th:'ติดตามพนักงาน',en:'Employee tracking'},
+d_all:{th:'ทั้งหมด',en:'All'},d_failed:{th:'ไม่ผ่าน',en:'Failed'},d_pendingTab:{th:'รอทำ',en:'Pending'},
+d_thBadge:{th:'รหัส',en:'Badge'},d_thName:{th:'ชื่อ',en:'Name'},d_thDept:{th:'แผนก',en:'Dept'},d_thPosition:{th:'ตำแหน่ง',en:'Position'},d_thShift:{th:'กะ',en:'Shift'},d_thScore:{th:'คะแนน',en:'Score'},d_thStreak:{th:'สตรีค',en:'Streak'},d_thTrend:{th:'แนวโน้ม',en:'Trend'},d_thStatus:{th:'สถานะ',en:'Status'},
+d_byDept:{th:'ตามแผนก',en:'By department'},d_byShift:{th:'ตามกะ',en:'By shift'},d_complSel:{th:'ความสำเร็จของวันที่เลือก',en:'Completion for selected date'},
+d_dayOfWeek:{th:'📅 คะแนนตามวันในสัปดาห์',en:'📅 Score by day of week'},d_dayOfWeekSub:{th:'คะแนนเฉลี่ยรายวัน — ตลอดเวลา',en:'Average score per weekday — all time'},
+d_shiftComp:{th:'🔄 เปรียบเทียบกะ',en:'🔄 Shift comparison'},d_shiftCompSub:{th:'คะแนนเฉลี่ยและการเข้าร่วมตามกะ',en:'Average score and participation by shift'},
+d_scoreTrend:{th:'📈 แนวโน้มคะแนน',en:'📈 Score trend'},
+d_oplPerf:{th:'📋 ผลตาม OPL',en:'📋 OPL Performance'},d_oplPerfSub:{th:'อัตราตอบผิดตาม Working Instruction — คลิกเพื่อดูว่าใครตอบผิด',en:'Error rate by Working Instruction — click to see who failed'},
+d_mostFailed:{th:'⚠️ คำถามที่ตอบผิดบ่อยที่สุด',en:'⚠️ Most failed questions'},d_mostFailedSub:{th:'ตลอดเวลา — คำถามที่มีอัตราตอบผิดสูงสุด',en:'All time — questions with highest error rate'},
+d_empHist:{th:'👤 ประวัติคะแนนพนักงาน',en:'👤 Employee score history'},d_empHistSub:{th:'แนวโน้มคะแนนรายบุคคล — 30 วันล่าสุด',en:'Personal score trend — last 30 days'},
+d_importQ:{th:'📥 นำเข้าคำถามจาก Excel',en:'📥 Import questions from Excel'},d_importQSub:{th:'อัปโหลดไฟล์ .xlsx — คำถามที่นำเข้าจะเข้าคลังเพื่อรอตรวจสอบก่อนใช้ในแบบทดสอบ',en:'Upload a .xlsx file — imported questions go to the bank for validation before entering the quiz'},
+d_qBank:{th:'📚 คลังคำถาม',en:'📚 Question Bank'},d_qBankSub:{th:'อนุมัติ → ใช้ในแบบทดสอบทันที · ปฏิเสธ → ลบถาวร',en:'Approve → enters quiz pool immediately · Reject → deleted permanently'},
+d_importEmp:{th:'📥 นำเข้าพนักงานจาก Excel',en:'📥 Import employees from Excel'},d_importEmpSub:{th:'อัปโหลด .xlsx — คอลัมน์: Badge, Name, Department, Position, Shift, Role',en:'Upload .xlsx — columns: Badge, Name, Department, Position, Shift, Role'},
+d_allEmp:{th:'พนักงานทั้งหมด',en:'All employees'},
+d_todayWord:{th:'วันนี้',en:'Today'},d_resultsFor:{th:'ผลของ',en:'Results for'},d_todayResults:{th:'ผลของวันนี้',en:"Today's results"},
+d_completedWord:{th:'ทำแล้ว',en:'completed'},d_pendingWord:{th:'รอทำ',en:'pending'},d_moreWord:{th:'อีก {n} คน',en:'+{n} more'},d_pendingLabel:{th:'รอทำ:',en:'Pending:'},d_allDone:{th:'✅ พนักงานทุกคนทำแล้ว!',en:'✅ All employees done!'},d_employeesWord:{th:'พนักงาน',en:'employees'},
+st_Passed:{th:'ผ่าน',en:'Passed'},st_Partial:{th:'บางส่วน',en:'Partial'},st_Failed:{th:'ไม่ผ่าน',en:'Failed'},st_Pending:{th:'รอทำ',en:'Pending'}
 };
 function t(k){const e=I18N[k]||{};return e[appLang]||e.th||k;}
 function qTxt(q){return appLang==='th'?(q.question_th||q.question_text):(q.question_text||q.question_th);}
@@ -1388,7 +1418,7 @@ function applyI18n(){
   const sq=document.getElementById('s-quiz');
   if(sq&&sq.classList.contains('active')&&qs&&qs.length&&document.getElementById('next-btn').style.display==='none')renderQ();
 }
-function toggleAppLang(){appLang=appLang==='th'?'en':'th';localStorage.setItem('mon-lang',appLang);applyI18n();const _ov=document.getElementById('detail-overlay');if(_currentDetailBadge&&_ov&&_ov.classList.contains('active'))showEmployeeDetail(_currentDetailBadge);}
+function toggleAppLang(){appLang=appLang==='th'?'en':'th';localStorage.setItem('mon-lang',appLang);applyI18n();if(document.getElementById('s-dash').classList.contains('active')){try{applyFilters();}catch(e){}try{loadTodayStrip();}catch(e){}}const _ov=document.getElementById('detail-overlay');if(_currentDetailBadge&&_ov&&_ov.classList.contains('active'))showEmployeeDetail(_currentDetailBadge);}
 
 const MGR_PASSWORD='MON2026'; // ← change this password here
 
@@ -1814,8 +1844,8 @@ async function loadDash(){
   selectedDate=new Date().toISOString().split('T')[0];
   initDatePicker();
   loadTodayStrip();
-  document.getElementById('dash-date-label').textContent='Today — '+new Date().toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('tracking-sub').textContent="Today's results";
+  document.getElementById('dash-date-label').textContent=t('d_todayWord')+' — '+new Date().toLocaleDateString(appLang==='th'?'th-TH':'en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('tracking-sub').textContent=t('d_todayResults');
   try{
     const today=selectedDate;
     const d7=new Date();d7.setDate(d7.getDate()-6);
@@ -1896,7 +1926,7 @@ function applyFilters(){
   });
 
   if(statusFilter!=='all')filtered=filtered.filter(e=>e.status===statusFilter);
-  document.getElementById('filter-count').textContent=filtered.length+' employee'+(filtered.length!==1?'s':'');
+  document.getElementById('filter-count').textContent=filtered.length+' '+(appLang==='th'?t('d_employeesWord'):'employee'+(filtered.length!==1?'s':''));
 
   // KPIs based on filtered set
   const done=filtered.filter(e=>e.status!=='Pending');
@@ -1911,7 +1941,7 @@ function applyFilters(){
   document.getElementById('kpi-pass-n').textContent=passed+' perfect scores';
   document.getElementById('kpi-avg').textContent=avgScore;
   document.getElementById('kpi-failed').textContent=done.filter(e=>e.score<2).length;
-  document.getElementById('tracking-sub').textContent=`${completed} completed · ${total-completed} pending`;
+  document.getElementById('tracking-sub').textContent=`${completed} ${t('d_completedWord')} · ${total-completed} ${t('d_pendingWord')}`;
 
   renderTable(filtered);
   renderBreakdown('dept-breakdown',filtered,'department');
@@ -1962,7 +1992,7 @@ function renderTable(data){
       <td>${e.score!==null?`<span class="pill ${pc[e.status]}">${e.score}/3</span>`:'<span class="pill pill-n">—</span>'}</td>
       <td style="text-align:center">${streakCell}</td>
       <td style="text-align:center">${trendHtml}</td>
-      <td><span class="pill ${pc[e.status]}">${e.status}</span></td>
+      <td><span class="pill ${pc[e.status]}">${t('st_'+e.status)}</span></td>
     </tr>`;
   }).join('');
 }
@@ -2725,15 +2755,15 @@ async function loadTodayStrip(){
     const label=document.getElementById('today-label');
     const pendingEl=document.getElementById('today-pending-list');
     if(bar)bar.style.width=pct+'%';
-    if(label)label.textContent=completed+' / '+total+' completed ('+pct+'%)';
+    if(label)label.textContent=completed+' / '+total+' '+t('d_completedWord')+' ('+pct+'%)';
     const pending=(emps||[]).filter(e=>!done.has(e.badge_number));
     if(pendingEl){
       if(!pending.length){
-        pendingEl.innerHTML='<span style="color:#008d36;font-weight:700">✅ All employees done!</span>';
+        pendingEl.innerHTML='<span style="color:#008d36;font-weight:700">'+t('d_allDone')+'</span>';
       } else {
         const names=pending.slice(0,6).map(e=>`<span style="background:#fff;border:1px solid #dde8f5;border-radius:4px;padding:1px 6px;color:#004990;font-weight:600">${e.name}</span>`).join(' ');
-        const more=pending.length>6?` <span style="color:#8a9ab5">+${pending.length-6} more</span>`:'';
-        pendingEl.innerHTML='<span style="color:#8a9ab5;margin-right:4px">Pending:</span>'+names+more;
+        const more=pending.length>6?` <span style="color:#8a9ab5">${t('d_moreWord').replace('{n}',pending.length-6)}</span>`:'';
+        pendingEl.innerHTML='<span style="color:#8a9ab5;margin-right:4px">'+t('d_pendingLabel')+'</span>'+names+more;
       }
     }
     // Update strip color based on completion
@@ -2763,8 +2793,8 @@ async function onDateChange(){
   selectedDate=document.getElementById('date-picker').value;
   const label=new Date(selectedDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const isToday=selectedDate===new Date().toISOString().split('T')[0];
-  document.getElementById('dash-date-label').textContent=(isToday?'Today — ':'')+label;
-  document.getElementById('tracking-sub').textContent='Results for '+label;
+  document.getElementById('dash-date-label').textContent=(isToday?t('d_todayWord')+' — ':'')+label;
+  document.getElementById('tracking-sub').textContent=t('d_resultsFor')+' '+label;
   try{
     dashResults=await sbGet('quiz_results?quiz_date=eq.'+selectedDate+'&select=*');
     // Rebuild allT with new results
