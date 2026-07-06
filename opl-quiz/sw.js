@@ -1,5 +1,5 @@
-// MON NPA Quiz — Service Worker v6 (nouvelle base Supabase + dépt PD)
-const CACHE = 'mon-npa-v6';
+// MON NPA Quiz — Service Worker v6
+const CACHE = 'mon-npa-v7';
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());
