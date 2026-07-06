@@ -28,6 +28,7 @@
     body.dark .topbar-label-bot{color:#e2e8f0}
     body.dark .topbar-label-top{color:#6b7a99}
     body.dark .login-card,body.dark .done-card,body.dark .score-card,body.dark .detail-card,body.dark .meta-card,body.dark .panel,body.dark .q-card,body.dark .modal-card,body.dark .detail-modal{background:var(--surface);border-color:var(--border)}
+    body.dark .breakdown-label{color:#e2e8f0}
     body.dark .login-card-accent{background:linear-gradient(90deg,#004990,#006eaf,#4eb2e5)}
     body.dark .login-title,body.dark .done-title,body.dark .r-title,body.dark .dm-name,body.dark .panel-title,body.dark .dash-title,body.dark .kpi-val,body.dark .qbank-q,body.dark .emp-table td:nth-child(2),body.dark .opl-q-count{color:#e2e8f0}
     body.dark .login-sub,body.dark .login-hint,body.dark .r-sub,body.dark .q-text{color:var(--text2)}
@@ -869,11 +870,11 @@
           <div class="table-scroll">
             <table class="emp-table" style="table-layout:fixed;width:100%">
               <thead><tr>
-                <th style="width:78px" data-i18n="d_thBadge">Badge</th>
+                <th style="width:74px" data-i18n="d_thBadge">Badge</th>
                 <th data-i18n="d_thName">Name</th>
                 <th style="width:46px" data-i18n="d_thDept">Dept</th>
-                <th style="width:140px" data-i18n="d_thPosition">Position</th>
-                <th style="width:64px" data-i18n="d_thShift">Shift</th>
+                <th style="width:120px" data-i18n="d_thPosition">Position</th>
+                <th style="width:56px" data-i18n="d_thShift">Shift</th>
                 <th style="width:56px" data-i18n="d_thScore">Score</th>
                 <th style="width:56px" data-i18n="d_thStreak">Streak</th>
                 <th style="width:46px;text-align:center" data-i18n="d_thTrend">Trend</th>
@@ -1985,7 +1986,7 @@ function renderTable(data){
     const avatarHtml=`<span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:${avatarColor};align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-right:6px;flex-shrink:0">${initials}</span>`;
     return`<tr style="cursor:pointer;transition:background 0.1s" onclick="showEmployeeDetail('${e.badge}')" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
       <td style="color:#a0aec0;font-size:11px;font-family:monospace">${e.badge}</td>
-      <td><span style="display:inline-flex;align-items:center;vertical-align:middle">${avatarHtml}${e.name}</span></td>
+      <td title="${e.name}"><span style="display:flex;align-items:center;min-width:0">${avatarHtml}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</span></span></td>
       <td style="color:#8a9ab5;font-weight:400">${e.department}</td>
       <td style="font-size:11px;color:var(--text2);max-width:170px" title="${e.position}">${e.position}</td>
       <td style="font-size:11px;white-space:nowrap">${shiftCell}</td>
