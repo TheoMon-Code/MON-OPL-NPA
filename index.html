@@ -224,8 +224,8 @@
     .tab:not(.active):hover{background:#f0f4f8}
     .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .emp-table{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
-    .emp-table th{text-align:left;color:var(--text3);font-weight:700;padding:0 12px 10px 0;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1.5px solid #eef1f6;white-space:nowrap}
-    .emp-table td{padding:11px 12px 11px 0;border-bottom:1px solid #f5f7fa;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .emp-table th{text-align:left;color:var(--text3);font-weight:700;padding:0 8px 10px 0;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1.5px solid #eef1f6;white-space:nowrap}
+    .emp-table td{padding:11px 8px 11px 0;border-bottom:1px solid #f5f7fa;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .emp-table tr:last-child td{border-bottom:none}
     .emp-table td:nth-child(2){color:#1d1d1b;font-weight:600}
     .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1.5px solid}
@@ -789,7 +789,6 @@
         <button class="dnav-tab"        id="dnt-employees"  onclick="showDashTab('employees')">👥 Employees</button>
         <button class="dnav-tab"        id="dnt-reports"    onclick="showDashTab('reports')">📋 Reports</button>
       </div>
-      <button id="mgr-lang-btn" onclick="toggleMgrLang()" style="font-size:11px;font-weight:700;padding:6px 12px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;font-family:inherit;color:var(--text2);white-space:nowrap;flex-shrink:0;align-self:center;margin:6px 0">🇹🇭 ภาษาไทย</button>
     </div>
   </div>
 
@@ -1389,7 +1388,7 @@ function applyI18n(){
   const sq=document.getElementById('s-quiz');
   if(sq&&sq.classList.contains('active')&&qs&&qs.length&&document.getElementById('next-btn').style.display==='none')renderQ();
 }
-function toggleAppLang(){appLang=appLang==='th'?'en':'th';localStorage.setItem('mon-lang',appLang);applyI18n();}
+function toggleAppLang(){appLang=appLang==='th'?'en':'th';localStorage.setItem('mon-lang',appLang);applyI18n();const _ov=document.getElementById('detail-overlay');if(_currentDetailBadge&&_ov&&_ov.classList.contains('active'))showEmployeeDetail(_currentDetailBadge);}
 
 const MGR_PASSWORD='MON2026'; // ← change this password here
 
@@ -1406,7 +1405,6 @@ function go(id){
   el.classList.add('active');
   window.scrollTo(0,0);
   document.getElementById('mgr-back-btn').style.display=id==='s-dash'?'block':'none';
-  const _ltb=document.getElementById('lang-toggle-btn');if(_ltb)_ltb.style.display=id==='s-dash'?'none':'inline-block';
   if(id!=='s-quiz')document.title='MON NPA — OPL Quiz';
   if(id==='s-login'){setTimeout(()=>{const b=document.getElementById('badge-input');if(b&&!('ontouchstart' in window))b.focus();},120);}
 }
@@ -1806,15 +1804,7 @@ async function showResult(){
 }
 
 // ── MANAGER LANGUAGE TOGGLE ──────────────────────────────────────────────────
-let mgrLang='th';
-function toggleMgrLang(){
-  mgrLang=mgrLang==='th'?'en':'th';
-  const btn=document.getElementById('mgr-lang-btn');
-  if(btn)btn.textContent=mgrLang==='th'?'🇹🇭 ภาษาไทย':'🇬🇧 English';
-  // If detail modal is open, refresh it
-  if(_currentDetailBadge)showEmployeeDetail(_currentDetailBadge);
-}
-function mgrQ(q){return mgrLang==='th'?(q.question_th||q.question_text):q.question_text;}
+function mgrQ(q){return appLang==='th'?(q.question_th||q.question_text):q.question_text;}
 
 // ── DASHBOARD STATE ───────────────────────────────────────────────────────────
 let statusFilter='all';
@@ -1966,10 +1956,10 @@ function renderTable(data){
     const avatarHtml=`<span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:${avatarColor};align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-right:6px;flex-shrink:0">${initials}</span>`;
     return`<tr style="cursor:pointer;transition:background 0.1s" onclick="showEmployeeDetail('${e.badge}')" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background=''">
       <td style="color:#a0aec0;font-size:11px;font-family:monospace">${e.badge}</td>
-      <td style="display:flex;align-items:center">${avatarHtml}${e.name}</td>
+      <td><span style="display:inline-flex;align-items:center;vertical-align:middle">${avatarHtml}${e.name}</span></td>
       <td style="color:#8a9ab5;font-weight:400">${e.department}</td>
       <td style="font-size:11px;color:var(--text2)">${e.position}</td>
-      <td style="font-size:11px;display:flex;align-items:center;gap:2px;padding-top:14px">${shiftCell}</td>
+      <td style="font-size:11px;white-space:nowrap">${shiftCell}</td>
       <td>${e.score!==null?`<span class="pill ${pc[e.status]}">${e.score}/3</span>`:'<span class="pill pill-n">—</span>'}</td>
       <td style="text-align:center">${streakCell}</td>
       <td style="text-align:center">${trendHtml}</td>
@@ -2401,7 +2391,7 @@ function showEmployeeDetail(badge){
           <span class="dm-q-opl">${q.wi_reference||'WI'}</span>
         </div>
         <div class="dm-q-text">${mgrQ(q)}</div>
-        <div style="font-size:10px;color:#b0bdd0;font-style:italic;margin-bottom:6px">${mgrLang==='th'?q.question_text:q.question_th||''}</div>
+        <div style="font-size:10px;color:#b0bdd0;font-style:italic;margin-bottom:6px">${appLang==='th'?q.question_text:q.question_th||''}</div>
         ${answerLine}
       </div>`;
     }).join('');
