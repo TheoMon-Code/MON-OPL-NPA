@@ -224,8 +224,8 @@
     .tab:not(.active):hover{background:#f0f4f8}
     .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .emp-table{width:100%;border-collapse:collapse;font-size:13px;min-width:500px}
-    .emp-table th{text-align:left;color:var(--text3);font-weight:700;padding:0 0 10px;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1.5px solid #eef1f6;white-space:nowrap}
-    .emp-table td{padding:11px 0;border-bottom:1px solid #f5f7fa;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .emp-table th{text-align:left;color:var(--text3);font-weight:700;padding:0 12px 10px 0;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1.5px solid #eef1f6;white-space:nowrap}
+    .emp-table td{padding:11px 12px 11px 0;border-bottom:1px solid #f5f7fa;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .emp-table tr:last-child td{border-bottom:none}
     .emp-table td:nth-child(2){color:#1d1d1b;font-weight:600}
     .pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1.5px solid}
@@ -368,6 +368,8 @@
     .emp-mgmt-table td:nth-child(2){color:#1d1d1b;font-weight:600}
     .emp-action-btn{font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;border:1.5px solid;touch-action:manipulation}
     .emp-edit-btn{color:var(--blue1);border-color:#b5d8f0;background:#e8f4fb}
+    .emp-hist-btn{color:var(--text2);border-color:var(--border);background:var(--surface);margin-right:4px}
+    .emp-tog-btn{border-color:var(--border);background:var(--surface);margin-left:4px}
     .emp-del-btn{color:var(--red);border-color:#f5b5b0;background:#fdecea;margin-left:4px}
     .role-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
     .role-emp{background:#e8f4fb;color:#004990;border:1px solid #b5d8f0}
@@ -1404,6 +1406,7 @@ function go(id){
   el.classList.add('active');
   window.scrollTo(0,0);
   document.getElementById('mgr-back-btn').style.display=id==='s-dash'?'block':'none';
+  const _ltb=document.getElementById('lang-toggle-btn');if(_ltb)_ltb.style.display=id==='s-dash'?'none':'inline-block';
   if(id!=='s-quiz')document.title='MON NPA — OPL Quiz';
   if(id==='s-login'){setTimeout(()=>{const b=document.getElementById('badge-input');if(b&&!('ontouchstart' in window))b.focus();},120);}
 }
@@ -1955,7 +1958,6 @@ function renderTable(data){
     const streakCell=e.streak>=3?`<span style="color:#c05e00;font-weight:700;font-size:12px">🔥${e.streak}</span>`:
                      e.streak>=1?`<span style="color:#8a9ab5;font-size:12px">🔥${e.streak}</span>`:
                      `<span style="color:#c0ccd8;font-size:11px">—</span>`;
-    const statusIcon=e.status==='Pending'?' 📅':' 🔍';
     const trendHtml=e.trend==='up'?`<span class="trend-up" title="Improving">▲</span>`:
                     e.trend==='down'?`<span class="trend-down" title="Declining">▼</span>`:
                     `<span class="trend-flat">—</span>`;
@@ -1971,7 +1973,7 @@ function renderTable(data){
       <td>${e.score!==null?`<span class="pill ${pc[e.status]}">${e.score}/3</span>`:'<span class="pill pill-n">—</span>'}</td>
       <td style="text-align:center">${streakCell}</td>
       <td style="text-align:center">${trendHtml}</td>
-      <td><span class="pill ${pc[e.status]}">${e.status}${statusIcon}</span></td>
+      <td><span class="pill ${pc[e.status]}">${e.status}</span></td>
     </tr>`;
   }).join('');
 }
@@ -1985,7 +1987,12 @@ function renderBreakdown(elId,tracking,field){
     d[k].total++;
     if(e.status!=='Pending'){d[k].done++;if(e.score>=3)d[k].passed++;}
   });
-  const entries=Object.entries(d).sort((a,b)=>b[1].done-a[1].done);
+  let entries=Object.entries(d).sort((a,b)=>b[1].done-a[1].done);
+  const noVal=k=>!k||k==='Unknown'||k==='—';
+  if(field==='shift'&&entries.every(([k])=>noVal(k))){
+    document.getElementById(elId).innerHTML='<div style="color:#8a9ab5;font-size:13px">No shift data yet — assign shifts in the Employees tab</div>';return;
+  }
+  entries=entries.map(([k,v])=>[noVal(k)?'No shift':k,v]);
   if(!entries.length){document.getElementById(elId).innerHTML='<div style="color:#8a9ab5;font-size:13px">No data yet</div>';return;}
   document.getElementById(elId).innerHTML=entries.map(([key,v])=>{
     const pct=v.total>0?Math.round((v.done/v.total)*100):0;
@@ -3102,9 +3109,9 @@ function renderEmpMgmtTable(filter=''){
       <td><span class="role-badge ${e.is_manager?'role-mgr':'role-emp'}">${e.is_manager?'Manager':'Employee'}</span></td>
       <td>${activeHtml}</td>
       <td>
-        <button class="emp-action-btn" style="font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;border:1.5px solid #b3d9f5;background:#e8f4fb;color:#004990" onclick="openEmpHistoryFromMgmt('${e.badge_number}','${e.name.replace(/'/g,"\\'")}')">📊 History</button>
+        <button class="emp-action-btn emp-hist-btn" onclick="openEmpHistoryFromMgmt('${e.badge_number}','${e.name.replace(/'/g,"\\'")}')">History</button>
         <button class="emp-action-btn emp-edit-btn" onclick="openEditEmployee('${e.badge_number}')">Edit</button>
-        <button class="emp-action-btn" style="font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;border:1.5px solid;${isActive?'color:#c05e00;border-color:#fdd49a;background:#fff5e6':'color:#005020;border-color:#a8ddb8;background:#edfbf3'}" onclick="toggleActiveEmployee('${e.badge_number}',${isActive})">${isActive?'Deactivate':'Activate'}</button>
+        <button class="emp-action-btn emp-tog-btn" style="${isActive?'color:#c05e00':'color:#005020'}" onclick="toggleActiveEmployee('${e.badge_number}',${isActive})">${isActive?'Deactivate':'Activate'}</button>
         <button class="emp-action-btn emp-del-btn" onclick="deleteEmployee('${e.badge_number}','${e.name.replace(/'/g,"\\'")}')">Del</button>
       </td>
     </tr>`;
