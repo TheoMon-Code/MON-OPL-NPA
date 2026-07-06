@@ -1,5 +1,5 @@
 // MON NPA Quiz — Service Worker v6
-const CACHE = 'mon-npa-v7';
+const CACHE = 'mon-npa-v10';
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());
