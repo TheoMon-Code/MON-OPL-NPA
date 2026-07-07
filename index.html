@@ -633,8 +633,8 @@
       <button id="dm-reset-btn" onclick="resetEmployeeQuiz()" style="display:none;margin-left:auto;font-size:11px;padding:5px 12px;border:1.5px solid #f5b5b0;border-radius:7px;background:#fdecea;color:#7a1020;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap" title="Let employee retake today's quiz">🔄 Reset</button>
     </div>
     <div class="dm-tab-row">
-      <button class="dm-tab-btn active" id="dmt-quiz" onclick="switchDetailTab('quiz')">Today's Quiz</button>
-      <button class="dm-tab-btn" id="dmt-history" onclick="switchDetailTab('history')">📅 30-Day History</button>
+      <button class="dm-tab-btn active" id="dmt-quiz" onclick="switchDetailTab('quiz')" data-i18n="p2_todayQuiz">Today's Quiz</button>
+      <button class="dm-tab-btn" id="dmt-history" onclick="switchDetailTab('history')" data-i18n="p2_history30">📅 30-Day History</button>
     </div>
     <div id="dm-questions"></div>
     <div id="dm-history" style="display:none"></div>
@@ -644,12 +644,12 @@
 <!-- PASSWORD MODAL -->
 <div class="modal-overlay" id="modal-pwd">
   <div class="modal-card">
-    <div class="modal-title">🔒 Manager access</div>
-    <div class="modal-sub">Badge recognized. Enter the manager password to access the dashboard.</div>
-    <input class="modal-input" type="password" id="pwd-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()"/>
-    <div class="modal-error" id="pwd-error">Incorrect password. Please try again.</div>
-    <button class="modal-btn" onclick="checkPassword()">Access dashboard</button>
-    <button class="modal-cancel" onclick="closePasswordModal()">Cancel</button>
+    <div class="modal-title" data-i18n="p2_mgrAccess">🔒 Manager access</div>
+    <div class="modal-sub" data-i18n="p2_mgrAccessSub">Badge recognized. Enter the manager password to access the dashboard.</div>
+    <input class="modal-input" type="password" id="pwd-input" placeholder="Password" data-i18n-ph="p2_password" onkeydown="if(event.key==='Enter')checkPassword()"/>
+    <div class="modal-error" id="pwd-error" data-i18n="p2_wrongPwd">Incorrect password. Please try again.</div>
+    <button class="modal-btn" onclick="checkPassword()" data-i18n="p2_accessDash">Access dashboard</button>
+    <button class="modal-cancel" onclick="closePasswordModal()" data-i18n="p2_cancel">Cancel</button>
   </div>
 </div>
 
@@ -1020,14 +1020,14 @@
         </div>
         <div class="import-zone" id="import-zone" onclick="document.getElementById('xlsx-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleImportDrop(event)">
           <div class="import-zone-icon">📂</div>
-          <div class="import-zone-text">Click to choose a file or drag &amp; drop</div>
+          <div class="import-zone-text" data-i18n="p2_dropFile">Click to choose a file or drag &amp; drop</div>
           <div class="import-zone-sub">Format: .xlsx — columns: WI Ref, Department, Question EN, Question TH, A, B, C, D, A TH, B TH, C TH, D TH, Correct (A/B/C/D), Difficulty</div>
         </div>
         <input type="file" id="xlsx-input" accept=".xlsx,.xls" style="display:none" onchange="handleImportFile(this)">
         <div id="import-preview-wrap" style="display:none">
           <div class="import-preview" id="import-preview"></div>
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-            <button class="import-btn" id="import-confirm-btn" onclick="confirmImport()">✅ Import to Question Bank</button>
+            <button class="import-btn" id="import-confirm-btn" onclick="confirmImport()" data-i18n="p2_importQBtn">✅ Import to Question Bank</button>
             <button class="ghost-btn" style="width:auto;padding:10px 18px;font-size:13px" onclick="cancelImport()">Cancel</button>
             <span id="import-count" style="font-size:12px;color:var(--text3)"></span>
           </div>
@@ -1040,7 +1040,7 @@
           <div><div class="panel-title" data-i18n="d_qBank">📚 Question Bank</div><div class="panel-sub" data-i18n="d_qBankSub">Approve → enters quiz pool immediately · Reject → deleted permanently</div></div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <button onclick="exportQuestions()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px">⬇️ Export</button>
-            <button id="approve-all-btn" onclick="approveAllQuestions()" style="display:none;background:#008d36;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">✅ Approve all</button>
+            <button id="approve-all-btn" onclick="approveAllQuestions()" style="display:none;background:#008d36;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" data-i18n="p2_approveAll">✅ Approve all</button>
             <span id="qbank-count-badge" class="qbank-count-badge">Loading...</span>
           </div>
         </div>
@@ -1054,50 +1054,50 @@
     <div class="dash-wrap">
       <div class="dash-header">
         <div><div class="dash-title" data-i18n="tabEmployees">Employees</div><div class="dash-sub" data-i18n="d_employeesSub">Add, edit or remove employees</div></div>
-        <button class="export-btn" onclick="document.getElementById('add-emp-form').style.display=document.getElementById('add-emp-form').style.display==='none'?'block':'none'">+ Add employee</button>
+        <button class="export-btn" onclick="document.getElementById('add-emp-form').style.display=document.getElementById('add-emp-form').style.display==='none'?'block':'none'" data-i18n="p2_addEmp">+ Add employee</button>
       </div>
 
       <!-- ADD EMPLOYEE FORM -->
       <div class="panel emp-form-panel" id="add-emp-form" style="display:none;margin-bottom:12px">
-        <div class="emp-form-title">➕ New employee</div>
+        <div class="emp-form-title" data-i18n="p2_newEmp">➕ New employee</div>
         <div class="emp-form-grid">
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-badge">Badge number *</label>
+            <label class="emp-form-label" for="nf-badge" data-i18n="p2_badgeNo">Badge number *</label>
             <input class="emp-form-input" id="nf-badge" placeholder="e.g. 1234" maxlength="10">
           </div>
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-name">Full name *</label>
+            <label class="emp-form-label" for="nf-name" data-i18n="p2_fullName">Full name *</label>
             <input class="emp-form-input" id="nf-name" placeholder="First Last">
           </div>
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-dept">Department *</label>
+            <label class="emp-form-label" for="nf-dept" data-i18n="p2_dept">Department *</label>
             <select class="emp-form-input" id="nf-dept">
               <option value="WH">WH — Warehouse</option>
               <option value="PD">PD — Production</option>
             </select>
           </div>
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-position">Position</label>
+            <label class="emp-form-label" for="nf-position" data-i18n="p2_position">Position</label>
             <input class="emp-form-input" id="nf-position" placeholder="e.g. Forklift Operator">
           </div>
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-shift">Shift</label>
+            <label class="emp-form-label" for="nf-shift" data-i18n="p2_shift">Shift</label>
             <select class="emp-form-input" id="nf-shift">
-              <option value="">— Select —</option>
-              <option value="Morning">Morning</option>
-              <option value="Afternoon">Afternoon</option>
-              <option value="Night">Night</option>
+              <option value="" data-i18n="p2_select">— Select —</option>
+              <option value="Morning" data-i18n="p2_morning">Morning</option>
+              <option value="Afternoon" data-i18n="p2_afternoon">Afternoon</option>
+              <option value="Night" data-i18n="p2_night">Night</option>
             </select>
           </div>
           <div class="emp-form-field">
-            <label class="emp-form-label" for="nf-role">Role</label>
+            <label class="emp-form-label" for="nf-role" data-i18n="p2_role">Role</label>
             <select class="emp-form-input" id="nf-role">
-              <option value="false">Employee</option>
-              <option value="true">Manager</option>
+              <option value="false" data-i18n="p2_employee">Employee</option>
+              <option value="true" data-i18n="p2_manager">Manager</option>
             </select>
           </div>
         </div>
-        <button class="emp-form-btn" onclick="addEmployee()">Save employee</button>
+        <button class="emp-form-btn" onclick="addEmployee()" data-i18n="p2_saveEmp">Save employee</button>
       </div>
 
       <!-- IMPORT EMPLOYEES FROM EXCEL -->
@@ -1108,14 +1108,14 @@
         </div>
         <div class="import-zone" id="emp-import-zone" onclick="document.getElementById('emp-xlsx-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleEmpImportDrop(event)">
           <div class="import-zone-icon">👥</div>
-          <div class="import-zone-text">Click to choose a file or drag &amp; drop</div>
+          <div class="import-zone-text" data-i18n="p2_dropFile">Click to choose a file or drag &amp; drop</div>
           <div class="import-zone-sub">Format: .xlsx — Badge | Name | Department | Position | Shift | Role (Employee/Manager)</div>
         </div>
         <input type="file" id="emp-xlsx-input" accept=".xlsx,.xls" style="display:none" onchange="handleEmpImportFile(this)">
         <div id="emp-import-preview-wrap" style="display:none">
           <div class="import-preview" id="emp-import-preview"></div>
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-            <button class="import-btn" id="emp-import-confirm-btn" onclick="confirmEmpImport()">✅ Import employees</button>
+            <button class="import-btn" id="emp-import-confirm-btn" onclick="confirmEmpImport()" data-i18n="p2_importEmpBtn">✅ Import employees</button>
             <button class="ghost-btn" style="width:auto;padding:10px 18px;font-size:13px" onclick="cancelEmpImport()">Cancel</button>
             <span id="emp-import-count" style="font-size:12px;color:var(--text3)"></span>
           </div>
@@ -1126,7 +1126,7 @@
       <div class="panel">
         <div class="panel-header">
           <div><div class="panel-title" data-i18n="d_allEmp">All employees</div><div class="panel-sub" id="emp-mgmt-count">Loading...</div></div>
-          <input class="filter-select" id="emp-search" placeholder="🔍 Search name or badge..." style="min-width:180px" oninput="filterEmpTable()">
+          <input class="filter-select" id="emp-search" placeholder="🔍 Search name or badge..." data-i18n-ph="p2_search" style="min-width:180px" oninput="filterEmpTable()">
         </div>
         <div class="table-scroll">
           <table class="emp-mgmt-table">
@@ -1168,22 +1168,22 @@
 
         <!-- PERIOD SELECTOR -->
         <div style="margin-bottom:1.25rem">
-          <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Report period</label>
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px" data-i18n="p2_reportPeriod">Report period</label>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-            <button class="report-period-btn active" id="rpb-week" onclick="selectReportPeriod('week')">This week</button>
-            <button class="report-period-btn" id="rpb-lastweek" onclick="selectReportPeriod('lastweek')">Last week</button>
-            <button class="report-period-btn" id="rpb-month" onclick="selectReportPeriod('month')">This month</button>
-            <button class="report-period-btn" id="rpb-lastmonth" onclick="selectReportPeriod('lastmonth')">Last month</button>
-            <button class="report-period-btn" id="rpb-custom" onclick="selectReportPeriod('custom')">Custom range</button>
+            <button class="report-period-btn active" id="rpb-week" onclick="selectReportPeriod('week')" data-i18n="p2_thisWeek">This week</button>
+            <button class="report-period-btn" id="rpb-lastweek" onclick="selectReportPeriod('lastweek')" data-i18n="p2_lastWeek">Last week</button>
+            <button class="report-period-btn" id="rpb-month" onclick="selectReportPeriod('month')" data-i18n="p2_thisMonth">This month</button>
+            <button class="report-period-btn" id="rpb-lastmonth" onclick="selectReportPeriod('lastmonth')" data-i18n="p2_lastMonth">Last month</button>
+            <button class="report-period-btn" id="rpb-custom" onclick="selectReportPeriod('custom')" data-i18n="p2_custom">Custom range</button>
           </div>
           <!-- Custom date pickers (hidden by default) -->
           <div id="report-custom-dates" style="display:none;gap:12px;align-items:center;flex-wrap:wrap">
             <div style="display:flex;align-items:center;gap:6px">
-              <label style="font-size:12px;color:var(--text2);white-space:nowrap">From</label>
+              <label style="font-size:12px;color:var(--text2);white-space:nowrap" data-i18n="p2_from">From</label>
               <input type="date" id="report-date-from" style="border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit">
             </div>
             <div style="display:flex;align-items:center;gap:6px">
-              <label style="font-size:12px;color:var(--text2);white-space:nowrap">To</label>
+              <label style="font-size:12px;color:var(--text2);white-space:nowrap" data-i18n="p2_to">To</label>
               <input type="date" id="report-date-to" style="border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;background:var(--bg);color:var(--text);font-family:inherit">
             </div>
           </div>
@@ -1216,9 +1216,23 @@
         <!-- GENERATE BUTTON -->
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
           <button id="skill-matrix-btn" onclick="generateSkillMatrix()" style="display:flex;align-items:center;gap:8px;background:#006eaf;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation">
-            ⬇️ Generate &amp; Download Excel
+            <span data-i18n="p2_generateXlsx">⬇️ Generate &amp; Download Excel</span>
           </button>
           <span id="skill-matrix-status" style="font-size:12px;color:var(--text3)">Downloads as .xlsx (3 sheets)</span>
+        </div>
+      </div>
+
+      <!-- BACKUP -->
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title" data-i18n="p2_backupTitle">💾 Database backup</div>
+            <div class="panel-sub" data-i18n="p2_backupSub">Download all data (employees, questions, quiz results) as one Excel file — keep a copy somewhere safe</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button id="backup-btn" onclick="downloadBackup()" style="display:flex;align-items:center;gap:8px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation">💾 Download backup (.xlsx)</button>
+          <span style="font-size:12px;color:var(--text3)">3 sheets — restorable via SQL or Excel import</span>
         </div>
       </div>
 
@@ -1237,48 +1251,48 @@
 <!-- EDIT EMPLOYEE MODAL -->
 <div class="modal-overlay" id="edit-emp-modal">
   <div class="modal-card" style="max-width:420px">
-    <div class="modal-title">Edit employee</div>
+    <div class="modal-title" data-i18n="p2_editEmp">Edit employee</div>
     <input type="hidden" id="edit-emp-badge">
     <div class="emp-form-grid" style="margin-top:1rem">
       <div class="emp-form-field">
-        <label class="emp-form-label" for="ef-name">Full name</label>
+        <label class="emp-form-label" for="ef-name" data-i18n="p2_fullName2">Full name</label>
         <input class="emp-form-input modal-input" id="ef-name" placeholder="Full name">
       </div>
       <div class="emp-form-field">
-        <label class="emp-form-label" for="ef-dept">Department</label>
+        <label class="emp-form-label" for="ef-dept" data-i18n="p2_dept2">Department</label>
         <select class="emp-form-input modal-input" id="ef-dept">
           <option value="WH">WH — Warehouse</option>
           <option value="PD">PD — Production</option>
         </select>
       </div>
       <div class="emp-form-field">
-        <label class="emp-form-label" for="ef-position">Position</label>
+        <label class="emp-form-label" for="ef-position" data-i18n="p2_position">Position</label>
         <input class="emp-form-input modal-input" id="ef-position" placeholder="Position">
       </div>
       <div class="emp-form-field">
-        <label class="emp-form-label" for="ef-shift">Shift</label>
+        <label class="emp-form-label" for="ef-shift" data-i18n="p2_shift">Shift</label>
         <select class="emp-form-input modal-input" id="ef-shift">
-          <option value="">— Select —</option>
-          <option value="Morning">Morning</option>
-          <option value="Afternoon">Afternoon</option>
-          <option value="Night">Night</option>
+          <option value="" data-i18n="p2_select">— Select —</option>
+          <option value="Morning" data-i18n="p2_morning">Morning</option>
+          <option value="Afternoon" data-i18n="p2_afternoon">Afternoon</option>
+          <option value="Night" data-i18n="p2_night">Night</option>
         </select>
       </div>
     </div>
     <div class="emp-form-field" id="ef-pwd-field" style="display:none">
-      <label class="emp-form-label" for="ef-pwd">Manager password <span style="font-weight:400;text-transform:none">(leave blank = shared default)</span></label>
+      <label class="emp-form-label" for="ef-pwd" data-i18n="p2_mgrPwd">Manager password</label>
       <input class="emp-form-input modal-input" id="ef-pwd" type="text" placeholder="Individual password" autocomplete="off">
     </div>
     <div class="modal-error" id="edit-emp-error"></div>
-    <button class="modal-btn" onclick="saveEditEmployee()">Save changes</button>
-    <button class="modal-cancel" onclick="document.getElementById('edit-emp-modal').classList.remove('active')">Cancel</button>
+    <button class="modal-btn" onclick="saveEditEmployee()" data-i18n="p2_saveChanges">Save changes</button>
+    <button class="modal-cancel" onclick="document.getElementById('edit-emp-modal').classList.remove('active')" data-i18n="p2_cancel">Cancel</button>
   </div>
 </div>
 
 <!-- EDIT QUESTION MODAL -->
 <div class="modal-overlay" id="edit-q-modal">
   <div class="modal-card" style="max-width:540px;max-height:88vh;overflow-y:auto">
-    <div class="modal-title">✏️ Edit question</div>
+    <div class="modal-title" data-i18n="p2_editQ">✏️ Edit question</div>
     <input type="hidden" id="eq-id">
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:1rem">
       <div class="emp-form-field">
@@ -1454,6 +1468,49 @@ d_todayWord:{th:'วันนี้',en:'Today'},d_resultsFor:{th:'ผลขอ�
 d_completedWord:{th:'ทำแล้ว',en:'completed'},d_pendingWord:{th:'รอทำ',en:'pending'},d_moreWord:{th:'อีก {n} คน',en:'+{n} more'},d_pendingLabel:{th:'รอทำ:',en:'Pending:'},d_allDone:{th:'✅ พนักงานทุกคนทำแล้ว!',en:'✅ All employees done!'},d_employeesWord:{th:'พนักงาน',en:'employees'},
 sessionExpired:{th:'หมดเวลาเซสชัน — กรุณาเข้าสู่ระบบใหม่',en:'Session expired — please log in again'},
 ms3:{th:'3 วัน',en:'3 days'},ms7:{th:'1 สัปดาห์',en:'1 week'},ms14:{th:'2 สัปดาห์',en:'2 weeks'},ms30:{th:'1 เดือน',en:'1 month'},
+p2_mgrAccess:{th:'🔒 การเข้าถึงสำหรับหัวหน้างาน',en:'🔒 Manager access'},
+p2_mgrAccessSub:{th:'ระบบรู้จักบัตรของคุณแล้ว กรอกรหัสผ่านหัวหน้างานเพื่อเข้าแดชบอร์ด',en:'Badge recognized. Enter the manager password to access the dashboard.'},
+p2_password:{th:'รหัสผ่าน',en:'Password'},
+p2_wrongPwd:{th:'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่',en:'Incorrect password. Please try again.'},
+p2_accessDash:{th:'เข้าแดชบอร์ด',en:'Access dashboard'},
+p2_cancel:{th:'ยกเลิก',en:'Cancel'},
+p2_todayQuiz:{th:'แบบทดสอบวันนี้',en:"Today's Quiz"},
+p2_history30:{th:'📅 ประวัติ 30 วัน',en:'📅 30-Day History'},
+p2_addEmp:{th:'+ เพิ่มพนักงาน',en:'+ Add employee'},
+p2_newEmp:{th:'➕ พนักงานใหม่',en:'➕ New employee'},
+p2_badgeNo:{th:'หมายเลขบัตร *',en:'Badge number *'},
+p2_fullName:{th:'ชื่อ-นามสกุล *',en:'Full name *'},
+p2_fullName2:{th:'ชื่อ-นามสกุล',en:'Full name'},
+p2_dept:{th:'แผนก *',en:'Department *'},
+p2_dept2:{th:'แผนก',en:'Department'},
+p2_position:{th:'ตำแหน่ง',en:'Position'},
+p2_shift:{th:'กะ',en:'Shift'},
+p2_role:{th:'บทบาท',en:'Role'},
+p2_select:{th:'— เลือก —',en:'— Select —'},
+p2_morning:{th:'กะเช้า (07-15)',en:'Morning'},p2_afternoon:{th:'กะบ่าย (15-23)',en:'Afternoon'},p2_night:{th:'กะดึก (23-07)',en:'Night'},
+p2_employee:{th:'พนักงาน',en:'Employee'},p2_manager:{th:'หัวหน้างาน',en:'Manager'},
+p2_saveEmp:{th:'บันทึกพนักงาน',en:'Save employee'},
+p2_editEmp:{th:'แก้ไขพนักงาน',en:'Edit employee'},
+p2_saveChanges:{th:'บันทึกการแก้ไข',en:'Save changes'},
+p2_mgrPwd:{th:'รหัสผ่านหัวหน้างาน <span style="font-weight:400;text-transform:none">(เว้นว่าง = ใช้รหัสกลาง)</span>',en:'Manager password <span style="font-weight:400;text-transform:none">(leave blank = shared default)</span>'},
+p2_editQ:{th:'✏️ แก้ไขคำถาม',en:'✏️ Edit question'},
+p2_dropFile:{th:'คลิกเพื่อเลือกไฟล์ หรือลากมาวาง',en:'Click to choose a file or drag &amp; drop'},
+p2_importEmpBtn:{th:'✅ นำเข้าพนักงาน',en:'✅ Import employees'},
+p2_importQBtn:{th:'✅ นำเข้าสู่คลังคำถาม',en:'✅ Import to Question Bank'},
+p2_search:{th:'🔍 ค้นหาชื่อหรือหมายเลขบัตร...',en:'🔍 Search name or badge...'},
+p2_reportPeriod:{th:'ช่วงเวลารายงาน',en:'Report period'},
+p2_thisWeek:{th:'สัปดาห์นี้',en:'This week'},p2_lastWeek:{th:'สัปดาห์ที่แล้ว',en:'Last week'},
+p2_thisMonth:{th:'เดือนนี้',en:'This month'},p2_lastMonth:{th:'เดือนที่แล้ว',en:'Last month'},p2_custom:{th:'กำหนดเอง',en:'Custom range'},
+p2_from:{th:'จาก',en:'From'},p2_to:{th:'ถึง',en:'To'},
+p2_generateXlsx:{th:'⬇️ สร้างและดาวน์โหลด Excel',en:'⬇️ Generate &amp; Download Excel'},
+p2_backupTitle:{th:'💾 สำรองข้อมูล',en:'💾 Database backup'},
+p2_backupSub:{th:'ดาวน์โหลดข้อมูลทั้งหมด (พนักงาน คำถาม ผลการทดสอบ) เป็นไฟล์ Excel — เก็บสำเนาไว้ในที่ปลอดภัย',en:'Download all data (employees, questions, quiz results) as one Excel file — keep a copy somewhere safe'},
+p2_backupBtn:{th:'💾 ดาวน์โหลดข้อมูลสำรอง (.xlsx)',en:'💾 Download backup (.xlsx)'},
+p2_approve:{th:'✅ อนุมัติ',en:'✅ Approve'},
+p2_reject:{th:'❌ ปฏิเสธ',en:'❌ Reject'},
+p2_approveAll:{th:'✅ อนุมัติทั้งหมด',en:'✅ Approve all'},
+p2_pendingN:{th:'{n} รอตรวจสอบ',en:'{n} pending'},
+p2_allValidated:{th:'ตรวจสอบคำถามครบแล้ว — ไม่มีรายการค้าง',en:'All questions validated — nothing pending'},
 st_Passed:{th:'ผ่าน',en:'Passed'},st_Partial:{th:'บางส่วน',en:'Partial'},st_Failed:{th:'ไม่ผ่าน',en:'Failed'},st_Pending:{th:'รอทำ',en:'Pending'}
 };
 function t(k){const e=I18N[k]||{};return e[appLang]||e.th||k;}
@@ -1463,6 +1520,7 @@ function applyI18n(){
   document.documentElement.lang=appLang;
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n);});
   const bi=document.getElementById('badge-input');if(bi)bi.placeholder=t('badgePh');
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
   const lb=document.getElementById('lang-toggle-btn');if(lb)lb.textContent=appLang==='th'?'EN':'ไทย';
   const sq=document.getElementById('s-quiz');
   if(sq&&sq.classList.contains('active')&&qs&&qs.length&&document.getElementById('next-btn').style.display==='none')renderQ();
@@ -1549,6 +1607,32 @@ function _onSessionExpired(){
     goToLogin();
     showToast(t('sessionExpired'));
   }
+}
+
+// ── DATABASE BACKUP ──────────────────────────────────────────────────────────
+async function downloadBackup(){
+  const btn=document.getElementById('backup-btn');
+  btn.disabled=true;btn.textContent='⏳ Fetching data…';
+  try{
+    await ensureXLSX();
+    const [emps,questions,results]=await Promise.all([
+      sbGet('employees?select=*&order=badge_number&limit=2000'),
+      sbGet('questions?select=*&order=wi_reference&limit=5000'),
+      sbGet('quiz_results?select=*&order=quiz_date.desc&limit=50000')
+    ]);
+    const wb=XLSX.utils.book_new();
+    const toSheet=rows=>{
+      if(!rows||!rows.length)return XLSX.utils.aoa_to_sheet([['(empty)']]);
+      const cols=Object.keys(rows[0]);
+      return XLSX.utils.aoa_to_sheet([cols,...rows.map(r=>cols.map(c=>r[c]))]);
+    };
+    XLSX.utils.book_append_sheet(wb,toSheet(emps),'employees');
+    XLSX.utils.book_append_sheet(wb,toSheet(questions),'questions');
+    XLSX.utils.book_append_sheet(wb,toSheet(results),'quiz_results');
+    XLSX.writeFile(wb,'opl-quiz-backup_'+new Date().toISOString().split('T')[0]+'.xlsx');
+    showToast('💾 Backup downloaded — '+(emps.length)+' employees, '+(questions.length)+' questions, '+(results.length)+' results');
+  }catch(e){showToast('Backup error: '+e.message);}
+  btn.disabled=false;btn.textContent='💾 Download backup (.xlsx)';
 }
 
 // ── TV MODE (warehouse screen — open the app URL followed by #tv) ────────────
@@ -3006,7 +3090,7 @@ async function loadQuestionBank(){
     _qbankAllQuestions=[...pending,...active];
     const rates=computeQErrorRates();
     const badge=document.getElementById('qbank-count-badge');
-    badge.textContent=pending.length+' pending';
+    badge.textContent=t('p2_pendingN').replace('{n}',pending.length);
     // Update nav tab badge
     const navBadge=document.getElementById('qbank-nav-badge');
     if(pending.length>0){navBadge.textContent=pending.length;navBadge.style.display='inline-block';}
@@ -3014,7 +3098,7 @@ async function loadQuestionBank(){
     const mbnBadge=document.getElementById('mbn-q-badge');
     if(mbnBadge){if(pending.length>0){mbnBadge.textContent=pending.length;mbnBadge.style.display='inline-block';}else{mbnBadge.style.display='none';}}
     const pendingHtml=pending.length===0
-      ?'<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">All questions validated — nothing pending</div></div>'
+      ?'<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">'+t('p2_allValidated')+'</div></div>'
       :pending.map(q=>{
         const opts=['a','b','c','d'].map(l=>{
           const letter=l.toUpperCase();
@@ -3038,9 +3122,9 @@ async function loadQuestionBank(){
           ${qSub}
           <div class="qbank-opts">${opts}</div>
           <div class="qbank-actions">
-            <button class="qbank-btn qbank-approve" onclick="approveQuestion('${q.id}')">✅ Approve</button>
+            <button class="qbank-btn qbank-approve" onclick="approveQuestion('${q.id}')">${t('p2_approve')}</button>
             <button class="qbank-btn" style="background:#e8f4fb;color:#004990;border:1.5px solid #b5d8f0;flex:0.5" onclick="openEditQuestion('${q.id}')">✏️ Edit</button>
-            <button class="qbank-btn qbank-reject" onclick="rejectQuestion('${q.id}')">❌ Reject</button>
+            <button class="qbank-btn qbank-reject" onclick="rejectQuestion('${q.id}')">${t('p2_reject')}</button>
           </div>
         </div>`;
       }).join('');
@@ -3145,13 +3229,13 @@ function _getQbankCount(){
 }
 function _setQbankCount(n){
   const el=document.getElementById('qbank-count-badge');
-  el.textContent=n+' pending';
+  el.textContent=t('p2_pendingN').replace('{n}',n);
   const navBadge=document.getElementById('qbank-nav-badge');
   if(n>0){navBadge.textContent=n;navBadge.style.display='inline-block';}else{navBadge.style.display='none';}
   const approveAllBtn=document.getElementById('approve-all-btn');
   if(approveAllBtn)approveAllBtn.style.display=n>0?'inline-block':'none';
   if(n<=0){
-    document.getElementById('qbank-list').innerHTML='<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">All questions validated — nothing pending</div></div>';
+    document.getElementById('qbank-list').innerHTML='<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">'+t('p2_allValidated')+'</div></div>';
   }
 }
 
@@ -3188,7 +3272,7 @@ async function approveAllQuestions(){
       if(r.ok)ok++;else fail++;
     }catch(e){fail++;}
   }
-  btn.textContent='✅ Approve all';btn.disabled=false;
+  btn.textContent=t('p2_approveAll');btn.disabled=false;
   showToast(ok+' question'+(ok!==1?'s':'')+' approved'+(fail?' ('+fail+' failed)':'')+'  ✓');
   _qbankAllQuestions=[];
   loadQuestionBank();
