@@ -730,38 +730,55 @@
 
 <!-- TV MODE (warehouse screen — open with #tv) -->
 <div class="screen" id="s-tv">
-  <div style="min-height:100vh;background:linear-gradient(160deg,#081422 0%,#0d2138 60%,#0f2a4a 100%);color:#fff;padding:2.5rem 3rem;box-sizing:border-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
+  <div style="min-height:100vh;background:linear-gradient(160deg,#eaf3fb 0%,#f7fbff 55%,#e3effa 100%);color:#0b2e50;padding:2rem 2.5rem;box-sizing:border-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
       <div style="display:flex;align-items:center;gap:14px">
-        <img src="logo.png" alt="" style="height:40px;filter:brightness(0) invert(1)" onerror="this.style.display='none'">
+        <img src="logo.png" alt="" style="height:40px" onerror="this.style.display='none'">
         <div>
-          <div style="font-size:24px;font-weight:800" id="tv-title">OPL Quiz — วันนี้</div>
-          <div style="font-size:13px;color:#7fa8c8" id="tv-date"></div>
+          <div style="font-size:24px;font-weight:800;color:#04335c" id="tv-title">OPL Quiz — วันนี้</div>
+          <div style="font-size:13px;color:#5a7fa0" id="tv-date"></div>
         </div>
       </div>
-      <div style="font-size:40px;font-weight:800;font-variant-numeric:tabular-nums" id="tv-clock">—</div>
+      <div style="font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;color:#004990" id="tv-clock">—</div>
     </div>
-    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.5rem 2rem;margin-bottom:1.5rem">
-      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:12px">
-        <span style="font-size:56px;font-weight:800;line-height:1" id="tv-count">— / —</span>
-        <span style="font-size:22px;font-weight:700;color:#4eb2e5" id="tv-pct">—%</span>
-        <span style="font-size:14px;color:#7fa8c8" id="tv-completed-label">ทำแบบทดสอบแล้ววันนี้</span>
+
+    <!-- Rangée 1 : donut de complétion + tendance 7 jours -->
+    <div style="display:grid;grid-template-columns:1.1fr 1.6fr;gap:1.25rem;margin-bottom:1.25rem">
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.75rem;box-shadow:0 4px 20px rgba(0,73,144,0.07);display:flex;align-items:center;gap:1.75rem">
+        <svg viewBox="0 0 120 120" style="width:150px;height:150px;flex-shrink:0">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#e2ecf5" stroke-width="12"/>
+          <circle id="tv-donut" cx="60" cy="60" r="52" fill="none" stroke="#006eaf" stroke-width="12" stroke-linecap="round" stroke-dasharray="0 326.7" transform="rotate(-90 60 60)" style="transition:stroke-dasharray 1s ease"/>
+          <text id="tv-donut-pct" x="60" y="57" text-anchor="middle" font-size="24" font-weight="800" fill="#04335c">—%</text>
+          <text x="60" y="76" text-anchor="middle" font-size="10" fill="#5a7fa0" id="tv-donut-sub">วันนี้</text>
+        </svg>
+        <div>
+          <div style="font-size:46px;font-weight:800;line-height:1;color:#04335c" id="tv-count">— / —</div>
+          <div style="font-size:14px;color:#5a7fa0;margin-top:6px" id="tv-completed-label">ทำแบบทดสอบแล้ววันนี้</div>
+          <div style="font-size:13px;color:#8aa4bf;margin-top:10px" id="tv-avg-line"></div>
+        </div>
       </div>
-      <div style="height:14px;background:rgba(255,255,255,0.10);border-radius:7px;overflow:hidden">
-        <div id="tv-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#006eaf,#4eb2e5);border-radius:7px;transition:width 1s"></div>
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.75rem;box-shadow:0 4px 20px rgba(0,73,144,0.07)">
+        <div style="font-size:15px;font-weight:800;margin-bottom:12px;color:#04335c" id="tv-trend-title">📈 การเข้าร่วม 7 วันล่าสุด</div>
+        <div id="tv-trend" style="display:flex;align-items:flex-end;gap:14px;height:130px"></div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem">
-      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
-        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-dept-title">ตามแผนก</div>
+
+    <!-- Rangée 2 : département / scores du jour / streaks / derniers -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem">
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.5rem;box-shadow:0 4px 20px rgba(0,73,144,0.07)">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px;color:#04335c" id="tv-dept-title">ตามแผนก</div>
         <div id="tv-dept"></div>
       </div>
-      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
-        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-streak-title">🔥 สตรีคสูงสุด</div>
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.5rem;box-shadow:0 4px 20px rgba(0,73,144,0.07)">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px;color:#04335c" id="tv-scores-title">🎯 คะแนนวันนี้</div>
+        <div id="tv-scores"></div>
+      </div>
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.5rem;box-shadow:0 4px 20px rgba(0,73,144,0.07)">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px;color:#04335c" id="tv-streak-title">🔥 สตรีคสูงสุด</div>
         <div id="tv-streaks"></div>
       </div>
-      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:1.25rem 1.5rem">
-        <div style="font-size:15px;font-weight:800;margin-bottom:14px" id="tv-latest-title">✅ ล่าสุด</div>
+      <div style="background:#fff;border:1px solid #d8e6f3;border-radius:18px;padding:1.25rem 1.5rem;box-shadow:0 4px 20px rgba(0,73,144,0.07)">
+        <div style="font-size:15px;font-weight:800;margin-bottom:14px;color:#04335c" id="tv-latest-title">✅ ล่าสุด</div>
         <div id="tv-latest"></div>
       </div>
     </div>
@@ -894,9 +911,9 @@
       <!-- KPIs -->
       <div class="kpi-grid">
         <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label" data-i18n="d_kpiCompleted">Completed</div><div class="kpi-val blue" id="kpi-completed">—</div><div class="kpi-sub" id="kpi-total">loading...</div></div>
-        <div class="kpi"><div class="kpi-accent green"></div><div class="kpi-label" data-i18n="d_kpiPass">Pass rate (3/3)</div><div class="kpi-val green" id="kpi-pass">—</div><div class="kpi-sub" id="kpi-pass-n">—</div></div>
+        <div class="kpi"><div class="kpi-accent green"></div><div class="kpi-label" data-i18n="d_kpiPass">Pass rate (3/3)</div><div class="kpi-val" id="kpi-pass">—</div><div class="kpi-sub" id="kpi-pass-n">—</div></div>
         <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label" data-i18n="d_kpiAvg">Avg. score</div><div class="kpi-val" id="kpi-avg">—</div><div class="kpi-sub" data-i18n="d_outOf3">out of 3.0</div></div>
-        <div class="kpi"><div class="kpi-accent red"></div><div class="kpi-label" data-i18n="d_kpiAttn">Need attention</div><div class="kpi-val red" id="kpi-failed">—</div><div class="kpi-sub" data-i18n="d_below2">score below 2</div></div>
+        <div class="kpi"><div class="kpi-accent red"></div><div class="kpi-label" data-i18n="d_kpiAttn">Need attention</div><div class="kpi-val" id="kpi-failed">—</div><div class="kpi-sub" data-i18n="d_below2">score below 2</div></div>
       </div>
       <!-- PANELS: TABLE + BREAKDOWNS -->
       <div class="panels">
@@ -1656,40 +1673,76 @@ async function loadTV(){
     ]);
     const nameOf={};emps.forEach(e=>nameOf[e.badge_number]=e.name);
     document.getElementById('tv-date').textContent=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-    // Completion
+    // ── Complétion (donut) ──
     const doneSet=new Set(todayRes.map(r=>r.badge_number));
     const doneCount=[...doneSet].filter(b=>nameOf[b]).length;
     const total=emps.length;
     const pct=total?Math.round(doneCount/total*100):0;
     document.getElementById('tv-count').textContent=doneCount+' / '+total;
-    document.getElementById('tv-pct').textContent=pct+'%';
-    document.getElementById('tv-bar').style.width=pct+'%';
-    // By department
+    document.getElementById('tv-donut-pct').textContent=pct+'%';
+    const circ=326.7;
+    const donut=document.getElementById('tv-donut');
+    donut.setAttribute('stroke-dasharray',(pct/100*circ)+' '+circ);
+    donut.setAttribute('stroke',pct>=80?'#008d36':pct>=40?'#f39200':'#006eaf');
+    // moyenne du jour
+    const todayScores=todayRes.filter(r=>nameOf[r.badge_number]).map(r=>r.score??0);
+    document.getElementById('tv-avg-line').textContent=todayScores.length?('คะแนนเฉลี่ยวันนี้: '+(todayScores.reduce((a,c)=>a+c,0)/todayScores.length).toFixed(1)+' / 3'):'';
+    // ── Tendance 7 jours ──
+    const days=[];
+    for(let i=6;i>=0;i--){
+      const d=new Date(Date.now()-i*86400000);
+      days.push({date:d.toISOString().split('T')[0],label:d.toLocaleDateString('th-TH',{weekday:'short'})});
+    }
+    const byDay={};hist.forEach(r=>{if(!nameOf[r.badge_number])return;(byDay[r.quiz_date]=byDay[r.quiz_date]||new Set()).add(r.badge_number);});
+    document.getElementById('tv-trend').innerHTML=days.map(d=>{
+      const n=(byDay[d.date]||new Set()).size;
+      const p=total?Math.round(n/total*100):0;
+      const isToday=d.date===today;
+      return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%">
+        <div style="font-size:11px;font-weight:700;color:${isToday?'#006eaf':'#8aa4bf'}">${p}%</div>
+        <div style="flex:1;width:100%;max-width:46px;display:flex;align-items:flex-end;background:#eef4fa;border-radius:8px;overflow:hidden">
+          <div style="width:100%;height:${Math.max(p,2)}%;background:${isToday?'linear-gradient(180deg,#4eb2e5,#006eaf)':'#b8d4ea'};border-radius:8px 8px 0 0;transition:height 1s"></div>
+        </div>
+        <div style="font-size:11px;font-weight:${isToday?'800':'600'};color:${isToday?'#04335c':'#8aa4bf'}">${d.label}</div>
+      </div>`;
+    }).join('');
+    // ── Départements ──
     const byDept={};
     emps.forEach(e=>{const d=e.department||'—';byDept[d]=byDept[d]||{total:0,done:0};byDept[d].total++;if(doneSet.has(e.badge_number))byDept[d].done++;});
     document.getElementById('tv-dept').innerHTML=Object.entries(byDept).map(([d,v])=>{
       const p=v.total?Math.round(v.done/v.total*100):0;
       return `<div style="margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px"><span style="font-weight:700">${d}</span><span style="color:#7fa8c8">${v.done}/${v.total} · ${p}%</span></div>
-        <div style="height:9px;background:rgba(255,255,255,0.10);border-radius:5px;overflow:hidden"><div style="height:100%;width:${p}%;background:${p>=80?'#2fbf71':p>=40?'#f39200':'#4eb2e5'};border-radius:5px;transition:width 1s"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px"><span style="font-weight:700;color:#1d3a5c">${d}</span><span style="color:#5a7fa0">${v.done}/${v.total} · ${p}%</span></div>
+        <div style="height:9px;background:#e2ecf5;border-radius:5px;overflow:hidden"><div style="height:100%;width:${p}%;background:${p>=80?'#008d36':p>=40?'#f39200':'#006eaf'};border-radius:5px;transition:width 1s"></div></div>
       </div>`;
     }).join('');
-    // Top streaks
+    // ── Distribution des scores du jour ──
+    const dist=[3,2,1,0].map(sc=>({sc,n:todayScores.filter(x=>x===sc).length}));
+    const maxN=Math.max(1,...dist.map(d=>d.n));
+    const scColors={3:'#008d36',2:'#7ac043',1:'#f39200',0:'#d31a2b'};
+    document.getElementById('tv-scores').innerHTML=todayScores.length?dist.map(d=>
+      `<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <span style="width:32px;font-size:14px;font-weight:800;color:${scColors[d.sc]}">${d.sc}/3</span>
+        <div style="flex:1;height:16px;background:#eef4fa;border-radius:8px;overflow:hidden"><div style="height:100%;width:${Math.round(d.n/maxN*100)}%;background:${scColors[d.sc]};border-radius:8px;transition:width 1s"></div></div>
+        <span style="width:26px;text-align:right;font-size:14px;font-weight:700;color:#1d3a5c">${d.n}</span>
+      </div>`).join(''):'<div style="color:#8aa4bf;font-size:13px">—</div>';
+    // ── Top streaks ──
     const datesBy={};hist.forEach(r=>{if(!nameOf[r.badge_number])return;(datesBy[r.badge_number]=datesBy[r.badge_number]||[]).push(r.quiz_date);});
-    const streaks=Object.entries(datesBy).map(([b,ds])=>({b,s:computeStreak(ds)})).filter(x=>x.s>=1).sort((a,c)=>c.s-a.s).slice(0,8);
+    const streaks=Object.entries(datesBy).map(([b,ds])=>({b,s:computeStreak(ds)})).filter(x=>x.s>=1).sort((a,c)=>c.s-a.s).slice(0,7);
+    const medals=['🥇','🥈','🥉'];
     document.getElementById('tv-streaks').innerHTML=streaks.length?streaks.map((x,i)=>
-      `<div style="display:flex;align-items:center;gap:10px;font-size:15px;padding:6px 0;${i<streaks.length-1?'border-bottom:1px solid rgba(255,255,255,0.07)':''}">
-        <span style="width:20px;color:#7fa8c8;font-weight:700">${i+1}</span>
-        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${nameOf[x.b]}</span>
-        <span style="font-weight:800;color:#f5a623">🔥 ${x.s}</span>
-      </div>`).join(''):'<div style="color:#7fa8c8;font-size:13px">—</div>';
-    // Latest completions
-    const latest=todayRes.filter(r=>nameOf[r.badge_number]).slice(0,8);
+      `<div style="display:flex;align-items:center;gap:10px;font-size:14px;padding:6px 0;${i<streaks.length-1?'border-bottom:1px solid #eef4fa':''}">
+        <span style="width:24px;font-weight:700;color:#8aa4bf">${medals[i]||(i+1)}</span>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#1d3a5c">${nameOf[x.b]}</span>
+        <span style="font-weight:800;color:#e07b00">🔥 ${x.s}</span>
+      </div>`).join(''):'<div style="color:#8aa4bf;font-size:13px">—</div>';
+    // ── Derniers quiz ──
+    const latest=todayRes.filter(r=>nameOf[r.badge_number]).slice(0,7);
     document.getElementById('tv-latest').innerHTML=latest.length?latest.map((r,i)=>
-      `<div style="display:flex;align-items:center;gap:10px;font-size:15px;padding:6px 0;${i<latest.length-1?'border-bottom:1px solid rgba(255,255,255,0.07)':''}">
-        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${nameOf[r.badge_number]}</span>
-        <span style="font-weight:800;color:${r.score>=3?'#2fbf71':r.score>=2?'#f39200':'#ff6b6b'}">${r.score}/3</span>
-      </div>`).join(''):'<div style="color:#7fa8c8;font-size:13px">—</div>';
+      `<div style="display:flex;align-items:center;gap:10px;font-size:14px;padding:6px 0;${i<latest.length-1?'border-bottom:1px solid #eef4fa':''}">
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;color:#1d3a5c">${nameOf[r.badge_number]}</span>
+        <span style="font-weight:800;color:${r.score>=3?'#008d36':r.score>=2?'#e07b00':'#d31a2b'}">${r.score}/3</span>
+      </div>`).join(''):'<div style="color:#8aa4bf;font-size:13px">—</div>';
   }catch(e){console.error('TV error',e);}
 }
 if(location.hash==='#tv'){startTV();}
