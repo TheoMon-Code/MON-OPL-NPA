@@ -12,7 +12,8 @@
   <meta name="apple-mobile-web-app-title" content="MON Quiz"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <title>MON NPA — OPL Quiz</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23006eaf'/><text y='72' x='50' text-anchor='middle' font-size='62' fill='white' font-weight='800' font-family='sans-serif'>M</text></svg>">
+  <link rel="icon" href="/favicon.ico" sizes="32x32 48x48">
+  <link rel="icon" type="image/png" href="/favicon-64.png" sizes="64x64">
   <link rel="preconnect" href="https://wezkonqnlkmkthbfimai.supabase.co" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -434,7 +435,7 @@
       .dash-wrap{padding:1.5rem 1.5rem}
       .kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
       .panels{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
-      .q-text{font-size:16px}
+      .q-text{font-size:19px}
       .login-card{padding:2.5rem 2rem}
     }
 
@@ -572,6 +573,88 @@
     .login-wm{position:absolute;bottom:-20px;right:-20px;opacity:0.045;pointer-events:none;z-index:0;transform:rotate(-8deg)}
   }
 
+    /* ── Visibilité selon le rôle du compte connecté ── */
+    body.role-client .client-hide{display:none !important}
+    body:not(.role-admin) .admin-only{display:none !important}
+    .role-chip{font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;border-radius:20px;padding:3px 10px;white-space:nowrap}
+    .role-chip.admin{background:#e8f4fb;color:#004990;border:1px solid #b5d8f0}
+    .role-chip.manager{background:#edfbf3;color:#005020;border:1px solid #a8ddb8}
+    .role-chip.client{background:#fff5e6;color:#8a4b00;border:1px solid #fdd49a}
+
+    /* ══ TABLETTE / iPAD — écran des employés (≥768px) ══
+     Les opérateurs répondent sur tablette : tout doit être plus grand,
+     lisible à bout de bras et facile à toucher avec des gants. */
+  @media(min-width:768px){
+    .quiz-wrap{max-width:720px;padding:2rem 2rem 3rem}
+    .q-card{padding:2.25rem 2.5rem;border-radius:20px}
+    .q-text{font-size:24px;line-height:1.6;margin-bottom:1rem}
+    .q-num{font-size:13px}
+    .opt{font-size:19px;padding:22px 20px;border-radius:16px;margin-bottom:12px;min-height:68px}
+    .opt-letter{width:42px;height:42px;font-size:16px}
+    .next-btn{padding:22px;font-size:19px;border-radius:14px}
+    #q-explanation{font-size:15px !important;padding:14px 18px !important}
+    .login-card{max-width:560px}
+    .badge-wrap input{font-size:26px;padding:20px 16px}
+    .login-btn{padding:18px;font-size:18px}
+  }
+  /* Grande tablette en paysage : on élargit encore un peu */
+  @media(min-width:1024px) and (orientation:landscape){
+    .quiz-wrap{max-width:820px}
+    .q-text{font-size:26px}
+    .opt{font-size:20px;min-height:74px}
+  }
+  /* Appareil tactile : cibles minimum 60px, pas d'effet de survol trompeur */
+  @media(hover:none) and (pointer:coarse){
+    /* pas d'effet de survol collant après un appui, sans masquer le vert/rouge */
+    .opt:not(.correct):not(.wrong):hover{background:#fafbfc;border-color:#e2e8f0;color:var(--text2)}
+    .next-btn,.login-btn{min-height:56px}
+  }
+  /* cible tactile minimale sur petits écrans (les tablettes ont déjà plus grand) */
+  @media(hover:none) and (pointer:coarse) and (max-width:767px){
+    .opt{min-height:62px}
+  }
+
+  /* ══ TÉLÉPHONE — barre du haut compacte (managers) ══ */
+  @media(max-width:479px){
+    .topbar{padding:0 0.75rem;height:auto;min-height:56px;flex-wrap:nowrap;gap:6px}
+    .topbar-logo{gap:8px;min-width:0;flex:1}
+    .topbar-label{min-width:0}
+    .topbar-logo img{height:26px}
+    .topbar-divider{display:none}
+    .topbar-label-top{display:none}
+    .topbar-label-bot{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topbar-right{gap:6px;flex-shrink:0}
+    .role-chip{font-size:9px;padding:2px 7px}
+    #lang-toggle-btn{padding:4px 7px !important;font-size:11px !important}
+    .dark-toggle{width:30px;height:30px;font-size:14px}
+    .mgr-back-btn{padding:5px 9px;font-size:11px}
+    /* Matrice : colonne de noms plus étroite pour laisser voir les OPL */
+    .mx-name,.mx-corner{max-width:112px;font-size:10px;padding:4px 6px}
+    .mx-cell{width:22px;height:22px}
+    .mx-head{height:66px}
+    #mx-wrap{max-height:60vh}
+    /* Filtres de la matrice empilés */
+    #mx-dept,#mx-role{min-width:0 !important;flex:1}
+  }
+
+  /* ── Matrice de compétences ── */
+  .mx-table{border-collapse:separate;border-spacing:0;font-size:11px}
+  .mx-table th,.mx-table td{padding:0;margin:0}
+  .mx-corner,.mx-name{position:sticky;left:0;background:var(--surface);z-index:3;text-align:left;
+    padding:4px 10px;white-space:nowrap;border-right:1.5px solid var(--border);max-width:190px;overflow:hidden;text-overflow:ellipsis}
+  .mx-head{position:sticky;top:0;background:var(--surface);z-index:2;height:78px;vertical-align:bottom;
+    border-bottom:1.5px solid var(--border);padding:0 0 4px 0}
+  .mx-corner{top:0;z-index:4;border-bottom:1.5px solid var(--border)}
+  .mx-head span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;
+    font-weight:700;color:var(--text2);margin:0 auto;letter-spacing:.3px}
+  .mx-cell{width:26px;height:26px;border-radius:4px;display:block;margin:1px auto;cursor:pointer;border:1px solid rgba(0,0,0,.05)}
+  .mx-cell:hover{outline:2px solid var(--blue1);outline-offset:1px}
+  .mx-row:hover .mx-name{background:#f0f7ff}
+  body.dark .mx-corner,body.dark .mx-name,body.dark .mx-head{background:var(--surface)}
+  body.dark .mx-row:hover .mx-name{background:#1e2438}
+  .mx-lg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+  .mx-lg i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.08)}
+
   /* Quiz global progress bar */
   .q-progress-bar{height:6px;background:#e2e8f0;border-radius:3px;margin-bottom:1.25rem;overflow:hidden}
   .q-progress-fill{height:6px;background:linear-gradient(90deg,#004990,#006eaf,#4eb2e5);border-radius:3px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);width:0%}
@@ -608,6 +691,7 @@
   </div>
   <div class="topbar-right">
     <span class="topbar-date" id="top-date"></span>
+    <span class="role-chip" id="role-chip" style="display:none"></span>
     <button id="lang-toggle-btn" onclick="toggleAppLang()" title="เปลี่ยนภาษา / Change language" style="border:1.5px solid rgba(0,73,144,0.25);background:rgba(255,255,255,0.55);color:#1a3a5c;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:0.5px">EN</button>
     <button class="dark-toggle" id="dark-toggle-btn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
     <button class="mgr-back-btn" id="mgr-back-btn" onclick="goToLogin()">← Employee Login</button>
@@ -630,7 +714,7 @@
     <div class="dm-score-row">
       <div class="dm-score-ring" id="dm-ring">—</div>
       <div class="dm-score-label" id="dm-score-label">—</div>
-      <button id="dm-reset-btn" onclick="resetEmployeeQuiz()" style="display:none;margin-left:auto;font-size:11px;padding:5px 12px;border:1.5px solid #f5b5b0;border-radius:7px;background:#fdecea;color:#7a1020;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap" title="Let employee retake today's quiz">🔄 Reset</button>
+      <button id="dm-reset-btn" class="client-hide" onclick="resetEmployeeQuiz()" style="display:none;margin-left:auto;font-size:11px;padding:5px 12px;border:1.5px solid #f5b5b0;border-radius:7px;background:#fdecea;color:#7a1020;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap" title="Let employee retake today's quiz">🔄 Reset</button>
     </div>
     <div class="dm-tab-row">
       <button class="dm-tab-btn active" id="dmt-quiz" onclick="switchDetailTab('quiz')" data-i18n="p2_todayQuiz">Today's Quiz</button>
@@ -1038,7 +1122,7 @@
         <div class="import-zone" id="import-zone" onclick="document.getElementById('xlsx-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleImportDrop(event)">
           <div class="import-zone-icon">📂</div>
           <div class="import-zone-text" data-i18n="p2_dropFile">Click to choose a file or drag &amp; drop</div>
-          <div class="import-zone-sub">Format: .xlsx — columns: WI Ref, Department, Question EN, Question TH, A, B, C, D, A TH, B TH, C TH, D TH, Correct (A/B/C/D), Difficulty</div>
+          <div class="import-zone-sub"><span data-i18n="imp_hint">Columns are matched by name — order does not matter. Download the Template first.</span></div>
         </div>
         <input type="file" id="xlsx-input" accept=".xlsx,.xls" style="display:none" onchange="handleImportFile(this)">
         <div id="import-preview-wrap" style="display:none">
@@ -1057,6 +1141,7 @@
           <div><div class="panel-title" data-i18n="d_qBank">📚 Question Bank</div><div class="panel-sub" data-i18n="d_qBankSub">Approve → enters quiz pool immediately · Reject → deleted permanently</div></div>
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <button onclick="exportQuestions()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:4px">⬇️ Export</button>
+            <button onclick="openNewQuestion()" style="background:#006eaf;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" data-i18n="q_addBtn">+ Add question</button>
             <button id="approve-all-btn" onclick="approveAllQuestions()" style="display:none;background:#008d36;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" data-i18n="p2_approveAll">✅ Approve all</button>
             <span id="qbank-count-badge" class="qbank-count-badge">Loading...</span>
           </div>
@@ -1174,14 +1259,40 @@
         </div>
       </div>
 
+      <!-- MATRICE DE COMPÉTENCES (Employés × OPL) -->
+      <div class="panel" style="margin-bottom:1.5rem">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title" data-i18n="mx_title">🧩 Skill matrix — Employees × OPL</div>
+            <div class="panel-sub" data-i18n="mx_sub">Colour = mastery level, computed from every answer over the last 90 days. Click a cell for the question-by-question detail.</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <select class="filter-select" id="mx-dept" onchange="renderMatrix()" style="min-width:120px">
+              <option value="" data-i18n="d_allDepts">All Departments</option>
+              <option value="WH">WH</option><option value="PD">PD</option>
+            </select>
+            <select class="filter-select" id="mx-role" onchange="renderMatrix()" style="min-width:130px">
+              <option value="" data-i18n="q_allRoles">All positions</option>
+              <option value="MHE">MHE Operator</option><option value="PACK">Manual pack</option>
+              <option value="CHECK">Checker</option><option value="SSCC">SSCC Staff</option>
+              <option value="SAFETY">Safety</option><option value="LEAD">Supervisor / Leader</option>
+            </select>
+            <button onclick="exportMatrixCsv()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">⬇️ CSV</button>
+          </div>
+        </div>
+        <div id="mx-legend" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px"></div>
+        <div id="mx-wrap" style="overflow:auto;max-height:70vh;border:1px solid var(--border);border-radius:10px">
+          <div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">Loading…</div>
+        </div>
+      </div>
+
       <!-- SKILL MATRIX SECTION -->
       <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
           <span style="font-size:1.25rem">📊</span>
           <span style="font-size:1rem;font-weight:700;color:var(--text)">Skill Matrix</span>
-          <span style="background:#e8f4ff;color:#006eaf;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #b3d9f5;letter-spacing:.4px">CLAUDE AI</span>
         </div>
-        <p style="font-size:13px;color:var(--text2);margin:0 0 1.25rem 0;line-height:1.5">Automatically analyzes quiz results and generates an Excel report with each employee's skill level per OPL topic. Identifies weak areas and tracks progress over time.</p>
+        <p style="font-size:13px;color:var(--text2);margin:0 0 1.25rem 0;line-height:1.5" data-i18n="mx_exportSub">Export an Excel report with each employee's level per OPL topic, weak areas and progress over the period.</p>
 
         <!-- PERIOD SELECTOR -->
         <div style="margin-bottom:1.25rem">
@@ -1240,7 +1351,7 @@
       </div>
 
       <!-- BACKUP -->
-      <div class="panel" style="margin-bottom:12px">
+      <div class="panel admin-only" style="margin-bottom:12px">
         <div class="panel-header">
           <div>
             <div class="panel-title" data-i18n="p2_backupTitle">💾 Database backup</div>
@@ -1312,9 +1423,36 @@
     <div class="modal-title" data-i18n="p2_editQ">✏️ Edit question</div>
     <input type="hidden" id="eq-id">
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:1rem">
-      <div class="emp-form-field">
-        <label class="emp-form-label" for="eq-wi">WI Reference</label>
-        <input class="emp-form-input" id="eq-wi" placeholder="e.g. WH-OPL-001">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="emp-form-field">
+          <label class="emp-form-label" for="eq-wi" data-i18n="q_oplRef">OPL Reference</label>
+          <input class="emp-form-input" id="eq-wi" placeholder="OPL-001">
+        </div>
+        <div class="emp-form-field">
+          <label class="emp-form-label" for="eq-version" data-i18n="q_oplVer">OPL Version</label>
+          <input class="emp-form-input" id="eq-version" placeholder="v01s01">
+        </div>
+        <div class="emp-form-field">
+          <label class="emp-form-label" for="eq-dept" data-i18n="p2_dept2">Department</label>
+          <select class="emp-form-input" id="eq-dept">
+            <option value="WH">WH — Warehouse</option>
+            <option value="PD">PD — Production</option>
+            <option value="WH,PD">WH + PD</option>
+            <option value="ALL">ALL</option>
+          </select>
+        </div>
+        <div class="emp-form-field">
+          <label class="emp-form-label" for="eq-roles" data-i18n="q_roles">Target roles</label>
+          <select class="emp-form-input" id="eq-roles">
+            <option value="" data-i18n="q_allRoles">All positions</option>
+            <option value="MHE">MHE Operator</option>
+            <option value="PACK">Manual pack</option>
+            <option value="CHECK">Checker</option>
+            <option value="SSCC">SSCC Staff</option>
+            <option value="SAFETY">Safety</option>
+            <option value="LEAD">Supervisor / Leader</option>
+          </select>
+        </div>
       </div>
       <div class="emp-form-field">
         <label class="emp-form-label" for="eq-q-en">Question (EN)</label>
@@ -1362,6 +1500,17 @@
 </div>
 
 <script>
+// ── DATE = HEURE DE BANGKOK (UTC+7) ───────────────────────────────────────────
+// La base enregistre quiz_date en heure de Bangkok (défaut SQL). Le client doit
+// utiliser la même journée, sinon l'équipe de nuit (23h-07h) est décalée d'un jour.
+// .bkk() remplace toISOString().split("T")[0] partout dans l app.
+Date.prototype.bkk=function(){return new Date(this.getTime()+7*3600000).toISOString().split('T')[0];};
+const BKK_TZ={timeZone:'Asia/Bangkok'};
+// Thème : clair de 06h00 à 17h59 (Bangkok), sombre sinon. Déclaré tôt car
+// applyI18n() appelle applyTheme() dès le chargement de la page.
+const THEME_LIGHT_FROM=6, THEME_LIGHT_TO=18;
+let themeMode='auto';
+
 // ── SERVICE WORKER REGISTRATION ───────────────────────────────────────────────
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/sw.js').catch(()=>{});
@@ -1381,6 +1530,39 @@ function cacheEmployee(badge, data){ try{localStorage.setItem('mon-emp-'+badge, 
 function getCachedEmployee(badge){ try{const d=localStorage.getItem('mon-emp-'+badge);return d?JSON.parse(d):null;}catch(e){return null;} }
 function cacheQuestions(dept, data){ try{localStorage.setItem('mon-q-'+dept, JSON.stringify(data));}catch(e){} }
 function getCachedQuestions(dept){ try{const d=localStorage.getItem('mon-q-'+dept);return d?JSON.parse(d):null;}catch(e){return null;} }
+
+// ── CIBLAGE PAR POSTE ─────────────────────────────────────────────────────────
+// Le poste libre (« MHE Operator FG (RT&CBT) », « Manual pack »…) est ramené à un
+// groupe de rôle. Une question peut viser un ou plusieurs groupes, ou tous.
+const ROLE_GROUPS=[
+  {code:'MHE',   re:/mhe|forklift|reach\s*truck|คนขับ|โฟล์ค/i},
+  {code:'PACK',  re:/manual\s*pa|packing|แพ็ค/i},
+  {code:'CHECK', re:/checker|check|ตรวจ/i},
+  {code:'SSCC',  re:/ssc/i},
+  {code:'SAFETY',re:/safety|sheq|ความปลอดภัย/i},
+  {code:'LEAD',  re:/supervisor|leader|manager|admin|หัวหน้า/i}
+];
+const ROLE_LABELS={MHE:'MHE Operator',PACK:'Manual pack',CHECK:'Checker',SSCC:'SSCC Staff',SAFETY:'Safety',LEAD:'Supervisor / Leader',OTHER:'Autre'};
+function roleGroup(position){
+  const p=String(position||'');
+  const hit=ROLE_GROUPS.find(g=>g.re.test(p));
+  return hit?hit.code:'OTHER';
+}
+// Équipe d'un employé : valeur explicite en base si elle existe, sinon déduite du poste
+function empRole(e){
+  const forced=String((e&&e.role_group)||'').trim().toUpperCase();
+  if(forced&&ROLE_LABELS[forced])return forced;
+  return roleGroup(e&&e.position);
+}
+function splitList(v){return String(v||'').split(',').map(x=>x.trim().toUpperCase()).filter(Boolean);}
+function qMatchesDept(q,dept){
+  const list=splitList(q.department);
+  return !list.length||list.includes('ALL')||list.includes(String(dept||'').toUpperCase());
+}
+function qMatchesRole(q,emp){
+  const list=splitList(q.roles);
+  return !list.length||list.includes('ALL')||list.includes(empRole(emp));
+}
 
 // ── OFFLINE RESULTS QUEUE ─────────────────────────────────────────────────────
 function queueResult(data){ try{const q=JSON.parse(localStorage.getItem('mon-pending')||'[]');q.push(data);localStorage.setItem('mon-pending',JSON.stringify(q));}catch(e){} }
@@ -1407,6 +1589,42 @@ const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI
 const H={'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json'};
 const sbFetch=(p,o={})=>fetch(SURL+'/rest/v1/'+p,{headers:H,...o});
 const sbGet=async p=>{const r=await sbFetch(p);return r.ok?r.json():[];};
+// L'API Supabase plafonne chaque réponse (1000 lignes par défaut) : on pagine.
+// Un ordre stable (id) est imposé, sinon les pages peuvent se chevaucher.
+const sbGetAll=async(p,page=1000)=>{
+  let q=p.includes('?')?p:p+'?';
+  q+= /[?&]order=/.test(q) ? (/[?&]order=[^&]*id/.test(q)?'':',id.asc')
+                           : ((q.endsWith('?')?'':'&')+'order=id.asc');
+  const url=n=>q+'&limit='+page+'&offset='+n;
+  // 1re page + total exact (en-tête Content-Range), puis pages restantes en parallèle
+  const r0=await sbFetch(url(0),{headers:{...H,'Prefer':'count=exact'}});
+  if(!r0.ok)return [];
+  const rows=await r0.json();
+  if(rows.length<page)return rows;
+  const cr=r0.headers.get('content-range')||'';
+  const totalTxt=cr.split('/')[1];
+  const total=totalTxt&&totalTxt!=='*'?parseInt(totalTxt,10):null;
+  if(total&&total>page){
+    const offsets=[];
+    for(let off=page;off<total&&off<200000;off+=page)offsets.push(off);
+    const pages=await Promise.all(offsets.map(async off=>{
+      const r=await sbFetch(url(off));
+      return r.ok?r.json():[];
+    }));
+    pages.forEach(pg=>rows.push(...pg));
+    return rows;
+  }
+  // Repli séquentiel si le total n'est pas fourni
+  for(let off=page;off<200000;off+=page){
+    const r=await sbFetch(url(off));
+    if(!r.ok)break;
+    const pg=await r.json();
+    rows.push(...pg);
+    if(pg.length<page)break;
+  }
+  return rows;
+};
+const _roleGuard=()=>{if(accessRole==='client'){showToast(t('roleReadOnly'));return false;}return true;};
 const sbPost=(p,b)=>sbFetch(p,{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(b)});
 const sbPatch=(p,b)=>sbFetch(p,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(b)});
 const sbDelete=p=>sbFetch(p,{method:'DELETE',headers:{...H,'Prefer':'return=minimal'}});
@@ -1471,11 +1689,11 @@ d_empTracking:{th:'ติดตามพนักงาน',en:'Employee trackin
 d_all:{th:'ทั้งหมด',en:'All'},d_failed:{th:'ไม่ผ่าน',en:'Failed'},d_pendingTab:{th:'รอทำ',en:'Pending'},
 d_thBadge:{th:'รหัส',en:'Badge'},d_thName:{th:'ชื่อ',en:'Name'},d_thDept:{th:'แผนก',en:'Dept'},d_thPosition:{th:'ตำแหน่ง',en:'Position'},d_thShift:{th:'กะ',en:'Shift'},d_thScore:{th:'คะแนน',en:'Score'},d_thStreak:{th:'สตรีค',en:'Streak'},d_thTrend:{th:'แนวโน้ม',en:'Trend'},d_thStatus:{th:'สถานะ',en:'Status'},
 d_byDept:{th:'ตามแผนก',en:'By department'},d_byShift:{th:'ตามกะ',en:'By shift'},d_complSel:{th:'ความสำเร็จของวันที่เลือก',en:'Completion for selected date'},
-d_dayOfWeek:{th:'📅 คะแนนตามวันในสัปดาห์',en:'📅 Score by day of week'},d_dayOfWeekSub:{th:'คะแนนเฉลี่ยรายวัน — ตลอดเวลา',en:'Average score per weekday — all time'},
+d_dayOfWeek:{th:'📅 คะแนนตามวันในสัปดาห์',en:'📅 Score by day of week'},d_dayOfWeekSub:{th:'คะแนนเฉลี่ยรายวัน — 90 วันล่าสุด',en:'Average score per weekday — last 90 days'},
 d_shiftComp:{th:'🔄 เปรียบเทียบกะ',en:'🔄 Shift comparison'},d_shiftCompSub:{th:'คะแนนเฉลี่ยและการเข้าร่วมตามกะ',en:'Average score and participation by shift'},
 d_scoreTrend:{th:'📈 แนวโน้มคะแนน',en:'📈 Score trend'},
 d_oplPerf:{th:'📋 ผลตาม OPL',en:'📋 OPL Performance'},d_oplPerfSub:{th:'อัตราตอบผิดตาม Working Instruction — คลิกเพื่อดูว่าใครตอบผิด',en:'Error rate by Working Instruction — click to see who failed'},
-d_mostFailed:{th:'⚠️ คำถามที่ตอบผิดบ่อยที่สุด',en:'⚠️ Most failed questions'},d_mostFailedSub:{th:'ตลอดเวลา — คำถามที่มีอัตราตอบผิดสูงสุด',en:'All time — questions with highest error rate'},
+d_mostFailed:{th:'⚠️ คำถามที่ตอบผิดบ่อยที่สุด',en:'⚠️ Most failed questions'},d_mostFailedSub:{th:'90 วันล่าสุด — คำถามที่มีอัตราตอบผิดสูงสุด',en:'Last 90 days — questions with highest error rate'},
 d_empHist:{th:'👤 ประวัติคะแนนพนักงาน',en:'👤 Employee score history'},d_empHistSub:{th:'แนวโน้มคะแนนรายบุคคล — 30 วันล่าสุด',en:'Personal score trend — last 30 days'},
 d_importQ:{th:'📥 นำเข้าคำถามจาก Excel',en:'📥 Import questions from Excel'},d_importQSub:{th:'อัปโหลดไฟล์ .xlsx — คำถามที่นำเข้าจะเข้าคลังเพื่อรอตรวจสอบก่อนใช้ในแบบทดสอบ',en:'Upload a .xlsx file — imported questions go to the bank for validation before entering the quiz'},
 d_qBank:{th:'📚 คลังคำถาม',en:'📚 Question Bank'},d_qBankSub:{th:'อนุมัติ → ใช้ในแบบทดสอบทันที · ปฏิเสธ → ลบถาวร',en:'Approve → enters quiz pool immediately · Reject → deleted permanently'},
@@ -1514,6 +1732,25 @@ p2_editQ:{th:'✏️ แก้ไขคำถาม',en:'✏️ Edit question'},
 p2_dropFile:{th:'คลิกเพื่อเลือกไฟล์ หรือลากมาวาง',en:'Click to choose a file or drag &amp; drop'},
 p2_importEmpBtn:{th:'✅ นำเข้าพนักงาน',en:'✅ Import employees'},
 p2_importQBtn:{th:'✅ นำเข้าสู่คลังคำถาม',en:'✅ Import to Question Bank'},
+themeAuto:{th:'ธีมอัตโนมัติ · สว่าง 06-18 น.',en:'Auto theme · light 6am-6pm'},
+themeLight:{th:'ธีมสว่างตลอดเวลา',en:'Always light'},
+themeDark:{th:'ธีมมืดตลอดเวลา',en:'Always dark'},
+mx_title:{th:'🧩 เมทริกซ์ทักษะ — พนักงาน × OPL',en:'🧩 Skill matrix — Employees × OPL'},
+mx_sub:{th:'สีแสดงระดับความเชี่ยวชาญ คำนวณจากทุกคำตอบใน 90 วันล่าสุด · คลิกช่องเพื่อดูรายละเอียดรายข้อ',en:'Colour = mastery level, computed from every answer over the last 90 days. Click a cell for the question-by-question detail.'},
+mx_exportSub:{th:'ส่งออกรายงาน Excel ระดับของพนักงานแต่ละคนตาม OPL จุดอ่อน และความก้าวหน้าในช่วงเวลาที่เลือก',en:"Export an Excel report with each employee's level per OPL topic, weak areas and progress over the period."},
+roleReadOnly:{th:'บัญชีนี้ดูข้อมูลได้เท่านั้น',en:'This account is read-only'},
+q_addBtn:{th:'+ เพิ่มคำถาม',en:'+ Add question'},
+q_newTitle:{th:'➕ คำถามใหม่',en:'➕ New question'},
+q_oplRef:{th:'อ้างอิง OPL',en:'OPL Reference'},
+q_oplVer:{th:'เวอร์ชัน OPL',en:'OPL Version'},
+q_roles:{th:'ตำแหน่งเป้าหมาย',en:'Target roles'},
+q_allRoles:{th:'ทุกตำแหน่ง',en:'All positions'},
+q_saveBtn:{th:'บันทึกคำถาม',en:'Save question'},
+q_created:{th:'สร้างคำถามแล้ว — รออนุมัติ ✓',en:'Question created — pending approval ✓'},
+q_errOptions:{th:'ต้องมีตัวเลือกอย่างน้อย 2 ข้อ',en:'At least 2 options are required'},
+q_errGap:{th:'กรอกตัวเลือกตามลำดับ A, B แล้ว C, D',en:'Fill options in order: A, B then C, D'},
+q_errCorrect:{th:'คำตอบที่ถูกชี้ไปที่ตัวเลือกว่าง',en:'The correct answer points to an empty option'},
+imp_hint:{th:'ระบบอ่านคอลัมน์จากชื่อหัวตาราง — ลำดับไม่สำคัญ · ดาวน์โหลด Template ก่อนกรอก',en:'Columns are matched by name — order does not matter. Download the Template first.'},
 p2_search:{th:'🔍 ค้นหาชื่อหรือหมายเลขบัตร...',en:'🔍 Search name or badge...'},
 p2_reportPeriod:{th:'ช่วงเวลารายงาน',en:'Report period'},
 p2_thisWeek:{th:'สัปดาห์นี้',en:'This week'},p2_lastWeek:{th:'สัปดาห์ที่แล้ว',en:'Last week'},
@@ -1539,6 +1776,7 @@ function applyI18n(){
   const bi=document.getElementById('badge-input');if(bi)bi.placeholder=t('badgePh');
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
   const lb=document.getElementById('lang-toggle-btn');if(lb)lb.textContent=appLang==='th'?'EN':'ไทย';
+  if(typeof applyTheme==='function')applyTheme();
   const sq=document.getElementById('s-quiz');
   if(sq&&sq.classList.contains('active')&&qs&&qs.length&&document.getElementById('next-btn').style.display==='none')renderQ();
 }
@@ -1581,7 +1819,7 @@ function updateSteps(idx){
   if(fill)fill.style.width=pct+'%';
 }
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-function goToLogin(){_stopSessionTimer();user=null;qs=[];qi=0;sc=0;ans=[];document.getElementById('badge-input').value='';go('s-login');}
+function goToLogin(){_stopSessionTimer();applyAccessRole('employee');user=null;qs=[];qi=0;sc=0;ans=[];document.getElementById('badge-input').value='';go('s-login');}
 
 // ── SESSION TIMEOUT ───────────────────────────────────────────────────────────
 // Employee: 2 min — Manager: 5 min
@@ -1626,16 +1864,159 @@ function _onSessionExpired(){
   }
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// MATRICE DE COMPÉTENCES — Employés × OPL
+// Une cellule agrège toutes les réponses d'un employé aux questions d'un OPL :
+//   acquis      (vert foncé) : aucune erreur
+//   ok          (vert clair) : erreurs passées, dernière réponse juste, < 1/3 d'erreurs
+//   fragile     (jaune)      : dernière réponse juste mais plus d'1/3 d'erreurs
+//   à revoir    (orange)     : dernière réponse fausse
+//   critique    (rouge)      : dernière fausse et au moins 2 erreurs
+//   non évalué  (gris)       : jamais posé
+// ══════════════════════════════════════════════════════════════════════════════
+const MX_LEVELS={
+  mastered:{color:'#00701f',th:'เชี่ยวชาญ',en:'Mastered'},
+  ok:      {color:'#4caf50',th:'ผ่าน',en:'OK'},
+  fragile: {color:'#f5c400',th:'ไม่มั่นคง',en:'Shaky'},
+  review:  {color:'#f39200',th:'ต้องทบทวน',en:'To review'},
+  critical:{color:'#d31a2b',th:'วิกฤต',en:'Critical'},
+  none:    {color:'#e8eef5',th:'ยังไม่ประเมิน',en:'Not assessed'}
+};
+
+function mxLevel(c){
+  if(!c||!c.attempts)return 'none';
+  if(c.errors===0)return 'mastered';
+  if(c.lastOk===false)return c.errors>=2?'critical':'review';
+  return (c.errors/c.attempts)>1/3?'fragile':'ok';
+}
+
+// Agrège l'historique en { badge: { oplRef: {attempts,errors,lastOk,lastDate,questions:{}} } }
+function buildMatrix(history,questions){
+  const oplOf={},qText={};
+  (questions||[]).forEach(q=>{oplOf[String(q.id)]=q.wi_reference||'—';qText[String(q.id)]=q.question_th||q.question_text||'';});
+  const cells={};
+  (history||[]).forEach(r=>{
+    if(!r.badge_number||!r.quiz_date)return;
+    ['q1','q2','q3'].forEach(pos=>{
+      const id=r[pos+'_id'];if(!id)return;
+      const ref=oplOf[String(id)];if(!ref)return;                       // question supprimée/inactive
+      const ok=r[pos+'_correct']===true;
+      const byB=cells[r.badge_number]=cells[r.badge_number]||{};
+      const c=byB[ref]=byB[ref]||{attempts:0,errors:0,lastOk:null,lastDate:'',questions:{}};
+      c.attempts++;if(!ok)c.errors++;
+      if(r.quiz_date>=c.lastDate){c.lastDate=r.quiz_date;c.lastOk=ok;}
+      const qk=c.questions[String(id)]=c.questions[String(id)]||{attempts:0,errors:0,lastOk:null,lastDate:'',text:qText[String(id)]};
+      qk.attempts++;if(!ok)qk.errors++;
+      if(r.quiz_date>=qk.lastDate){qk.lastDate=r.quiz_date;qk.lastOk=ok;}
+    });
+  });
+  return cells;
+}
+
+let _mxCells=null,_mxRows=null,_mxOpls=null;
+
+function renderMatrix(){
+  const wrap=document.getElementById('mx-wrap');
+  if(!wrap)return;
+  const th=appLang==='th';
+  if(!dashHistory||!dashEmployees||!dashQuestions){wrap.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">Loading…</div>';return;}
+  // Légende
+  const lg=document.getElementById('mx-legend');
+  if(lg)lg.innerHTML=Object.keys(MX_LEVELS).map(k=>'<span class="mx-lg"><i style="background:'+MX_LEVELS[k].color+'"></i>'+(th?MX_LEVELS[k].th:MX_LEVELS[k].en)+'</span>').join('');
+
+  _mxCells=buildMatrix(dashHistory,dashQuestions);
+  // OPL présents dans les questions actives, triés
+  _mxOpls=[...new Set(dashQuestions.map(q=>q.wi_reference||'—'))].sort();
+  // Employés filtrés
+  const fd=document.getElementById('mx-dept').value,fr=document.getElementById('mx-role').value;
+  _mxRows=dashEmployees.filter(e=>(!fd||e.department===fd)&&(!fr||empRole(e)===fr))
+                       .sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  if(!_mxRows.length||!_mxOpls.length){
+    wrap.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">'+(th?'ไม่มีข้อมูล':'No data for this filter')+'</div>';return;
+  }
+  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  let html='<table class="mx-table"><thead><tr><th class="mx-corner">'+(th?'พนักงาน':'Employee')+'</th>';
+  _mxOpls.forEach(ref=>{html+='<th class="mx-head"><span>'+esc(ref)+'</span></th>';});
+  html+='</tr></thead><tbody>';
+  _mxRows.forEach(e=>{
+    const byB=_mxCells[e.badge_number]||{};
+    html+='<tr class="mx-row"><td class="mx-name" title="'+esc(e.name)+' · '+esc(e.position||'')+'">'+esc(e.name)+'</td>';
+    _mxOpls.forEach(ref=>{
+      const c=byB[ref],lv=mxLevel(c);
+      const tip=c?esc(e.name)+' · '+esc(ref)+' — '+(c.attempts-c.errors)+'/'+c.attempts+' '+(th?'ถูก':'correct'):esc(e.name)+' · '+esc(ref)+' — '+(th?'ยังไม่ประเมิน':'not assessed');
+      html+='<td><span class="mx-cell" style="background:'+MX_LEVELS[lv].color+'" title="'+tip+'" onclick="openMatrixCell(\''+esc(e.badge_number)+'\',\''+esc(ref)+'\')"></span></td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  wrap.innerHTML=html;
+}
+
+function openMatrixCell(badge,ref){
+  const th=appLang==='th';
+  const emp=(dashEmployees||[]).find(e=>e.badge_number===badge)||{name:badge};
+  const c=((_mxCells||{})[badge]||{})[ref];
+  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  document.getElementById('dm-name').textContent=emp.name;
+  document.getElementById('dm-meta').textContent=[ref,emp.position,emp.department].filter(Boolean).join(' · ');
+  const lv=mxLevel(c);
+  const ring=document.getElementById('dm-ring');
+  ring.textContent=c?(c.attempts-c.errors)+'/'+c.attempts:'—';
+  ring.style.borderColor=MX_LEVELS[lv].color;ring.style.color=MX_LEVELS[lv].color;
+  document.getElementById('dm-score-label').innerHTML='<strong>'+(th?MX_LEVELS[lv].th:MX_LEVELS[lv].en)+'</strong>'
+    +(c?'<br><span style="color:var(--text3)">'+(th?'ตอบล่าสุด':'last answered')+' '+c.lastDate+'</span>':'');
+  const rb=document.getElementById('dm-reset-btn');if(rb)rb.style.display='none';
+  // Détail question par question
+  const qs=(dashQuestions||[]).filter(q=>(q.wi_reference||'—')===ref);
+  const body=qs.map(q=>{
+    const k=(c&&c.questions[String(q.id)])||null;
+    const l=mxLevel(k);
+    return '<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border)">'
+      +'<span style="width:12px;height:12px;border-radius:3px;background:'+MX_LEVELS[l].color+';flex-shrink:0;margin-top:3px"></span>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:12px;color:var(--text);line-height:1.45">'+esc(q.question_th||q.question_text)+'</div>'
+      +'<div style="font-size:11px;color:var(--text3);margin-top:2px">'
+      +(k?((k.attempts-k.errors)+'/'+k.attempts+' '+(th?'ถูก':'correct')+' · '+(th?'ล่าสุด':'last')+' '+(k.lastOk?'✓':'✗')+' ('+k.lastDate+')')
+         :(th?'ยังไม่เคยถาม':'never asked'))
+      +'</div></div></div>';
+  }).join('')||'<div style="color:var(--text3);font-size:12px;padding:1rem 0">'+(th?'ไม่มีคำถามสำหรับ OPL นี้':'No active question for this OPL')+'</div>';
+  document.getElementById('dm-questions').innerHTML=body;
+  switchDetailTab('quiz');
+  _currentDetailBadge=null;                        // la modale n'est pas en mode « employé »
+  document.getElementById('detail-overlay').classList.add('active');
+}
+
+function exportMatrixCsv(){
+  if(!_mxRows||!_mxOpls){showToast('Matrix not ready');return;}
+  const esc=v=>{const t=String(v==null?'':v);return /[",\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t;};
+  const lines=[['Badge','Name','Department','Position',..._mxOpls].map(esc).join(',')];
+  _mxRows.forEach(e=>{
+    const byB=(_mxCells||{})[e.badge_number]||{};
+    const row=[e.badge_number,e.name,e.department,e.position||''];
+    _mxOpls.forEach(ref=>{
+      const c=byB[ref],lv=mxLevel(c);
+      row.push(lv==='none'?'':(MX_LEVELS[lv].en+' ('+(c.attempts-c.errors)+'/'+c.attempts+')'));
+    });
+    lines.push(row.map(esc).join(','));
+  });
+  const blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='skill-matrix_'+new Date().bkk()+'.csv';a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ CSV');
+}
+
 // ── DATABASE BACKUP ──────────────────────────────────────────────────────────
 async function downloadBackup(){
+  if(!_roleGuard())return;
   const btn=document.getElementById('backup-btn');
   btn.disabled=true;btn.textContent='⏳ Fetching data…';
   try{
     await ensureXLSX();
     const [emps,questions,results]=await Promise.all([
-      sbGet('employees?select=*&order=badge_number&limit=2000'),
-      sbGet('questions?select=*&order=wi_reference&limit=5000'),
-      sbGet('quiz_results?select=*&order=quiz_date.desc&limit=50000')
+      sbGetAll('employees?select=*&order=badge_number'),
+      sbGetAll('questions?select=*&order=wi_reference'),
+      sbGetAll('quiz_results?select=*&order=quiz_date.desc')
     ]);
     const wb=XLSX.utils.book_new();
     const toSheet=rows=>{
@@ -1646,7 +2027,7 @@ async function downloadBackup(){
     XLSX.utils.book_append_sheet(wb,toSheet(emps),'employees');
     XLSX.utils.book_append_sheet(wb,toSheet(questions),'questions');
     XLSX.utils.book_append_sheet(wb,toSheet(results),'quiz_results');
-    XLSX.writeFile(wb,'opl-quiz-backup_'+new Date().toISOString().split('T')[0]+'.xlsx');
+    XLSX.writeFile(wb,'opl-quiz-backup_'+new Date().bkk()+'.xlsx');
     showToast('💾 Backup downloaded — '+(emps.length)+' employees, '+(questions.length)+' questions, '+(results.length)+' results');
   }catch(e){showToast('Backup error: '+e.message);}
   btn.disabled=false;btn.textContent='💾 Download backup (.xlsx)';
@@ -1660,19 +2041,19 @@ function startTV(){
   document.getElementById('s-tv').classList.add('active');
   loadTV();
   _tvTimer=setInterval(loadTV,60000);
-  setInterval(()=>{const c=document.getElementById('tv-clock');if(c)c.textContent=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});},1000);
+  setInterval(()=>{const c=document.getElementById('tv-clock');if(c)c.textContent=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',...BKK_TZ});},1000);
 }
 async function loadTV(){
   try{
-    const today=new Date().toISOString().split('T')[0];
-    const cutoff=new Date(Date.now()-40*86400000).toISOString().split('T')[0];
+    const today=new Date().bkk();
+    const cutoff=new Date(Date.now()-40*86400000).bkk();
     const [emps,todayRes,hist]=await Promise.all([
       sbGet('employees?is_manager=eq.false&is_active=eq.true&select=badge_number,name,department'),
       sbGet('quiz_results?quiz_date=eq.'+today+'&select=badge_number,score,created_at&order=created_at.desc'),
-      sbGet('quiz_results?quiz_date=gte.'+cutoff+'&select=badge_number,quiz_date')
+      sbGetAll('quiz_results?quiz_date=gte.'+cutoff+'&select=badge_number,quiz_date')
     ]);
     const nameOf={};emps.forEach(e=>nameOf[e.badge_number]=e.name);
-    document.getElementById('tv-date').textContent=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    document.getElementById('tv-date').textContent=new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric',...BKK_TZ});
     // ── Complétion (donut) ──
     const doneSet=new Set(todayRes.map(r=>r.badge_number));
     const doneCount=[...doneSet].filter(b=>nameOf[b]).length;
@@ -1691,7 +2072,7 @@ async function loadTV(){
     const days=[];
     for(let i=6;i>=0;i--){
       const d=new Date(Date.now()-i*86400000);
-      days.push({date:d.toISOString().split('T')[0],label:d.toLocaleDateString('th-TH',{weekday:'short'})});
+      days.push({date:d.bkk(),label:d.toLocaleDateString('th-TH',{weekday:'short',...BKK_TZ})});
     }
     const byDay={};hist.forEach(r=>{if(!nameOf[r.badge_number])return;(byDay[r.quiz_date]=byDay[r.quiz_date]||new Set()).add(r.badge_number);});
     document.getElementById('tv-trend').innerHTML=days.map(d=>{
@@ -1747,13 +2128,47 @@ async function loadTV(){
 }
 if(location.hash==='#tv'){startTV();}
 
-// ── DARK MODE ─────────────────────────────────────────────────────────────────
-function toggleDark(){
-  const dark=document.body.classList.toggle('dark');
-  document.getElementById('dark-toggle-btn').textContent=dark?'☀️':'🌙';
-  try{localStorage.setItem('mon-dark',dark?'1':'0');}catch(e){}
+// ══════════════════════════════════════════════════════════════════════════════
+// THÈME — 3 états : auto (défaut), clair forcé, sombre forcé
+//   auto : clair de 06h00 à 17h59, sombre de 18h00 à 05h59 (heure de Bangkok),
+//          réévalué chaque minute pour basculer sans recharger la page.
+// ══════════════════════════════════════════════════════════════════════════════
+
+function bkkHour(){
+  // heure de Bangkok, quel que soit le fuseau de l'appareil
+  return parseInt(new Date().toLocaleString('en-GB',{hour:'2-digit',hour12:false,...BKK_TZ}),10);
 }
-(function(){try{if(localStorage.getItem('mon-dark')==='1'){document.body.classList.add('dark');document.getElementById('dark-toggle-btn').textContent='☀️';}}catch(e){}})();
+function isDarkHour(){
+  const h=bkkHour();
+  return !(h>=THEME_LIGHT_FROM&&h<THEME_LIGHT_TO);
+}
+function applyTheme(){
+  const dark = themeMode==='dark' || (themeMode==='auto' && isDarkHour());
+  document.body.classList.toggle('dark',dark);
+  const btn=document.getElementById('dark-toggle-btn');
+  if(btn){
+    btn.textContent = themeMode==='auto' ? '🌗' : (dark?'🌙':'☀️');
+    btn.title = themeMode==='auto' ? t('themeAuto') : (dark?t('themeDark'):t('themeLight'));
+    btn.setAttribute('aria-label',btn.title);
+  }
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',dark?'#1a1d27':'#006eaf');
+}
+function toggleDark(){
+  themeMode = themeMode==='auto' ? 'light' : themeMode==='light' ? 'dark' : 'auto';
+  try{localStorage.setItem('mon-theme',themeMode);}catch(e){}
+  applyTheme();
+  showToast(themeMode==='auto'?t('themeAuto'):themeMode==='light'?t('themeLight'):t('themeDark'));
+}
+(function(){
+  try{
+    const saved=localStorage.getItem('mon-theme');
+    if(saved==='light'||saved==='dark'||saved==='auto')themeMode=saved;
+    else if(localStorage.getItem('mon-dark')==='1')themeMode='dark';   // ancien réglage
+  }catch(e){}
+  applyTheme();
+  setInterval(function(){if(themeMode==='auto')applyTheme();},60000);
+})();
 
 // ── MANAGER PASSWORD ─────────────────────────────────────────────────────────
 function openPasswordModal(){
@@ -1772,6 +2187,7 @@ async function checkPassword(){
   const expected=(user&&user.mgr_password)?user.mgr_password:MGR_PASSWORD;
   if(pwd===expected){
     document.getElementById('modal-pwd').classList.remove('active');
+    applyAccessRole(roleOf(user));
     go('s-dash');
     _startSessionTimer(true);
     await loadDash();
@@ -1790,102 +2206,131 @@ async function checkPassword(){
 //   4. Novelty bonus            : never-seen questions get exploration priority
 //   5. 7-day no-repeat window   : same-week questions excluded first
 //   6. Badge-seeded tie-break   : deterministic per employee per day
+// ══════════════════════════════════════════════════════════════════════════════
+// SÉLECTION DES QUESTIONS — répétition espacée
+//  · question ratée      → revient entre 1 et 3 jours après (réglage SRS_WRONG)
+//  · question réussie    → mise en pause, de plus en plus longue à chaque succès
+//  · 3 succès d'affilée  → question « acquise », sortie du tirage pour 30 jours
+//  · jamais vue          → priorité d'exploration
+//  · maximum 2 questions du même OPL dans une session
+// ══════════════════════════════════════════════════════════════════════════════
+const SRS_WRONG=[1,3];      // fourchette de retour après une erreur (jours)
+const SRS_OK=[7,14,30];     // pause après 1, 2, 3+ bonnes réponses consécutives
+const SRS_MASTER=3;         // nombre de bonnes réponses consécutives = acquise
+
+function daysBetween(aStr,bStr){
+  return Math.round((new Date(aStr+'T00:00:00Z')-new Date(bStr+'T00:00:00Z'))/86400000);
+}
+// Petit hachage stable : même employé + même question → toujours le même délai
+function stableHash(str){
+  let h=0;
+  for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))%100000;}
+  return h;
+}
+
+// Construit l'état de révision de chaque question depuis l'historique d'un employé.
+// history = lignes quiz_results (les plus récentes d'abord)
+function buildSrsStats(history,badge,today){
+  const stats={};
+  history.forEach(r=>{
+    if(!r.quiz_date)return;
+    ['q1','q2','q3'].forEach(pos=>{
+      const id=r[pos+'_id'];if(!id)return;
+      const key=String(id);
+      const ok=r[pos+'_correct']===true;
+      if(!stats[key])stats[key]={attempts:0,errors:0,lastDate:null,lastOk:null,streakOk:0,_streakOpen:true,history:[]};
+      const st=stats[key];
+      st.attempts++;
+      if(!ok)st.errors++;
+      st.history.push({date:r.quiz_date,ok});
+      // La 1re occurrence rencontrée est la plus récente (tri desc)
+      if(st.lastDate===null||r.quiz_date>st.lastDate){st.lastDate=r.quiz_date;st.lastOk=ok;}
+      // Série de bonnes réponses consécutives, en partant de la plus récente
+      if(st._streakOpen){ if(ok)st.streakOk++; else st._streakOpen=false; }
+    });
+  });
+  Object.entries(stats).forEach(([key,st])=>{
+    delete st._streakOpen;
+    st.errorRate=st.attempts?st.errors/st.attempts:0;
+    st.mastered=st.streakOk>=SRS_MASTER;
+    // Délai avant réapparition
+    if(st.lastOk===false){
+      const span=SRS_WRONG[1]-SRS_WRONG[0]+1;               // 1, 2 ou 3 jours
+      st.interval=SRS_WRONG[0]+(stableHash(badge+key)%span);
+    }else{
+      st.interval=SRS_OK[Math.min(st.streakOk,SRS_OK.length)-1]||SRS_OK[0];
+    }
+    st.daysSince=st.lastDate?daysBetween(today,st.lastDate):999;
+    st.overdue=st.daysSince-st.interval;                     // >= 0 → à reposer
+    st.due=st.overdue>=0;
+  });
+  return stats;
+}
+
+// Note de priorité d'une question pour un employé donné
+function srsScore(q,stats,oplBoost,seed,i){
+  const st=stats[String(q.id)];
+  let base,label;
+  if(!st){ base=6; label='new'; }                                   // jamais vue
+  else if(st.lastOk===false&&st.due){ base=10; label='relearn'; }   // ratée, à reposer
+  else if(st.lastOk===false){ base=4; label='wrong-soon'; }         // ratée mais trop tôt
+  else if(st.mastered){ base=st.due?1:-2; label='mastered'; }       // acquise
+  else if(st.due){ base=3; label='review'; }                        // révision normale
+  else { base=0; label='resting'; }                                 // en pause
+  const overdueBonus=st?Math.min(Math.max(st.overdue,0),7)*0.25:0;
+  const errBonus=st?st.errorRate*1.5:0;
+  const tie=((seed+i*13)%100)/1000;
+  return{score:base+overdueBonus+errBonus+(oplBoost[q.wi_reference||'?']||0)+tie,label};
+}
+
 async function getAdaptiveQuestions(allQ){
   if(allQ.length<=3)return allQ;
+  const today=new Date().bkk();
+  const badge=String(user.badge_number||'');
 
-  // Fetch up to 90 past sessions (desc = most recent first)
+  // Historique de l'employé (120 dernières sessions)
   let history=[];
   try{
-    const r=await sbFetch('quiz_results?badge_number=eq.'+encodeURIComponent(user.badge_number)
-      +'&select=q1_id,q1_correct,q2_id,q2_correct,q3_id,q3_correct,quiz_date&order=quiz_date.desc&limit=90');
+    const r=await sbFetch('quiz_results?badge_number=eq.'+encodeURIComponent(badge)
+      +'&select=q1_id,q1_correct,q2_id,q2_correct,q3_id,q3_correct,quiz_date&order=quiz_date.desc&limit=120');
     if(r.ok)history=await r.json();
     if(!Array.isArray(history))history=[];
   }catch(e){history=[];}
 
-  // Week boundaries (Mon–Sun)
-  const now=new Date();
-  const today=now.toISOString().split('T')[0];
-  const monday=new Date(now);
-  monday.setDate(now.getDate()-(now.getDay()===0?6:now.getDay()-1));
-  const weekStart=monday.toISOString().split('T')[0];
+  const stats=buildSrsStats(history,badge,today);
 
-  // ── PER-QUESTION STATS ────────────────────────────────────────────────────
-  const stats={};
-  const seenThisWeek=new Set();
-
-  history.forEach(r=>{
-    const daysAgo=Math.max(0,Math.round((new Date(today)-new Date(r.quiz_date))/86400000));
-    // Time decay: this week=1.0, last week=0.6, 2 weeks=0.35, older=0.15
-    const decay=daysAgo<=7?1.0:daysAgo<=14?0.6:daysAgo<=21?0.35:0.15;
-    ['q1','q2','q3'].forEach(pos=>{
-      const id=String(r[pos+'_id']);
-      const ok=r[pos+'_correct'];
-      if(!r[pos+'_id'])return;
-      if(r.quiz_date>=weekStart)seenThisWeek.add(id);
-      if(!stats[id])stats[id]={attempts:0,weightedErrors:0,recentResults:[],lastDaysAgo:daysAgo};
-      stats[id].attempts++;
-      stats[id].lastDaysAgo=Math.min(stats[id].lastDaysAgo,daysAgo);
-      if(!ok)stats[id].weightedErrors+=decay;
-      if(stats[id].recentResults.length<5)stats[id].recentResults.push(ok);
-    });
-  });
-
-  // Mastery: last 3 answers all correct → deprioritise
-  Object.values(stats).forEach(s=>{
-    s.errorRate=s.attempts>0?s.weightedErrors/s.attempts:0;
-    s.mastered=s.recentResults.length>=3&&s.recentResults.slice(0,3).every(v=>v===true);
-  });
-
-  // ── OPL-LEVEL BOOST ───────────────────────────────────────────────────────
-  // If a whole OPL has a high error rate, all its questions get a bonus
-  const oplAgg={};
+  // Un OPL globalement mal maîtrisé tire toutes ses questions vers le haut
+  const agg={};
   allQ.forEach(q=>{
     const ref=q.wi_reference||'?';
-    const s=stats[String(q.id)];
-    if(!oplAgg[ref])oplAgg[ref]={w:0,a:0};
-    if(s){oplAgg[ref].w+=s.weightedErrors;oplAgg[ref].a+=s.attempts;}
+    const st=stats[String(q.id)];
+    if(!agg[ref])agg[ref]={err:0,att:0};
+    if(st){agg[ref].err+=st.errors;agg[ref].att+=st.attempts;}
   });
   const oplBoost={};
-  Object.entries(oplAgg).forEach(([ref,o])=>{
-    oplBoost[ref]=o.a>3?(o.w/o.a)*0.4:0;
-  });
+  Object.entries(agg).forEach(([ref,o])=>{oplBoost[ref]=o.att>3?(o.err/o.att)*0.4:0;});
 
-  // ── POOL: exclude this week's seen questions ───────────────────────────────
-  let pool=allQ.filter(q=>!seenThisWeek.has(String(q.id)));
-  if(pool.length<3)pool=allQ; // safety reset
-
-  // ── FINAL SCORING ─────────────────────────────────────────────────────────
-  const badgeDigits=parseInt((user.badge_number||'0').replace(/\D/g,'').slice(-6)||'0');
+  // Tirage déterministe : même employé, même jour → même sélection
+  const badgeDigits=parseInt(badge.replace(/\D/g,'').slice(-6)||'0');
   const datePart=today.split('-').reduce((a,v)=>a+parseInt(v),0);
   const seed=(badgeDigits*31+datePart)%9973;
 
-  const scored=pool.map((q,i)=>{
-    const s=stats[String(q.id)];
-    const errorScore = s ? s.errorRate*2.5 : 0;       // weighted error rate × 2.5
-    const novelty    = !s ? 0.40 : 0;                 // never seen → explore
-    const masteryPen = s&&s.mastered ? -1.50 : 0;     // mastered → move on
-    const oplBonus   = oplBoost[q.wi_reference||'?']||0;
-    const tie        = ((seed+i*13)%100)/1000;         // per-employee determinism
-    return{...q,_score:errorScore+novelty+masteryPen+oplBonus+tie};
-  });
+  const scored=allQ.map((q,i)=>{
+    const r=srsScore(q,stats,oplBoost,seed,i);
+    return Object.assign({},q,{_score:r.score,_srs:r.label});
+  }).sort((a,b)=>b._score-a._score);
 
-  scored.sort((a,b)=>b._score-a._score);
-
-  // ── OPL DIVERSITY: max 2 questions per OPL ────────────────────────────────
-  // Greedy selection: iterate by score, skip if OPL already has 2 slots
-  const selected=[];
-  const oplCount={};
+  // Diversité : au plus 2 questions du même OPL
+  const selected=[],oplCount={};
   for(const q of scored){
     const ref=q.wi_reference||'?';
     if((oplCount[ref]||0)>=2)continue;
-    selected.push(q);
-    oplCount[ref]=(oplCount[ref]||0)+1;
+    selected.push(q);oplCount[ref]=(oplCount[ref]||0)+1;
     if(selected.length===3)break;
   }
-  // Fallback: if diversity constraint left us short (very small pool), fill remaining slots
   if(selected.length<3){
     for(const q of scored){
-      if(!selected.find(s=>s.id===q.id)){selected.push(q);}
+      if(!selected.find(x=>x.id===q.id))selected.push(q);
       if(selected.length===3)break;
     }
   }
@@ -1913,10 +2358,10 @@ async function doLogin(){
     // Cache for future offline use
     cacheEmployee(badge, user);
     if(user.is_active===false){showToast(t('suspended'));btn.disabled=false;btn.textContent=t('loginBtn');return;}
-    if(user.is_manager){btn.disabled=false;btn.textContent=t('loginBtn');openPasswordModal();return;}
+    if(roleOf(user)!=='employee'){btn.disabled=false;btn.textContent=t('loginBtn');openPasswordModal();return;}
 
     // ── CHECK IF ALREADY DONE TODAY ───────────────────────────────────────────
-    const today=new Date().toISOString().split('T')[0];
+    const today=new Date().bkk();
     if(navigator.onLine){
       const done=await sbGet('quiz_results?badge_number=eq.'+encodeURIComponent(badge)+'&quiz_date=eq.'+today+'&select=score');
       if(done&&done.length>0){
@@ -1927,13 +2372,22 @@ async function doLogin(){
     }
 
     // ── LOAD QUESTIONS (online or cache) ──────────────────────────────────────
-    let allQ=null;
+    let pool=null;
     if(navigator.onLine){
-      allQ=await sbGet('questions?department=eq.'+encodeURIComponent(user.department)+'&is_active=eq.true&select=*');
-      if(allQ&&allQ.length) cacheQuestions(user.department, allQ);
+      pool=await sbGetAll('questions?is_active=eq.true&select=*');
+      if(pool&&pool.length) cacheQuestions('pool', pool);
     }
-    if(!allQ||!allQ.length) allQ=getCachedQuestions(user.department);
-    if(!allQ||!allQ.length){showToast(t('noQuestions'));btn.disabled=false;btn.textContent=t('loginBtn');return;}
+    if(!pool||!pool.length) pool=getCachedQuestions('pool')||getCachedQuestions(user.department);
+    if(!pool||!pool.length){showToast(t('noQuestions'));btn.disabled=false;btn.textContent=t('loginBtn');return;}
+    // Département (accepte 'WH', 'PD', 'WH,PD', 'ALL') puis ciblage par poste
+    const deptQ=pool.filter(q=>qMatchesDept(q,user.department));
+    let allQ=deptQ.filter(q=>qMatchesRole(q,user));
+    // Filet de sécurité : jamais moins de 3 questions, on complète avec le département
+    if(allQ.length<3){
+      const ids=new Set(allQ.map(q=>q.id));
+      allQ=allQ.concat(deptQ.filter(q=>!ids.has(q.id))).slice(0,Math.max(3,allQ.length));
+    }
+    if(!allQ.length){showToast(t('noQuestions'));btn.disabled=false;btn.textContent=t('loginBtn');return;}
     qs=await getAdaptiveQuestions(allQ);
     qi=0;sc=0;ans=[];
     const init=user.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -1968,17 +2422,17 @@ function renderQ(){
   // Hide explanation from previous question
   document.getElementById('q-explanation').style.display='none';
   // Thai options (fallback to English if no Thai)
-  const opts=[qOptTxt(q,'a'),qOptTxt(q,'b'),qOptTxt(q,'c'),qOptTxt(q,'d')],L=['A','B','C','D'];
-  document.getElementById('q-opts').innerHTML=opts.filter(Boolean).map((o,i)=>`<div class="opt" onclick="pick('${L[i]}',${i})" id="opt-${i}"><div class="opt-letter">${L[i]}</div>${o}</div>`).join('');
+  const opts=['A','B','C','D'].map(L=>[L,qOptTxt(q,L.toLowerCase())]).filter(([,txt])=>txt);
+  document.getElementById('q-opts').innerHTML=opts.map(([L,o])=>`<div class="opt" onclick="pick('${L}')" id="opt-${L}"><div class="opt-letter">${L}</div>${o}</div>`).join('');
   document.getElementById('next-btn').style.display='none';
 }
 
-function pick(letter,i){
+function pick(letter){
   const q=qs[qi];
   document.querySelectorAll('.opt').forEach(o=>o.onclick=null);
   let wrongEl=null;
-  ['A','B','C','D'].forEach((l,j)=>{
-    const el=document.getElementById('opt-'+j);if(!el)return;
+  ['A','B','C','D'].forEach(l=>{
+    const el=document.getElementById('opt-'+l);if(!el)return;
     if(l===q.correct_answer)el.className='opt correct';
     else if(l===letter&&l!==q.correct_answer){el.className='opt wrong';wrongEl=el;}
   });
@@ -2008,11 +2462,11 @@ document.addEventListener('keydown',function(e){
   const screen=document.querySelector('.screen.active');
   if(!screen||screen.id!=='s-quiz')return;
   const key=e.key.toUpperCase();
-  const map={A:0,B:1,C:2,D:3,'1':0,'2':1,'3':2,'4':3};
+  const map={A:'A',B:'B',C:'C',D:'D','1':'A','2':'B','3':'C','4':'D'};
   if(key in map){
-    const idx=map[key];
-    const opt=document.getElementById('opt-'+idx);
-    if(opt&&opt.onclick){const L=['A','B','C','D'];opt.onclick=null;pick(L[idx],idx);}
+    const L=map[key];
+    const opt=document.getElementById('opt-'+L);
+    if(opt&&opt.onclick){opt.onclick=null;pick(L);}
     return;
   }
   if(key==='ENTER'){
@@ -2082,27 +2536,65 @@ async function showResult(){
 // ── MANAGER LANGUAGE TOGGLE ──────────────────────────────────────────────────
 function mgrQ(q){return appLang==='th'?(q.question_th||q.question_text):q.question_text;}
 
+// ══════════════════════════════════════════════════════════════════════════════
+// RÔLES D'ACCÈS
+//   employee → fait le quiz (pas de dashboard)
+//   manager  → dashboard complet sauf réglages réservés à l'admin
+//   admin    → tout, y compris la sauvegarde de la base
+//   client   → Nestlé : Overview + Analytics + Reports, en lecture seule
+// ══════════════════════════════════════════════════════════════════════════════
+let accessRole='employee';
+const ROLE_CHIPS={admin:'Admin',manager:'Manager',client:'Nestlé'};
+
+function roleOf(u){
+  const r=String((u&&u.access_role)||'').toLowerCase();
+  if(['admin','manager','client'].includes(r))return r;
+  return (u&&u.is_manager)?'manager':'employee';   // repli sur l'ancien drapeau
+}
+
+function applyAccessRole(role){
+  accessRole=role;
+  document.body.classList.remove('role-admin','role-manager','role-client');
+  document.body.classList.add('role-'+role);
+  // Onglets interdits au client
+  const hidden=role==='client'?['questions','employees']:[];
+  ['overview','analytics','questions','employees','reports'].forEach(function(tab){
+    const off=hidden.indexOf(tab)>=0?'none':'';
+    const d=document.getElementById('dnt-'+tab);if(d)d.style.display=off;
+    const m=document.getElementById('mbn-'+tab);if(m)m.style.display=off;
+  });
+  if(hidden.indexOf(currentDashTab)>=0)showDashTab('overview');
+  // Pastille de rôle dans le bandeau
+  const chip=document.getElementById('role-chip');
+  if(chip){
+    if(role==='employee'){chip.style.display='none';}
+    else{chip.style.display='';chip.className='role-chip '+role;chip.textContent=ROLE_CHIPS[role]||role;}
+  }
+}
+
 // ── DASHBOARD STATE ───────────────────────────────────────────────────────────
 let statusFilter='all';
 
 // ── DASHBOARD LOAD ────────────────────────────────────────────────────────────
 async function loadDash(){
-  selectedDate=new Date().toISOString().split('T')[0];
+  selectedDate=new Date().bkk();
   initDatePicker();
   loadTodayStrip();
-  document.getElementById('dash-date-label').textContent=t('d_todayWord')+' — '+new Date().toLocaleDateString(appLang==='th'?'th-TH':'en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('dash-date-label').textContent=t('d_todayWord')+' — '+new Date().toLocaleDateString(appLang==='th'?'th-TH':'en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric',...BKK_TZ});
   document.getElementById('tracking-sub').textContent=t('d_todayResults');
   try{
     const today=selectedDate;
     const d7=new Date();d7.setDate(d7.getDate()-6);
-    const weekAgo=d7.toISOString().split('T')[0];
+    const weekAgo=d7.bkk();
+    const d90=new Date();d90.setDate(d90.getDate()-89);
+    const histFrom=d90.bkk();
 
     const [results,employees,allHistory,questions,weekly]=await Promise.all([
       sbGet('quiz_results?quiz_date=eq.'+selectedDate+'&select=*'),
-      sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift&order=name'),
-      sbGet('quiz_results?select=badge_number,employee_name,score,q1_id,q1_answer,q1_correct,q2_id,q2_answer,q2_correct,q3_id,q3_answer,q3_correct,quiz_date&limit=1000&order=quiz_date.desc'),
-      sbGet('questions?is_active=eq.true&select=id,question_text,question_th,wi_reference,department,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer'),
-      sbGet('quiz_results?quiz_date=gte.'+weekAgo+'&select=quiz_date,score,department,badge_number&order=quiz_date')
+      sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift,role_group&order=name'),
+      sbGetAll('quiz_results?quiz_date=gte.'+histFrom+'&select=badge_number,employee_name,score,q1_id,q1_answer,q1_correct,q2_id,q2_answer,q2_correct,q3_id,q3_answer,q3_correct,quiz_date&order=quiz_date.desc'),
+      sbGetAll('questions?is_active=eq.true&select=id,question_text,question_th,wi_reference,department,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer'),
+      sbGetAll('quiz_results?quiz_date=gte.'+weekAgo+'&select=quiz_date,score,department,badge_number&order=quiz_date')
     ]);
 
     dashResults=results;dashHistory=allHistory;dashQuestions=questions;weeklyRaw=weekly;dashEmployees=employees;
@@ -2285,10 +2777,10 @@ async function setChartRange(n){
   document.getElementById('chart-btn-30').classList.toggle('active',n===30);
   document.getElementById('chart-range-label').textContent=`Average score per day — last ${n} days`;
   const d=new Date();d.setDate(d.getDate()-(n-1));
-  const from=d.toISOString().split('T')[0];
+  const from=d.bkk();
   document.getElementById('weekly-chart').innerHTML='<div class="chart-no-data">Loading…</div>';
   try{
-    const raw=await sbGet('quiz_results?quiz_date=gte.'+from+'&select=quiz_date,score,department,badge_number&order=quiz_date');
+    const raw=await sbGetAll('quiz_results?quiz_date=gte.'+from+'&select=quiz_date,score,department,badge_number&order=quiz_date');
     renderWeeklyChart(raw,n);
   }catch(e){document.getElementById('weekly-chart').innerHTML='<div class="chart-no-data">Error loading data</div>';}
 }
@@ -2296,7 +2788,7 @@ async function setChartRange(n){
 function renderWeeklyChart(raw,numDays=7){
   // Build last N days buckets
   const days=[];
-  for(let i=numDays-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push({date:d.toISOString().split('T')[0],label:numDays<=7?d.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'}):d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'}),scores:[],count:0});}
+  for(let i=numDays-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push({date:d.bkk(),label:numDays<=7?d.toLocaleDateString('en-US',{weekday:'short',month:'numeric',day:'numeric'}):d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'}),scores:[],count:0});}
   raw.forEach(r=>{const day=days.find(d=>d.date===r.quiz_date);if(day){day.scores.push(r.score);day.count++;}});
   days.forEach(d=>{d.avg=d.scores.length?+(d.scores.reduce((a,b)=>a+b,0)/d.scores.length).toFixed(2):null;});
 
@@ -2503,7 +2995,7 @@ function renderEmployeeChart(badge){
   if(!badge){el.innerHTML='<div class="chart-no-data">Select an employee above to see their score history</div>';return;}
   const rows=dashHistory.filter(r=>r.badge_number===badge&&r.quiz_date).sort((a,b)=>a.quiz_date.localeCompare(b.quiz_date));
   const last30=new Date();last30.setDate(last30.getDate()-29);
-  const filtered=rows.filter(r=>r.quiz_date>=last30.toISOString().split('T')[0]);
+  const filtered=rows.filter(r=>r.quiz_date>=last30.bkk());
   if(!filtered.length){el.innerHTML='<div class="chart-no-data">No data for this employee yet</div>';return;}
 
   const W=560,H=140,PAD={t:14,r:10,b:40,l:36};
@@ -2724,6 +3216,7 @@ async function loadEmployeeHistory(badge){
       else if(diff<-0.2)trendHtml=`<span class="hist-trend hist-trend-down">↓ Declining</span>`;
       else trendHtml=`<span class="hist-trend hist-trend-flat">→ Stable</span>`;
     }
+    const progressHtml=empProgressHtml(history);
     // Current streak
     const streak=computeStreak(history.map(r=>r.quiz_date));
     const streakHtml=streak>=1?`<span style="color:#c05e00;font-weight:700;font-size:12px">🔥 ${streak}-day streak</span>`:'';
@@ -2745,7 +3238,7 @@ async function loadEmployeeHistory(badge){
         ${qCells}
       </tr>`;
     }).join('');
-    el.innerHTML=`
+    el.innerHTML=`${progressHtml}
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:0.75rem">
         <span style="font-size:12px;color:var(--text3)">${history.length} quiz${history.length!==1?'zes':''} · last 30 days</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${streakHtml}${trendHtml}</div>
@@ -2763,9 +3256,10 @@ async function loadEmployeeHistory(badge){
 
 // ── RESET TODAY'S QUIZ ────────────────────────────────────────────────────────
 async function resetEmployeeQuiz(){
+  if(!_roleGuard())return;
   if(!_currentDetailBadge)return;
   if(!confirm("Reset today's quiz for this employee?\nThey will be able to take it again today."))return;
-  const today=new Date().toISOString().split('T')[0];
+  const today=new Date().bkk();
   try{
     const r=await sbDelete('quiz_results?badge_number=eq.'+encodeURIComponent(_currentDetailBadge)+'&quiz_date=eq.'+today);
     if(r.ok||r.status===204){
@@ -2790,7 +3284,9 @@ function closeDetail(e){
 }
 
 // ── DASHBOARD TABS ────────────────────────────────────────────────────────────
+let currentDashTab='overview';
 function showDashTab(tab){
+  currentDashTab=tab;
   ['overview','analytics','questions','employees','reports'].forEach(t=>{
     document.getElementById('dt-'+t).classList.toggle('active',t===tab);
     document.getElementById('dnt-'+t).classList.toggle('active',t===tab);
@@ -2798,7 +3294,7 @@ function showDashTab(tab){
     if(mbn)mbn.classList.toggle('active',t===tab);
   });
   if(tab==='employees')renderEmpMgmtTable();
-  if(tab==='reports')initReportsTab();
+  if(tab==='reports'){initReportsTab();renderMatrix();}
   // Tab memory: save last active tab
   try{localStorage.setItem('mon-dash-tab',tab);}catch(e){}
 }
@@ -2812,7 +3308,7 @@ function startAutoRefresh(){
     // Only refresh if on overview tab and viewing today's date
     const activeTab=document.querySelector('.dt-content.active');
     if(!activeTab||activeTab.id!=='dt-overview')return;
-    const today=new Date().toISOString().split('T')[0];
+    const today=new Date().bkk();
     if(selectedDate!==today)return;
     silentRefreshOverview();
   },5*60*1000); // every 5 minutes
@@ -2824,10 +3320,10 @@ function stopAutoRefresh(){
 
 async function silentRefreshOverview(){
   try{
-    const today=new Date().toISOString().split('T')[0];
+    const today=new Date().bkk();
     const [results,employees]=await Promise.all([
       sbGet('quiz_results?quiz_date=eq.'+today+'&select=*'),
-      sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift&order=name')
+      sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift,role_group&order=name')
     ]);
     dashResults=results;dashEmployees=employees;
     allT=employees.map(emp=>{
@@ -2897,12 +3393,12 @@ async function generateSkillMatrix(){
   try{
     // Get date range for selected period
     const now=new Date();
-    let fromDate,toDate=now.toISOString().split('T')[0];
+    let fromDate,toDate=now.bkk();
     const monday=d=>{const dd=new Date(d);dd.setDate(dd.getDate()-((dd.getDay()+6)%7));return dd;};
-    if(_reportPeriod==='week'){fromDate=monday(now).toISOString().split('T')[0];}
-    else if(_reportPeriod==='lastweek'){const lm=monday(now);lm.setDate(lm.getDate()-7);fromDate=lm.toISOString().split('T')[0];toDate=new Date(lm.getTime()+6*86400000).toISOString().split('T')[0];}
-    else if(_reportPeriod==='month'){fromDate=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];}
-    else if(_reportPeriod==='lastmonth'){fromDate=new Date(now.getFullYear(),now.getMonth()-1,1).toISOString().split('T')[0];toDate=new Date(now.getFullYear(),now.getMonth(),0).toISOString().split('T')[0];}
+    if(_reportPeriod==='week'){fromDate=monday(now).bkk();}
+    else if(_reportPeriod==='lastweek'){const lm=monday(now);lm.setDate(lm.getDate()-7);fromDate=lm.bkk();toDate=new Date(lm.getTime()+6*86400000).bkk();}
+    else if(_reportPeriod==='month'){fromDate=new Date(now.getFullYear(),now.getMonth(),1).bkk();}
+    else if(_reportPeriod==='lastmonth'){fromDate=new Date(now.getFullYear(),now.getMonth()-1,1).bkk();toDate=new Date(now.getFullYear(),now.getMonth(),0).bkk();}
     else if(_reportPeriod==='custom'){
       fromDate=document.getElementById('report-date-from').value;
       toDate=document.getElementById('report-date-to').value;
@@ -2911,7 +3407,7 @@ async function generateSkillMatrix(){
 
     showToast('Fetching quiz data…');
     const [results,employees]=await Promise.all([
-      sbGet('quiz_results?quiz_date=gte.'+fromDate+'&quiz_date=lte.'+toDate+'&select=badge_number,score,quiz_date,q1_id,q1_correct,q2_id,q2_correct,q3_id,q3_correct&order=quiz_date.desc'),
+      sbGetAll('quiz_results?quiz_date=gte.'+fromDate+'&quiz_date=lte.'+toDate+'&select=badge_number,score,quiz_date,q1_id,q1_correct,q2_id,q2_correct,q3_id,q3_correct&order=quiz_date.desc'),
       sbGet('employees?is_manager=eq.false&is_active=eq.true&select=badge_number,name,department,position')
     ]);
 
@@ -2995,7 +3491,7 @@ async function downloadSkillMatrixCSV(data, fromDate){
 // ── TODAY COMPLETION STRIP ────────────────────────────────────────────────────
 async function loadTodayStrip(){
   try{
-    const todayStr=new Date().toISOString().split('T')[0];
+    const todayStr=new Date().bkk();
     const [results, emps]=await Promise.all([
       sbGet('quiz_results?quiz_date=eq.'+todayStr+'&select=badge_number,score'),
       sbGet('employees?is_manager=eq.false&is_active=eq.true&select=badge_number,name,department')
@@ -3034,24 +3530,24 @@ async function loadTodayStrip(){
 }
 
 // ── DATE PICKER ───────────────────────────────────────────────────────────────
-let selectedDate=new Date().toISOString().split('T')[0];
+let selectedDate=new Date().bkk();
 
 function initDatePicker(){
   const dp=document.getElementById('date-picker');
   dp.value=selectedDate;
-  dp.max=new Date().toISOString().split('T')[0];
+  dp.max=new Date().bkk();
 }
 
 async function onDateChange(){
   selectedDate=document.getElementById('date-picker').value;
   const label=new Date(selectedDate+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const isToday=selectedDate===new Date().toISOString().split('T')[0];
+  const isToday=selectedDate===new Date().bkk();
   document.getElementById('dash-date-label').textContent=(isToday?t('d_todayWord')+' — ':'')+label;
   document.getElementById('tracking-sub').textContent=t('d_resultsFor')+' '+label;
   try{
     dashResults=await sbGet('quiz_results?quiz_date=eq.'+selectedDate+'&select=*');
     // Rebuild allT with new results
-    const employees=await sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift&order=name');
+    const employees=await sbGet('employees?is_manager=eq.false&select=badge_number,name,department,position,shift,role_group&order=name');
     const datesByBadge={};
     dashHistory.forEach(r=>{if(r.quiz_date&&r.badge_number){if(!datesByBadge[r.badge_number])datesByBadge[r.badge_number]=[];datesByBadge[r.badge_number].push(r.quiz_date);}});
     const streakMap={};
@@ -3068,12 +3564,67 @@ async function onDateChange(){
 }
 
 // ── STREAK ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// PROGRESSION D'UN EMPLOYÉ — 6 dernières semaines
+// Pour chaque semaine : part de bonnes réponses et nombre de questions traitées.
+// Permet de voir si l'employé progresse d'un mois sur l'autre.
+// ══════════════════════════════════════════════════════════════════════════════
+function empProgressHtml(history){
+  const th=appLang==='th';
+  const WEEKS=6;
+  // Lundi de la semaine en cours (heure de Bangkok)
+  const now=new Date();
+  const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  const weeks=[];
+  for(let i=WEEKS-1;i>=0;i--){
+    const a=new Date(mon.getTime()-i*7*86400000);
+    const b=new Date(a.getTime()+6*86400000);
+    weeks.push({from:a.bkk(),to:b.bkk(),ok:0,tot:0,
+      label:a.toLocaleDateString(th?'th-TH':'en-GB',{day:'numeric',month:'short',...BKK_TZ})});
+  }
+  (history||[]).forEach(r=>{
+    const w=weeks.find(w=>r.quiz_date>=w.from&&r.quiz_date<=w.to);
+    if(!w)return;
+    [1,2,3].forEach(k=>{
+      if(!r['q'+k+'_id'])return;
+      w.tot++;if(r['q'+k+'_correct']===true)w.ok++;
+    });
+  });
+  const active=weeks.filter(w=>w.tot>0);
+  if(active.length<2)return '';
+  const pct=w=>w.tot?Math.round(w.ok/w.tot*100):null;
+  // Tendance : moyenne des 2 dernières semaines actives vs les 2 précédentes
+  const ps=active.map(pct);
+  const late=ps.slice(-2).reduce((a,b)=>a+b,0)/Math.min(2,ps.length);
+  const early=ps.slice(0,2).reduce((a,b)=>a+b,0)/Math.min(2,ps.length);
+  const diff=Math.round(late-early);
+  const trend=diff>=5?{t:'↑ '+(th?'ก้าวหน้า':'Improving'),c:'#008d36'}
+             :diff<=-5?{t:'↓ '+(th?'ถดถอย':'Declining'),c:'#d31a2b'}
+             :{t:'→ '+(th?'คงที่':'Stable'),c:'#8a9ab5'};
+  const bars=weeks.map(w=>{
+    const p=pct(w);
+    const col=p===null?'#e8eef5':p>=80?'#008d36':p>=50?'#f39200':'#d31a2b';
+    const h=p===null?3:Math.max(p,4);
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">'
+      +'<div style="font-size:10px;font-weight:700;color:'+(p===null?'#c0ccd8':'var(--text2)')+'">'+(p===null?'—':p+'%')+'</div>'
+      +'<div style="width:100%;max-width:34px;height:64px;display:flex;align-items:flex-end;background:#f2f6fa;border-radius:6px;overflow:hidden">'
+      +'<div style="width:100%;height:'+h+'%;background:'+col+';border-radius:6px 6px 0 0;transition:height .6s"></div></div>'
+      +'<div style="font-size:9px;color:var(--text3);white-space:nowrap">'+w.label+'</div></div>';
+  }).join('');
+  return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+    +'<span style="font-size:12px;font-weight:800;color:var(--text2)">'+(th?'ความก้าวหน้า 6 สัปดาห์':'Progress over 6 weeks')+'</span>'
+    +'<span style="font-size:11px;font-weight:700;color:'+trend.c+'">'+trend.t+(diff?' '+(diff>0?'+':'')+diff+' pts':'')+'</span></div>'
+    +'<div style="display:flex;gap:8px;align-items:flex-end">'+bars+'</div>'
+    +'<div style="font-size:10px;color:var(--text3);margin-top:8px">'+(th?'สัดส่วนคำตอบที่ถูกต้องในแต่ละสัปดาห์':'Share of correct answers per week')+'</div></div>';
+}
+
 function computeStreak(dates){
   if(!dates||!dates.length)return 0;
-  const today=new Date().toISOString().split('T')[0];
+  const today=new Date().bkk();
   const unique=[...new Set(dates)].sort().reverse(); // desc
   let streak=0;
-  const nextExpected=(d)=>{const dt=new Date(d);dt.setDate(dt.getDate()-1);return dt.toISOString().split('T')[0];};
+  const nextExpected=(d)=>{const dt=new Date(d);dt.setDate(dt.getDate()-1);return dt.bkk();};
   let expected=today;
   for(const d of unique){
     if(d===expected){streak++;expected=nextExpected(d);}
@@ -3137,9 +3688,9 @@ function errorBadgeHtml(qId,rates){
 
 async function loadQuestionBank(){
   try{
-    const pending=await sbGet('questions?is_active=eq.false&select=id,question_text,question_th,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer,wi_reference,difficulty,explanation,explanation_th,image_url&order=wi_reference');
+    const pending=await sbGetAll('questions?is_active=eq.false&select=id,question_text,question_th,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer,wi_reference,difficulty,explanation,explanation_th,image_url,department,roles,opl_version&order=wi_reference');
     // Also load active questions for editor
-    const active=await sbGet('questions?is_active=eq.true&select=id,question_text,question_th,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer,wi_reference,difficulty,explanation,explanation_th,image_url&order=wi_reference');
+    const active=await sbGetAll('questions?is_active=eq.true&select=id,question_text,question_th,option_a,option_b,option_c,option_d,option_a_th,option_b_th,option_c_th,option_d_th,correct_answer,wi_reference,difficulty,explanation,explanation_th,image_url,department,roles,opl_version&order=wi_reference');
     _qbankAllQuestions=[...pending,...active];
     const rates=computeQErrorRates();
     const badge=document.getElementById('qbank-count-badge');
@@ -3169,6 +3720,9 @@ async function loadQuestionBank(){
           <div class="qbank-header">
             <span class="opl-ref-badge">${q.wi_reference||'—'}</span>
             <span class="qbank-diff ${diff}">${diff}</span>
+            <span style="font-size:10px;font-weight:700;color:#004990;background:#e8f4fb;border:1px solid #b5d8f0;border-radius:10px;padding:2px 8px">${q.department||'WH'}</span>
+            ${q.roles?'<span style="font-size:10px;font-weight:700;color:#7a4b00;background:#fff5e6;border:1px solid #fdd49a;border-radius:10px;padding:2px 8px">'+q.roles+'</span>':''}
+            ${q.opl_version?'<span style="font-size:10px;color:var(--text3)">'+q.opl_version+'</span>':''}
             ${errorBadgeHtml(q.id,rates)}
           </div>
           <div class="qbank-q">${qMain}</div>
@@ -3213,11 +3767,29 @@ async function loadQuestionBank(){
 // ── QUESTION EDITOR ───────────────────────────────────────────────────────────
 let _qbankAllQuestions=[];
 
+function openNewQuestion(){
+  document.getElementById('eq-id').value='';
+  ['eq-wi','eq-version','eq-q-en','eq-q-th','eq-a-en','eq-a-th','eq-b-en','eq-b-th',
+   'eq-c-en','eq-c-th','eq-d-en','eq-d-th','eq-img','eq-explanation','eq-explanation-th']
+   .forEach(function(k){const el=document.getElementById(k);if(el)el.value='';});
+  document.getElementById('eq-correct').value='A';
+  document.getElementById('eq-dept').value='WH';
+  document.getElementById('eq-roles').value='';
+  document.getElementById('edit-q-error').style.display='none';
+  document.querySelector('#edit-q-modal .modal-title').textContent=t('q_newTitle');
+  document.getElementById('edit-q-modal').classList.add('active');
+  setTimeout(function(){const el=document.getElementById('eq-q-th');if(el)el.focus();},150);
+}
+
 function openEditQuestion(id){
   const q=_qbankAllQuestions.find(x=>x.id===id);
   if(!q)return;
   document.getElementById('eq-id').value=id;
   document.getElementById('eq-wi').value=q.wi_reference||'';
+  document.getElementById('eq-version').value=q.opl_version||'';
+  document.getElementById('eq-dept').value=q.department||'WH';
+  document.getElementById('eq-roles').value=q.roles||'';
+  document.querySelector('#edit-q-modal .modal-title').textContent=t('p2_editQ');
   document.getElementById('eq-q-en').value=q.question_text||'';
   document.getElementById('eq-q-th').value=q.question_th||'';
   document.getElementById('eq-a-en').value=q.option_a||'';
@@ -3237,7 +3809,8 @@ function openEditQuestion(id){
 }
 
 async function saveEditQuestion(){
-  const id=parseInt(document.getElementById('eq-id').value);
+  if(!_roleGuard())return;
+  const id=document.getElementById('eq-id').value.trim();   // uuid, jamais un entier
   const wi=document.getElementById('eq-wi').value.trim();
   const qEn=document.getElementById('eq-q-en').value.trim();
   const qTh=document.getElementById('eq-q-th').value.trim();
@@ -3246,6 +3819,9 @@ async function saveEditQuestion(){
   }
   const payload={
     wi_reference:wi||null,
+    opl_version:document.getElementById('eq-version').value.trim()||null,
+    department:document.getElementById('eq-dept').value||'WH',
+    roles:document.getElementById('eq-roles').value||null,
     question_text:qEn||null,question_th:qTh||null,
     option_a:document.getElementById('eq-a-en').value.trim()||null,
     option_a_th:document.getElementById('eq-a-th').value.trim()||null,
@@ -3263,15 +3839,26 @@ async function saveEditQuestion(){
   const btn=document.querySelector('#edit-q-modal .modal-btn');
   btn.textContent='Saving…';btn.disabled=true;
   try{
-    const r=await sbPatch('questions?id=eq.'+id,payload);
-    if(r.ok){
-      showToast('Question updated ✓');
+    // Contrôles identiques à l'import : 2 options minimum, sans trou, réponse valide
+    const has={A:!!(payload.option_a||payload.option_a_th),B:!!(payload.option_b||payload.option_b_th),
+               C:!!(payload.option_c||payload.option_c_th),D:!!(payload.option_d||payload.option_d_th)};
+    const letters=['A','B','C','D'];
+    const filled=letters.filter(function(L){return has[L];});
+    const err=document.getElementById('edit-q-error');
+    if(filled.length<2){err.textContent=t('q_errOptions');err.style.display='block';btn.textContent=t('q_saveBtn');btn.disabled=false;return;}
+    if(!letters.slice(0,filled.length).every(function(L){return has[L];})){err.textContent=t('q_errGap');err.style.display='block';btn.textContent=t('q_saveBtn');btn.disabled=false;return;}
+    if(!has[payload.correct_answer]){err.textContent=t('q_errCorrect');err.style.display='block';btn.textContent=t('q_saveBtn');btn.disabled=false;return;}
+    const r=id
+      ? await sbPatch('questions?id=eq.'+encodeURIComponent(id),payload)
+      : await sbPost('questions',Object.assign({is_active:false},payload));
+    if(r.ok||r.status===201){
+      showToast(id?'Question updated ✓':t('q_created'));
       document.getElementById('edit-q-modal').classList.remove('active');
       _qbankAllQuestions=[];
       loadQuestionBank();
     }else{const e=document.getElementById('edit-q-error');e.textContent='Error saving — try again';e.style.display='block';}
   }catch(e){const err=document.getElementById('edit-q-error');err.textContent='Error: '+e.message;err.style.display='block';}
-  btn.textContent='Save question';btn.disabled=false;
+  btn.textContent=t('q_saveBtn');btn.disabled=false;
 }
 
 let _qbankRemaining=null;
@@ -3295,7 +3882,7 @@ function _setQbankCount(n){
 async function exportQuestions(){
   try{
     showToast('Fetching questions…');
-    const data=await sbGet('questions?select=*&order=department,wi_reference,created_at');
+    const data=await sbGetAll('questions?select=*&order=department,wi_reference,created_at');
     if(!data||!data.length){showToast('No questions found');return;}
     // Build CSV
     const cols=['id','department','wi_reference','difficulty','question_text','question_th','option_a','option_b','option_c','option_d','option_a_th','option_b_th','option_c_th','option_d_th','correct_answer','is_active','created_at'];
@@ -3305,7 +3892,7 @@ async function exportQuestions(){
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url;
-    a.download='questions_'+new Date().toISOString().split('T')[0]+'.csv';
+    a.download='questions_'+new Date().bkk()+'.csv';
     a.click();
     URL.revokeObjectURL(url);
     showToast(data.length+' questions exported ✓');
@@ -3313,6 +3900,7 @@ async function exportQuestions(){
 }
 
 async function approveAllQuestions(){
+  if(!_roleGuard())return;
   const pending=_qbankAllQuestions.filter(q=>!q.is_active);
   if(!pending.length)return;
   if(!confirm(`Approve all ${pending.length} pending questions? They will enter the quiz pool immediately.`))return;
@@ -3332,6 +3920,7 @@ async function approveAllQuestions(){
 }
 
 async function approveQuestion(id){
+  if(!_roleGuard())return;
   const btn=document.querySelector(`#qbr-${id} .qbank-approve`);
   if(btn){btn.textContent='Approving…';btn.disabled=true;}
   try{
@@ -3345,6 +3934,7 @@ async function approveQuestion(id){
 }
 
 async function rejectQuestion(id){
+  if(!_roleGuard())return;
   if(!confirm('Delete this question permanently? This cannot be undone.'))return;
   const btn=document.querySelector(`#qbr-${id} .qbank-reject`);
   if(btn){btn.textContent='Deleting…';btn.disabled=true;}
@@ -3363,7 +3953,7 @@ let allEmployees=[];
 
 async function loadEmployees(){
   try{
-    allEmployees=await sbGet('employees?order=name&select=badge_number,name,department,position,shift,is_manager,is_active,mgr_password');
+    allEmployees=await sbGet('employees?order=name&select=badge_number,name,department,position,shift,is_manager,is_active,mgr_password,access_role,role_group');
     document.getElementById('emp-mgmt-count').textContent=allEmployees.filter(e=>!e.is_manager).length+' employees · '+allEmployees.filter(e=>e.is_manager).length+' manager(s)';
   }catch(e){allEmployees=[];}
 }
@@ -3422,6 +4012,7 @@ function openEmpHistoryFromMgmt(badge, name){
 }
 
 async function toggleActiveEmployee(badge, currentlyActive){
+  if(!_roleGuard())return;
   try{
     const r=await sbPatch('employees?badge_number=eq.'+encodeURIComponent(badge),{is_active:!currentlyActive});
     if(r.ok){
@@ -3438,6 +4029,7 @@ function filterEmpTable(){
 }
 
 async function addEmployee(){
+  if(!_roleGuard())return;
   const badge=document.getElementById('nf-badge').value.trim().toUpperCase();
   const name=document.getElementById('nf-name').value.trim();
   const dept=document.getElementById('nf-dept').value;
@@ -3477,6 +4069,7 @@ function openEditEmployee(badge){
 }
 
 async function saveEditEmployee(){
+  if(!_roleGuard())return;
   const badge=document.getElementById('edit-emp-badge').value;
   const name=document.getElementById('ef-name').value.trim();
   const dept=document.getElementById('ef-dept').value;
@@ -3499,6 +4092,7 @@ async function saveEditEmployee(){
 }
 
 async function deleteEmployee(badge,name){
+  if(!_roleGuard())return;
   if(!confirm(`Remove ${name} (${badge}) from the system?\nThis will not delete their quiz history.`))return;
   try{
     const r=await sbDelete('employees?badge_number=eq.'+encodeURIComponent(badge));
@@ -3539,98 +4133,305 @@ function handleImportFile(input){
   input.value='';
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// IMPORT DES QUESTIONS — lecture par nom de colonne (l'ordre n'importe pas)
+// ══════════════════════════════════════════════════════════════════════════════
+const IMP_DEPTS=['WH','PD','ALL'];
+const IMP_ROLES=['MHE','PACK','CHECK','SSCC','SAFETY','LEAD','ALL'];
+const IMP_DIFF=['basic','applied','situational'];
+let importRejects=[];
+
+// Normalise un en-tête : minuscules, sans espaces ni ponctuation
+function normHeader(h){return String(h||'').toLowerCase().replace(/[^a-z0-9฀-๿]/g,'');}
+
+// Associe un en-tête à un champ de la base. Accepte EN et TH, tolère les
+// suffixes du genre « Correct (A/B/C/D) » ou « Difficulty (basic/applied) ».
+function headerField(raw){
+  const h=normHeader(raw);
+  if(!h)return null;
+  const isTH=/[฀-๿]/.test(String(raw))||/thai/.test(h)||/th$/.test(h);
+  if(/ver/.test(h)&&/(opl|wi)/.test(h))return 'opl_version';
+  if(/^(opl|wi|ref)/.test(h))return 'wi_reference';
+  if(/^(dep|dept|แผนก)/.test(h))return 'department';
+  if(/^(role|target|ตำแหน่ง)/.test(h))return 'roles';
+  if(/^(diff|level|ระดับ)/.test(h))return 'difficulty';
+  if(/^(correct|answer|คำตอบ)/.test(h))return 'correct_answer';
+  if(/^(image|img|photo|picture|รูป)/.test(h))return 'image_url';
+  if(/^(expl|reason|คำอธิบาย)/.test(h))return isTH?'explanation_th':'explanation';
+  if(/^(quest|คำถาม)/.test(h))return isTH?'question_th':'question_text';
+  const core=h.replace(/^(option|choice|answer|ans|ตัวเลือก)/,'').replace(/(thai|th|english|eng|en)$/,'');
+  if(/^[abcd]$/.test(core))return 'option_'+core+(isTH?'_th':'');
+  return null;
+}
+
+function buildHeaderMap(headerRow){
+  const map={};
+  (headerRow||[]).forEach((h,i)=>{const f=headerField(h);if(f&&!(f in map))map[f]=i;});
+  return map;
+}
+
 async function parseImportFile(file){
   try{await ensureXLSX();}catch(err){showToast('⚠️ '+err.message);return;}
-  if(!file.name.match(/\.xlsx?$/i)){showToast('Please upload an .xlsx file');return;}
+  if(!file.name.match(/\.(xlsx?|csv)$/i)){showToast('Please upload an .xlsx file');return;}
   const reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=async function(e){
     try{
       const wb=XLSX.read(e.target.result,{type:'array'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      // Skip header row if first cell looks like a header
-      const start=raw.length>0&&typeof raw[0][0]==='string'&&raw[0][0].toLowerCase().includes('ref')?1:0;
-      importRows=raw.slice(start).filter(r=>r.some(c=>String(c).trim())).map(r=>({
-        wi_reference:String(r[0]||'').trim(),
-        department:String(r[1]||'WH').trim(),
-        question_text:String(r[2]||'').trim(),
-        question_th:String(r[3]||'').trim()||null,
-        option_a:String(r[4]||'').trim(),
-        option_b:String(r[5]||'').trim(),
-        option_c:String(r[6]||'').trim(),
-        option_d:String(r[7]||'').trim(),
-        option_a_th:String(r[8]||'').trim()||null,
-        option_b_th:String(r[9]||'').trim()||null,
-        option_c_th:String(r[10]||'').trim()||null,
-        option_d_th:String(r[11]||'').trim()||null,
-        correct_answer:String(r[12]||'').trim().toUpperCase(),
-        difficulty:String(r[13]||'basic').trim().toLowerCase()||'basic',
-        is_active:false
-      })).filter(r=>r.question_text&&r.option_a&&['A','B','C','D'].includes(r.correct_answer));
-
-      if(!importRows.length){showToast('No valid rows found. Check the file format.');return;}
+      // Cherche la feuille (et la ligne d'en-tête) qui contient une colonne Question
+      let raw=null,map=null;
+      for(const name of wb.SheetNames){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,defval:''});
+        for(let h=0;h<Math.min(5,rows.length);h++){
+          const m=buildHeaderMap(rows[h]);
+          if(m.question_th!==undefined||m.question_text!==undefined){
+            raw=rows.slice(h+1);map=m;break;
+          }
+        }
+        if(map)break;
+      }
+      if(!map){showToast(appLang==='th'?'⚠️ ไม่พบคอลัมน์ « Question » — ใช้ไฟล์ Template':'⚠️ No « Question » column found — use the Template');return;}
+      const {rows,rejects}=validateImportRows(raw,map);
+      if(!rows.length&&!rejects.length){showToast(appLang==='th'?'ไฟล์ว่าง':'Empty file');return;}
+      // Doublons déjà présents en base
+      if(rows.length&&navigator.onLine){
+        try{
+          const existing=await sbGetAll('questions?select=wi_reference,department,question_th,question_text');
+          const key=r=>[String(r.wi_reference||'').toUpperCase(),String(r.department||'').toUpperCase(),String(r.question_th||r.question_text||'').trim()].join('|');
+          const seen=new Set(existing.map(key));
+          for(let i=rows.length-1;i>=0;i--){
+            if(seen.has(key(rows[i]))){
+              rejects.push({line:rows[i]._line,reason:'dup_db',text:rows[i].question_th||rows[i].question_text});
+              rows.splice(i,1);
+            }
+          }
+        }catch(e){}
+      }
+      importRows=rows;importRejects=rejects;
       showImportPreview();
     }catch(err){showToast('Error reading file: '+err.message);}
   };
   reader.readAsArrayBuffer(file);
 }
 
+// Contrôle ligne à ligne. Renvoie les lignes valides et les rejets motivés.
+function validateImportRows(raw,map){
+  const get=(r,f)=>map[f]===undefined?'':String(r[map[f]]==null?'':r[map[f]]).trim();
+  const rows=[],rejects=[],inFile=new Set();
+  (raw||[]).forEach((r,idx)=>{
+    const line=idx+2;
+    if(!r||!r.some(c=>String(c).trim()))return;              // ligne vide
+    const qTh=get(r,'question_th'),qEn=get(r,'question_text');
+    if(!qTh&&!qEn){rejects.push({line,reason:'no_question',text:''});return;}
+    const label=qTh||qEn;
+    // Options : au moins 2, sans trou (A, B, puis C, D)
+    const oTh={},oEn={},has={};
+    ['a','b','c','d'].forEach(L=>{
+      oTh[L]=get(r,'option_'+L+'_th');oEn[L]=get(r,'option_'+L);
+      has[L]=!!(oTh[L]||oEn[L]);
+    });
+    const filled=['a','b','c','d'].filter(L=>has[L]);
+    if(filled.length<2){rejects.push({line,reason:'few_options',text:label});return;}
+    const contiguous=['a','b','c','d'].slice(0,filled.length).every(L=>has[L]);
+    if(!contiguous){rejects.push({line,reason:'option_gap',text:label});return;}
+    // Bonne réponse : une lettre A-D pointant vers une option remplie
+    const correct=get(r,'correct_answer').toUpperCase().replace(/[^ABCD]/g,'').slice(0,1);
+    if(!correct){rejects.push({line,reason:'no_correct',text:label});return;}
+    if(!has[correct.toLowerCase()]){rejects.push({line,reason:'correct_empty',text:label});return;}
+    // Département
+    let dept=get(r,'department').toUpperCase().replace(/\s/g,'')||'WH';
+    const dTok=dept.split(',').filter(Boolean);
+    const badDept=dTok.filter(d=>!IMP_DEPTS.includes(d));
+    if(badDept.length){rejects.push({line,reason:'bad_dept',text:label,extra:badDept.join(', ')});return;}
+    dept=dTok.join(',');
+    // Rôles
+    const rTok=get(r,'roles').toUpperCase().replace(/\s/g,'').split(',').filter(Boolean);
+    const badRole=rTok.filter(x=>!IMP_ROLES.includes(x));
+    if(badRole.length){rejects.push({line,reason:'bad_role',text:label,extra:badRole.join(', ')});return;}
+    const roles=(rTok.includes('ALL')||!rTok.length)?null:rTok.join(',');
+    // Doublon à l'intérieur du fichier
+    const dupKey=[get(r,'wi_reference').toUpperCase(),dept,label].join('|');
+    if(inFile.has(dupKey)){rejects.push({line,reason:'dup_file',text:label});return;}
+    inFile.add(dupKey);
+    // Difficulté (valeur inconnue → basic, sans rejeter la ligne)
+    let diff=get(r,'difficulty').toLowerCase();
+    if(!IMP_DIFF.includes(diff))diff='basic';
+    rows.push({
+      _line:line,
+      _warnTh:!qTh,
+      _warnExpl:!get(r,'explanation_th')&&!get(r,'explanation'),
+      wi_reference:get(r,'wi_reference')||null,
+      opl_version:get(r,'opl_version')||null,
+      department:dept,
+      roles,
+      difficulty:diff,
+      question_text:qEn||qTh,
+      question_th:qTh||null,
+      option_a:oEn.a||oTh.a||null,option_b:oEn.b||oTh.b||null,
+      option_c:oEn.c||oTh.c||null,option_d:oEn.d||oTh.d||null,
+      option_a_th:oTh.a||null,option_b_th:oTh.b||null,
+      option_c_th:oTh.c||null,option_d_th:oTh.d||null,
+      correct_answer:correct,
+      explanation:get(r,'explanation')||null,
+      explanation_th:get(r,'explanation_th')||null,
+      image_url:get(r,'image_url')||null,
+      is_active:false
+    });
+  });
+  return {rows,rejects};
+}
+
+const REJECT_REASONS={
+  no_question:{th:'ไม่มีคำถาม',en:'No question text'},
+  few_options:{th:'ต้องมีตัวเลือกอย่างน้อย 2 ข้อ',en:'Needs at least 2 options'},
+  option_gap:{th:'ตัวเลือกข้ามลำดับ (A, B แล้ว C, D)',en:'Gap in options (fill A, B then C, D)'},
+  no_correct:{th:'ไม่ได้ระบุคำตอบที่ถูก (A/B/C/D)',en:'Missing correct answer (A/B/C/D)'},
+  correct_empty:{th:'คำตอบที่ถูกชี้ไปที่ตัวเลือกว่าง',en:'Correct answer points to an empty option'},
+  bad_dept:{th:'แผนกไม่ถูกต้อง',en:'Unknown department'},
+  bad_role:{th:'ตำแหน่งไม่ถูกต้อง',en:'Unknown role'},
+  dup_file:{th:'ซ้ำในไฟล์',en:'Duplicate inside the file'},
+  dup_db:{th:'มีอยู่ในระบบแล้ว',en:'Already in the database'}
+};
+
 function showImportPreview(){
-  const cols=['WI Ref','Dept','Question (EN)','Question (TH)','A','B','C','D','Correct','Difficulty'];
-  const thead='<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
-  const tbody=importRows.map(r=>`<tr>
-    <td>${r.wi_reference||'—'}</td>
-    <td>${r.department}</td>
-    <td title="${r.question_text}">${r.question_text.substring(0,45)}${r.question_text.length>45?'…':''}</td>
-    <td title="${r.question_th||''}">${r.question_th?(r.question_th.substring(0,30)+(r.question_th.length>30?'…':'')):'—'}</td>
-    <td>${r.option_a.substring(0,20)}${r.option_a.length>20?'…':''}</td>
-    <td>${r.option_b.substring(0,20)}${r.option_b.length>20?'…':''}</td>
-    <td>${r.option_c.substring(0,20)}${r.option_c.length>20?'…':''}</td>
-    <td>${r.option_d.substring(0,20)}${r.option_d.length>20?'…':''}</td>
-    <td style="color:var(--green);font-weight:700">${r.correct_answer}</td>
-    <td>${r.difficulty}</td>
-  </tr>`).join('');
-  document.getElementById('import-preview').innerHTML=`<table class="import-preview-table"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
-  document.getElementById('import-count').textContent=importRows.length+' question'+(importRows.length!==1?'s':'')+' ready to import';
+  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const cut=(v,n)=>{const t=String(v||'');return esc(t.length>n?t.slice(0,n)+'…':t)||'—';};
+  const th=appLang==='th';
+  const warnTh=importRows.filter(r=>r._warnTh).length;
+  const warnEx=importRows.filter(r=>r._warnExpl).length;
+  let html='';
+  // ── Résumé ──
+  html+='<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">'
+    +'<span style="background:#edfbf3;border:1px solid #a8ddb8;color:#005020;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700">✅ '+importRows.length+' '+(th?'พร้อมนำเข้า':'ready')+'</span>'
+    +(importRejects.length?'<span style="background:#fdecea;border:1px solid #f5b5b0;color:#7a1020;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700">✕ '+importRejects.length+' '+(th?'ถูกปฏิเสธ':'rejected')+'</span>':'')
+    +(warnTh?'<span style="background:#fff5e6;border:1px solid #fdd49a;color:#8a4b00;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700">⚠ '+warnTh+' '+(th?'ไม่มีภาษาไทย':'without Thai')+'</span>':'')
+    +(warnEx?'<span style="background:#f5f7fa;border:1px solid var(--border);color:var(--text2);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700">'+warnEx+' '+(th?'ไม่มีคำอธิบาย':'without explanation')+'</span>':'')
+    +'</div>';
+  // ── Lignes rejetées ──
+  if(importRejects.length){
+    const rows=importRejects.slice().sort((a,b)=>a.line-b.line).map(function(r){
+      const reason=(REJECT_REASONS[r.reason]||{})[th?'th':'en']||r.reason;
+      return '<tr><td style="color:#7a1020;font-weight:700;white-space:nowrap">L.'+r.line+'</td>'
+        +'<td>'+cut(r.text,55)+'</td>'
+        +'<td style="color:#7a1020">'+esc(reason)+(r.extra?' ('+esc(r.extra)+')':'')+'</td></tr>';
+    }).join('');
+    html+='<div style="border:1.5px solid #f5b5b0;background:#fff8f7;border-radius:10px;padding:10px 12px;margin-bottom:12px">'
+      +'<div style="font-size:12px;font-weight:800;color:#7a1020;margin-bottom:6px">'+(th?'บรรทัดที่ไม่ได้นำเข้า':'Rows that will NOT be imported')+'</div>'
+      +'<table class="import-preview-table"><tbody>'+rows+'</tbody></table></div>';
+  }
+  // ── Lignes valides ──
+  if(importRows.length){
+    const cols=th?['OPL','แผนก','ตำแหน่ง','คำถาม (ไทย)','A','B','C','D','คำตอบ','คำอธิบาย']
+                 :['OPL','Dept','Roles','Question (TH)','A','B','C','D','Correct','Expl.'];
+    const thead='<tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>';
+    const tbody=importRows.map(function(r){
+      return '<tr'+(r._warnTh?' style="background:#fffaf2"':'')+'>'
+      +'<td style="white-space:nowrap">'+cut(r.wi_reference,12)+'</td>'
+      +'<td style="white-space:nowrap">'+esc(r.department)+'</td>'
+      +'<td style="white-space:nowrap;font-size:11px">'+(r.roles?esc(r.roles):'<span style="color:#8aa4bf">'+(th?'ทุกตำแหน่ง':'all')+'</span>')+'</td>'
+      +'<td title="'+esc(r.question_th||r.question_text)+'">'+cut(r.question_th||r.question_text,42)+'</td>'
+      +'<td>'+cut(r.option_a_th||r.option_a,16)+'</td>'
+      +'<td>'+cut(r.option_b_th||r.option_b,16)+'</td>'
+      +'<td>'+cut(r.option_c_th||r.option_c,16)+'</td>'
+      +'<td>'+cut(r.option_d_th||r.option_d,16)+'</td>'
+      +'<td style="color:var(--green);font-weight:800">'+esc(r.correct_answer)+'</td>'
+      +'<td>'+((r.explanation_th||r.explanation)?'✓':'<span style="color:#c9a227">—</span>')+'</td></tr>';
+    }).join('');
+    html+='<table class="import-preview-table"><thead>'+thead+'</thead><tbody>'+tbody+'</tbody></table>';
+  }
+  document.getElementById('import-preview').innerHTML=html;
+  const btn=document.getElementById('import-confirm-btn');
+  btn.style.display=importRows.length?'':'none';
+  document.getElementById('import-count').textContent=importRows.length
+    ? importRows.length+(th?' คำถามพร้อมนำเข้า':' question(s) ready to import')
+    : (th?'ไม่มีบรรทัดที่นำเข้าได้ — แก้ไฟล์แล้วลองใหม่':'Nothing importable — fix the file and try again');
   document.getElementById('import-preview-wrap').style.display='block';
   document.getElementById('import-zone').style.display='none';
 }
 
 function cancelImport(){
-  importRows=[];
+  importRows=[];importRejects=[];
   document.getElementById('import-preview-wrap').style.display='none';
   document.getElementById('import-zone').style.display='block';
+  document.getElementById('xlsx-input').value='';
 }
 
 async function confirmImport(){
+  if(!_roleGuard())return;
   if(!importRows.length)return;
   const btn=document.getElementById('import-confirm-btn');
   btn.textContent='Importing…';btn.disabled=true;
   let ok=0,fail=0;
-  // Insert in batches of 10
-  for(let i=0;i<importRows.length;i+=10){
-    const batch=importRows.slice(i,i+10);
+  const payload=importRows.map(function(r){const c=Object.assign({},r);delete c._line;delete c._warnTh;delete c._warnExpl;return c;});
+  for(let i=0;i<payload.length;i+=10){
+    const batch=payload.slice(i,i+10);
     try{
       const r=await sbPost('questions',batch);
       if(r.ok||r.status===201)ok+=batch.length;
       else fail+=batch.length;
     }catch(e){fail+=batch.length;}
   }
-  btn.textContent='✅ Import to Question Bank';btn.disabled=false;
+  btn.textContent=t('p2_importQBtn');btn.disabled=false;
   cancelImport();
   showToast(ok+' question'+(ok!==1?'s':'')+' imported'+(fail?' ('+fail+' failed)':'')+'  ✓');
-  if(ok>0)await loadQuestionBank();
+  if(ok>0){_qbankAllQuestions=[];await loadQuestionBank();}
 }
+
+// ── TEMPLATE D'IMPORT (thaï obligatoire, anglais optionnel) ───────────────────
+const IMPORT_COLUMNS=[
+  ['OPL Ref','OPL-001',14],
+  ['OPL Version','v01s01',12],
+  ['Department','WH,PD',12],
+  ['Roles','MHE',10],
+  ['Difficulty','basic',12],
+  ['Question TH','ระดับแบตเตอรี่ขั้นต่ำที่ต้องมีก่อนเริ่มกะคือเท่าไหร่?',40],
+  ['Option A TH','10%',18],
+  ['Option B TH','20%',18],
+  ['Option C TH','30%',18],
+  ['Option D TH','50%',18],
+  ['Correct (A/B/C/D)','C',10],
+  ['Explanation TH','แบตเตอรี่ต้องมีอย่างน้อย 30% ก่อนเริ่มกะ (ดูจากหน้าจอ BMS)',40],
+  ['Question EN','What is the minimum battery charge before starting a shift?',40],
+  ['Option A EN','10%',16],
+  ['Option B EN','20%',16],
+  ['Option C EN','30%',16],
+  ['Option D EN','50%',16],
+  ['Explanation EN','Battery must be at least 30% before starting the shift (BMS display).',40],
+  ['Image URL','',22]
+];
 
 async function downloadImportTemplate(e){
   e.preventDefault();
   try{await ensureXLSX();}catch(err){showToast('⚠️ '+err.message);return;}
-  const headers=[['WI Reference','Department','Question EN','Question TH','Option A','Option B','Option C','Option D','Option A TH','Option B TH','Option C TH','Option D TH','Correct (A/B/C/D)','Difficulty (basic/applied/situational)']];
-  const example=[['OPL-001','WH','What is the correct way to park an MHE?','วิธีการจอดอุปกรณ์ MHE ที่ถูกต้องคืออะไร?','Lower forks and apply handbrake','Leave it running','Park anywhere','Tilt forks up','ลดฟอร์กและใช้เบรกมือ','ปล่อยเครื่องทำงาน','จอดที่ไหนก็ได้','เอียงฟอร์กขึ้น','A','basic']];
   const wb=XLSX.utils.book_new();
-  const ws=XLSX.utils.aoa_to_sheet([...headers,...example]);
-  ws['!cols']=headers[0].map(()=>({wch:22}));
+  const ws=XLSX.utils.aoa_to_sheet([IMPORT_COLUMNS.map(function(c){return c[0];}),IMPORT_COLUMNS.map(function(c){return c[1];})]);
+  ws['!cols']=IMPORT_COLUMNS.map(function(c){return {wch:c[2]};});
   XLSX.utils.book_append_sheet(wb,ws,'Questions');
+  const help=[
+    ['MON NPA — OPL Quiz · How to fill this file / วิธีกรอกไฟล์นี้'],[],
+    ['Rule / กฎ','Detail / รายละเอียด'],
+    ['Column order','Free — columns are matched by NAME, not by position. / ลำดับคอลัมน์อิสระ ระบบอ่านจากชื่อหัวตาราง'],
+    ['Extra columns','Allowed (e.g. "No.", "Remark") — they are ignored. / คอลัมน์เกินจะถูกข้าม'],
+    ['Thai','REQUIRED — this is what the operators read. / จำเป็น ผู้ปฏิบัติงานอ่านภาษาไทย'],
+    ['English','Optional, for audits. If empty, Thai is used everywhere. / ไม่บังคับ ถ้าเว้นว่างจะใช้ภาษาไทย'],
+    ['Options','2 minimum (A and B). Fill in order A, B, then C, D. No gaps. / อย่างน้อย 2 ข้อ เรียง A B C D ห้ามข้าม'],
+    ['Correct','One letter A, B, C or D, pointing to a filled option. / ตัวอักษรเดียว ต้องชี้ไปที่ตัวเลือกที่กรอกแล้ว'],
+    ['Explanation TH','Strongly recommended: shown to the operator after a wrong answer. / แนะนำอย่างยิ่ง แสดงเมื่อตอบผิด'],[],
+    ['Department','WH = Warehouse · PD = Production · "WH,PD" = both · ALL = everyone'],[],
+    ['Roles — target by position','Leave empty = all positions / เว้นว่าง = ทุกตำแหน่ง'],
+    ['MHE','MHE Operator (FG, RM&PM, Push pull) / พนักงานขับรถยก'],
+    ['PACK','Manual pack, production / แพ็คด้วยมือ'],
+    ['CHECK','Checker / ผู้ตรวจสอบ'],
+    ['SSCC','SSCC Staff'],
+    ['SAFETY','Safety Specialist / เจ้าหน้าที่ความปลอดภัย'],
+    ['LEAD','Supervisors, Leaders, Managers / หัวหน้างาน'],
+    ['Several roles','Separate with a comma: "MHE,CHECK" / คั่นด้วยเครื่องหมายจุลภาค'],[],
+    ['Difficulty','basic · applied · situational (default: basic)'],
+    ['OPL Version','Version of the OPL used (e.g. v01s01) — used to flag questions to review when the OPL is revised'],[],
+    ['After import','Questions arrive as PENDING: a manager must approve them in the Question Bank. / คำถามจะรออนุมัติก่อนใช้งาน']
+  ];
+  const wsH=XLSX.utils.aoa_to_sheet(help);
+  wsH['!cols']=[{wch:30},{wch:84}];
+  XLSX.utils.book_append_sheet(wb,wsH,'Instructions');
   XLSX.writeFile(wb,'NPA_Quiz_Import_Template.xlsx');
 }
 
@@ -3688,6 +4489,7 @@ function cancelEmpImport(){
 }
 
 async function confirmEmpImport(){
+  if(!_roleGuard())return;
   if(!_empImportData.length)return;
   const btn=document.getElementById('emp-import-confirm-btn');
   btn.textContent='Importing…';btn.disabled=true;
@@ -3754,7 +4556,7 @@ function exportExcel(){
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url;a.download='NPA_Quiz_Results_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.href=url;a.download='NPA_Quiz_Results_'+new Date().bkk()+'.csv';
   a.click();URL.revokeObjectURL(url);
   showToast('Export downloaded ✓');
 }
