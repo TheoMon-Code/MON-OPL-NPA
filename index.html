@@ -2997,7 +2997,10 @@ function renderOplPanel(threshold){
       if(!r[pos+'_id'])return;
       if(!qStats[id])qStats[id]={attempts:0,errors:0,failed:[]};
       qStats[id].attempts++;
-      if(!ok&&r.badge_number)qStats[id].failed.push({badge:r.badge_number,name:r.employee_name||r.badge_number,gave:gave||'?'});
+      if(!ok){
+        qStats[id].errors++;
+        if(r.badge_number)qStats[id].failed.push({badge:r.badge_number,name:r.employee_name||r.badge_number,gave:gave||'?'});
+      }
     });
   });
 
@@ -3028,7 +3031,7 @@ function renderOplPanel(threshold){
     const failedNames=Object.values(o.uniqueFailed);
     const preview=failedNames.slice(0,3).map(n=>n.split(' ')[0]).join(', ')+(failedNames.length>3?` +${failedNames.length-3} more`:'');
     const failedLine=failedNames.length
-      ?`<div class="opl-failed-names">${failedNames.length} failed: ${preview}</div>`
+      ?`<div class="opl-failed-names">${o.totalErrors} errors · ${failedNames.length} people: ${preview}</div>`
       :`<div class="opl-failed-names" style="color:var(--green)">✓ No failures yet</div>`;
     return`<div class="opl-row" onclick="showOplDetail('${o.ref}')">
       <div class="opl-row-left">
@@ -3562,7 +3565,7 @@ async function generateSkillMatrix(){
     };
 
     // Build Excel using simple CSV (can be opened in Excel)
-    downloadSkillMatrixCSV(data, fromDate);
+    downloadSkillMatrixCSV(data, fromDate, toDate);
     showToast('✅ Skill Matrix downloaded!');
 
   }catch(err){
@@ -3572,8 +3575,9 @@ async function generateSkillMatrix(){
   }
 }
 
-async function downloadSkillMatrixCSV(data, fromDate){
+async function downloadSkillMatrixCSV(data, fromDate, toDate){
   const {analysis, emp_stats, opl_errors, period_label}=data;
+  toDate=toDate||new Date().bkk();
   try{await ensureXLSX();}catch(err){showToast('⚠️ '+err.message);return;}
   const wb=XLSX.utils.book_new();
   // Sheet 1 — Summary
@@ -3599,6 +3603,54 @@ async function downloadSkillMatrixCSV(data, fromDate){
   const ws3=XLSX.utils.aoa_to_sheet(s3);
   ws3['!cols']=[{wch:20},{wch:14},{wch:14},{wch:12}];
   XLSX.utils.book_append_sheet(wb,ws3,'By OPL');
+
+  // ── Feuille 4 : LA MATRICE (employes x OPL), en codes numeriques 0..5 ──
+  // Excel : selectionner la zone -> Mise en forme conditionnelle -> Nuances de couleurs
+  // pour obtenir la meme lecture visuelle que dans l'application.
+  try{
+    const cells=buildMatrix(mxFilter(dashHistory,fromDate,toDate),dashQuestions);
+    const opls=[...new Set((dashQuestions||[]).map(q=>q.wi_reference||'—'))].sort();
+    const emps=(dashEmployees||[]).slice().sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+    const head=['Badge','Name','Department','Position',...opls];
+    const grid=[
+      ['SKILL MATRIX '+fromDate+' -> '+toDate+'   (0 = not assessed, 1 = critical, 2 = to review, 3 = shaky, 4 = OK, 5 = mastered)'],
+      [],
+      head];
+    emps.forEach(e=>{
+      const byB=cells[e.badge_number]||{};
+      grid.push([e.badge_number,e.name,e.department,e.position||'',
+        ...opls.map(ref=>MX_ORDER[mxLevel(byB[ref])])]);
+    });
+    grid.push([]);
+    grid.push(['Legend']);
+    Object.keys(MX_LEVELS).forEach(k=>grid.push([MX_ORDER[k],MX_LEVELS[k].en]));
+    const ws4=XLSX.utils.aoa_to_sheet(grid);
+    ws4['!cols']=[{wch:12},{wch:26},{wch:12},{wch:26},...opls.map(()=>({wch:9}))];
+    ws4['!freeze']={xSplit:4,ySplit:3};
+    XLSX.utils.book_append_sheet(wb,ws4,'Matrix');
+  }catch(e){console.error('matrix sheet',e);}
+
+  // ── Feuille 5 : evolution jour par jour, pour tracer une courbe dans Excel ──
+  try{
+    const byDay={};
+    (dashHistory||[]).filter(r=>r.quiz_date>=fromDate&&r.quiz_date<=toDate).forEach(r=>{
+      const d=byDay[r.quiz_date]=byDay[r.quiz_date]||{n:0,sum:0,perfect:0,weak:0};
+      d.n++; d.sum+=(r.score||0);
+      if(r.score===3)d.perfect++;
+      if((r.score||0)<2)d.weak++;
+    });
+    const rows=[['Date','Quizzes','Average score','Perfect (3/3)','Below 2/3','Pass rate %']];
+    Object.keys(byDay).sort().forEach(d=>{
+      const v=byDay[d];
+      rows.push([d,v.n,Math.round(v.sum/v.n*100)/100,v.perfect,v.weak,Math.round(v.perfect/v.n*100)]);
+    });
+    rows.push([]);
+    rows.push(['Select columns A and C, then Insert > Line chart, to plot the trend.']);
+    const ws5=XLSX.utils.aoa_to_sheet(rows);
+    ws5['!cols']=[{wch:14},{wch:10},{wch:15},{wch:14},{wch:12},{wch:12}];
+    XLSX.utils.book_append_sheet(wb,ws5,'Daily trend');
+  }catch(e){console.error('trend sheet',e);}
+
   XLSX.writeFile(wb,'skill-matrix_'+fromDate+'.xlsx');
 }
 
