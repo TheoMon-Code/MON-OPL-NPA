@@ -1,5 +1,5 @@
 // MON NPA Quiz — Service Worker v26 (theme auto + tablette)
-const CACHE = 'mon-npa-v29';
+const CACHE = 'mon-npa-v30';
 
 self.addEventListener('install', e => {
   e.waitUntil(self.skipWaiting());

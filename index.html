@@ -649,6 +649,10 @@
     font-weight:700;color:var(--text2);margin:0 auto;letter-spacing:.3px}
   .mx-cell{width:26px;height:26px;border-radius:4px;display:block;margin:1px auto;cursor:pointer;border:1px solid rgba(0,0,0,.05)}
   .mx-cell:hover{outline:2px solid var(--blue1);outline-offset:1px}
+  .mx-cell{position:relative;line-height:26px;text-align:center;font-size:11px}
+  .mx-up,.mx-down{position:absolute;top:-1px;right:1px;font-size:9px;line-height:1;text-shadow:0 0 2px rgba(255,255,255,.9)}
+  .mx-up{color:#0a4}
+  .mx-down{color:#900}
   .mx-row:hover .mx-name{background:#f0f7ff}
   body.dark .mx-corner,body.dark .mx-name,body.dark .mx-head{background:var(--surface)}
   body.dark .mx-row:hover .mx-name{background:#1e2438}
@@ -1271,6 +1275,17 @@
               <option value="" data-i18n="d_allDepts">All Departments</option>
               <option value="WH">WH</option><option value="PD">PD</option>
             </select>
+            <select class="filter-select" id="mx-period" onchange="renderMatrix()" style="min-width:130px">
+              <option value="7" data-i18n="mx_p7">Last 7 days</option>
+              <option value="30" selected data-i18n="mx_p30">Last 30 days</option>
+              <option value="month" data-i18n="mx_pmonth">This month</option>
+              <option value="lastmonth" data-i18n="mx_plast">Last month</option>
+              <option value="90" data-i18n="mx_p90">Last 90 days</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);white-space:nowrap;cursor:pointer">
+              <input type="checkbox" id="mx-compare" onchange="renderMatrix()" style="width:15px;height:15px;cursor:pointer">
+              <span data-i18n="mx_compare">Compare with previous period</span>
+            </label>
             <select class="filter-select" id="mx-role" onchange="renderMatrix()" style="min-width:130px">
               <option value="" data-i18n="q_allRoles">All positions</option>
               <option value="MHE">MHE Operator</option><option value="PACK">Manual pack</option>
@@ -1280,7 +1295,8 @@
             <button onclick="exportMatrixCsv()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">⬇️ CSV</button>
           </div>
         </div>
-        <div id="mx-legend" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px"></div>
+        <div id="mx-legend" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px"></div>
+        <div id="mx-summary" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12px;margin-bottom:10px"></div>
         <div id="mx-wrap" style="overflow:auto;max-height:70vh;border:1px solid var(--border);border-radius:10px">
           <div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">Loading…</div>
         </div>
@@ -1735,8 +1751,14 @@ p2_importQBtn:{th:'✅ นำเข้าสู่คลังคำถาม',e
 themeAuto:{th:'ธีมอัตโนมัติ · สว่าง 06-18 น.',en:'Auto theme · light 6am-6pm'},
 themeLight:{th:'ธีมสว่างตลอดเวลา',en:'Always light'},
 themeDark:{th:'ธีมมืดตลอดเวลา',en:'Always dark'},
+mx_p7:{th:'7 วันล่าสุด',en:'Last 7 days'},
+mx_p30:{th:'30 วันล่าสุด',en:'Last 30 days'},
+mx_pmonth:{th:'เดือนนี้',en:'This month'},
+mx_plast:{th:'เดือนที่แล้ว',en:'Last month'},
+mx_p90:{th:'90 วันล่าสุด',en:'Last 90 days'},
+mx_compare:{th:'เทียบกับช่วงก่อนหน้า',en:'Compare with previous period'},
 mx_title:{th:'🧩 เมทริกซ์ทักษะ — พนักงาน × OPL',en:'🧩 Skill matrix — Employees × OPL'},
-mx_sub:{th:'สีแสดงระดับความเชี่ยวชาญ คำนวณจากทุกคำตอบใน 90 วันล่าสุด · คลิกช่องเพื่อดูรายละเอียดรายข้อ',en:'Colour = mastery level, computed from every answer over the last 90 days. Click a cell for the question-by-question detail.'},
+mx_sub:{th:'สีแสดงระดับความเชี่ยวชาญในช่วงที่เลือก · ติ๊ก "เทียบกับช่วงก่อนหน้า" เพื่อดูความก้าวหน้า · คลิกช่องเพื่อดูรายละเอียดรายข้อ',en:'Colour = mastery level over the selected period. Tick "Compare" to see progress. Click a cell for the question-by-question detail.'},
 mx_exportSub:{th:'ส่งออกรายงาน Excel ระดับของพนักงานแต่ละคนตาม OPL จุดอ่อน และความก้าวหน้าในช่วงเวลาที่เลือก',en:"Export an Excel report with each employee's level per OPL topic, weak areas and progress over the period."},
 roleReadOnly:{th:'บัญชีนี้ดูข้อมูลได้เท่านั้น',en:'This account is read-only'},
 q_addBtn:{th:'+ เพิ่มคำถาม',en:'+ Add question'},
@@ -1913,43 +1935,124 @@ function buildMatrix(history,questions){
   return cells;
 }
 
-let _mxCells=null,_mxRows=null,_mxOpls=null;
+let _mxCells=null,_mxRows=null,_mxOpls=null,_mxPrev=null;
+
+// Niveaux ordonnés, pour pouvoir dire si un employé a progressé ou reculé
+const MX_ORDER={none:0,critical:1,review:2,fragile:3,ok:4,mastered:5};
+
+// Bornes de la période choisie, et de la période précédente de même longueur
+function mxRange(){
+  const v=(document.getElementById('mx-period')||{}).value||'30';
+  const today=new Date();
+  const iso=d=>d.bkk();
+  let from,to,pFrom,pTo;
+  if(v==='month'){
+    const first=new Date(today.getFullYear(),today.getMonth(),1);
+    const pf=new Date(today.getFullYear(),today.getMonth()-1,1);
+    const pt=new Date(today.getFullYear(),today.getMonth(),0);
+    from=iso(first); to=iso(today); pFrom=iso(pf); pTo=iso(pt);
+  }else if(v==='lastmonth'){
+    const f=new Date(today.getFullYear(),today.getMonth()-1,1);
+    const t=new Date(today.getFullYear(),today.getMonth(),0);
+    const pf=new Date(today.getFullYear(),today.getMonth()-2,1);
+    const pt=new Date(today.getFullYear(),today.getMonth()-1,0);
+    from=iso(f); to=iso(t); pFrom=iso(pf); pTo=iso(pt);
+  }else{
+    const days=parseInt(v,10)||30;
+    const f=new Date(today.getTime()-(days-1)*86400000);
+    const pt=new Date(f.getTime()-86400000);
+    const pf=new Date(pt.getTime()-(days-1)*86400000);
+    from=iso(f); to=iso(today); pFrom=iso(pf); pTo=iso(pt);
+  }
+  return {from,to,pFrom,pTo,label:v};
+}
+
+function mxFilter(hist,from,to){
+  return (hist||[]).filter(r=>r.quiz_date>=from&&r.quiz_date<=to);
+}
 
 function renderMatrix(){
   const wrap=document.getElementById('mx-wrap');
   if(!wrap)return;
   const th=appLang==='th';
   if(!dashHistory||!dashEmployees||!dashQuestions){wrap.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">Loading…</div>';return;}
+  const rg=mxRange();
+  const compare=!!(document.getElementById('mx-compare')||{}).checked;
+
   // Légende
   const lg=document.getElementById('mx-legend');
-  if(lg)lg.innerHTML=Object.keys(MX_LEVELS).map(k=>'<span class="mx-lg"><i style="background:'+MX_LEVELS[k].color+'"></i>'+(th?MX_LEVELS[k].th:MX_LEVELS[k].en)+'</span>').join('');
+  if(lg){
+    let h=Object.keys(MX_LEVELS).map(k=>'<span class="mx-lg"><i style="background:'+MX_LEVELS[k].color+'"></i>'+(th?MX_LEVELS[k].th:MX_LEVELS[k].en)+'</span>').join('');
+    if(compare)h+='<span class="mx-lg" style="margin-left:8px"><b style="color:#008d36">▲</b>'+(th?'ดีขึ้น':'improved')
+                 +'</span><span class="mx-lg"><b style="color:#d31a2b">▼</b>'+(th?'แย่ลง':'declined')+'</span>';
+    lg.innerHTML=h;
+  }
 
-  _mxCells=buildMatrix(dashHistory,dashQuestions);
-  // OPL présents dans les questions actives, triés
+  _mxCells=buildMatrix(mxFilter(dashHistory,rg.from,rg.to),dashQuestions);
+  _mxPrev =compare?buildMatrix(mxFilter(dashHistory,rg.pFrom,rg.pTo),dashQuestions):null;
+
   _mxOpls=[...new Set(dashQuestions.map(q=>q.wi_reference||'—'))].sort();
-  // Employés filtrés
   const fd=document.getElementById('mx-dept').value,fr=document.getElementById('mx-role').value;
   _mxRows=dashEmployees.filter(e=>(!fd||e.department===fd)&&(!fr||empRole(e)===fr))
                        .sort((a,b)=>(a.name||'').localeCompare(b.name||''));
   if(!_mxRows.length||!_mxOpls.length){
-    wrap.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">'+(th?'ไม่มีข้อมูล':'No data for this filter')+'</div>';return;
+    wrap.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3);font-size:13px">'+(th?'ไม่มีข้อมูล':'No data for this filter')+'</div>';
+    const sm=document.getElementById('mx-summary'); if(sm)sm.innerHTML='';
+    return;
   }
   const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  let up=0,down=0,same=0,assessed=0;
+
   let html='<table class="mx-table"><thead><tr><th class="mx-corner">'+(th?'พนักงาน':'Employee')+'</th>';
   _mxOpls.forEach(ref=>{html+='<th class="mx-head"><span>'+esc(ref)+'</span></th>';});
   html+='</tr></thead><tbody>';
   _mxRows.forEach(e=>{
     const byB=_mxCells[e.badge_number]||{};
+    const byP=_mxPrev?(_mxPrev[e.badge_number]||{}):null;
     html+='<tr class="mx-row"><td class="mx-name" title="'+esc(e.name)+' · '+esc(e.position||'')+'">'+esc(e.name)+'</td>';
     _mxOpls.forEach(ref=>{
       const c=byB[ref],lv=mxLevel(c);
-      const tip=c?esc(e.name)+' · '+esc(ref)+' — '+(c.attempts-c.errors)+'/'+c.attempts+' '+(th?'ถูก':'correct'):esc(e.name)+' · '+esc(ref)+' — '+(th?'ยังไม่ประเมิน':'not assessed');
-      html+='<td><span class="mx-cell" style="background:'+MX_LEVELS[lv].color+'" title="'+tip+'" onclick="openMatrixCell(\''+esc(e.badge_number)+'\',\''+esc(ref)+'\')"></span></td>';
+      if(lv!=='none')assessed++;
+      let mark='',markTip='';
+      if(compare&&byP){
+        const p=byP[ref],pl=mxLevel(p);
+        if(lv!=='none'&&pl!=='none'){
+          const d=MX_ORDER[lv]-MX_ORDER[pl];
+          if(d>0){mark='<b class="mx-up">▲</b>';up++;markTip=' · '+(th?'ดีขึ้นจาก':'up from')+' '+(th?MX_LEVELS[pl].th:MX_LEVELS[pl].en);}
+          else if(d<0){mark='<b class="mx-down">▼</b>';down++;markTip=' · '+(th?'แย่ลงจาก':'down from')+' '+(th?MX_LEVELS[pl].th:MX_LEVELS[pl].en);}
+          else same++;
+        }
+      }
+      const tip=c?esc(e.name)+' · '+esc(ref)+' — '+(c.attempts-c.errors)+'/'+c.attempts+' '+(th?'ถูก':'correct')+markTip
+                 :esc(e.name)+' · '+esc(ref)+' — '+(th?'ยังไม่ประเมิน':'not assessed');
+      html+='<td><span class="mx-cell" style="background:'+MX_LEVELS[lv].color+'" title="'+tip
+           +'" onclick="openMatrixCell(\''+esc(e.badge_number)+'\',\''+esc(ref)+'\')">'+mark+'</span></td>';
     });
     html+='</tr>';
   });
   html+='</tbody></table>';
   wrap.innerHTML=html;
+
+  // Bandeau de synthèse au-dessus du tableau
+  const sm=document.getElementById('mx-summary');
+  if(sm){
+    const per=th?'ช่วง':'Period';
+    let txt='<span style="font-weight:700;color:var(--text2)">'+per+' : '+rg.from+' → '+rg.to+'</span>'
+           +'<span style="color:var(--text3)"> · '+assessed+' '+(th?'ช่องที่ประเมินแล้ว':'assessed cells')+'</span>';
+    if(compare){
+      // l'historique chargé couvre 90 jours : au-delà, il n'y a rien à comparer
+      const oldest=(dashHistory||[]).reduce((m,r)=>(!m||r.quiz_date<m)?r.quiz_date:m,null);
+      if(oldest&&rg.pFrom<oldest){
+        txt+='<span style="margin-left:10px;background:#fff5e6;border:1px solid #fdd49a;color:#8a4b00;border-radius:20px;padding:3px 10px;font-weight:700">⚠ '
+            +(th?'ช่วงก่อนหน้าอยู่นอกข้อมูลที่โหลด (90 วัน)':'previous period is outside the loaded history (90 days)')+'</span>';
+      }
+      txt+='<span style="color:var(--text3)"> · '+(th?'เทียบกับ':'vs')+' '+rg.pFrom+' → '+rg.pTo+'</span>'
+        +'<span style="margin-left:12px;background:#edfbf3;border:1px solid #a8ddb8;color:#005020;border-radius:20px;padding:3px 10px;font-weight:700">▲ '+up+'</span>'
+        +'<span style="margin-left:6px;background:#fdecea;border:1px solid #f5b5b0;color:#7a1020;border-radius:20px;padding:3px 10px;font-weight:700">▼ '+down+'</span>'
+        +'<span style="margin-left:6px;background:#f2f6fa;border:1px solid var(--border);color:var(--text2);border-radius:20px;padding:3px 10px;font-weight:700">= '+same+'</span>';
+    }
+    sm.innerHTML=txt;
+  }
 }
 
 function openMatrixCell(badge,ref){
@@ -1988,13 +2091,24 @@ function openMatrixCell(badge,ref){
 function exportMatrixCsv(){
   if(!_mxRows||!_mxOpls){showToast('Matrix not ready');return;}
   const esc=v=>{const t=String(v==null?'':v);return /[",\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t;};
-  const lines=[['Badge','Name','Department','Position',..._mxOpls].map(esc).join(',')];
+  const rg=mxRange();
+  const cmp=!!(document.getElementById('mx-compare')||{}).checked;
+  const lines=[['Period '+rg.from+' to '+rg.to+(cmp?'  (compared with '+rg.pFrom+' to '+rg.pTo+')':'')],
+               ['Badge','Name','Department','Position',..._mxOpls].map(esc).join(',')];
   _mxRows.forEach(e=>{
     const byB=(_mxCells||{})[e.badge_number]||{};
     const row=[e.badge_number,e.name,e.department,e.position||''];
     _mxOpls.forEach(ref=>{
       const c=byB[ref],lv=mxLevel(c);
-      row.push(lv==='none'?'':(MX_LEVELS[lv].en+' ('+(c.attempts-c.errors)+'/'+c.attempts+')'));
+      let cell=lv==='none'?'':(MX_LEVELS[lv].en+' ('+(c.attempts-c.errors)+'/'+c.attempts+')');
+      if(cmp&&_mxPrev&&lv!=='none'){
+        const p=((_mxPrev||{})[e.badge_number]||{})[ref],pl=mxLevel(p);
+        if(pl!=='none'){
+          const d=MX_ORDER[lv]-MX_ORDER[pl];
+          cell+= d>0?' [UP]':d<0?' [DOWN]':' [=]';
+        }
+      }
+      row.push(cell);
     });
     lines.push(row.map(esc).join(','));
   });
