@@ -3597,7 +3597,7 @@ async function generateSkillMatrix(){
     results.forEach(r=>[1,2,3].forEach(n=>{r['q'+n+'_ref']=(qMap[String(r['q'+n+'_id'])]||{}).ref||'—';}));
 
     showToast('Computing skill matrix…');
-    const periodLabel=document.getElementById('report-period-desc')?.textContent||fromDate+' → '+toDate;
+    const periodLabel=formatPeriod(fromDate,toDate);
 
     // Local computation (no AI) — per-employee stats + error rate per OPL
     const byBadge={};
@@ -3635,6 +3635,26 @@ async function generateSkillMatrix(){
   }finally{
     btn.disabled=false;btn.textContent='⬇️ Generate & Download Excel';
   }
+}
+
+// "2026-09-01","2026-09-16" -> "1 – 16 September 2026"
+// Dates are parsed field by field: new Date('2026-09-01') is UTC midnight and
+// would shift by a day once formatted in Bangkok time.
+function formatPeriod(from,to){
+  const mk=v=>{const p=String(v||'').split('-');
+    return (p.length===3)?new Date(+p[0],+p[1]-1,+p[2]):null;};
+  const a=mk(from),b=mk(to);
+  if(!a||!b||isNaN(a)||isNaN(b))return (from||'?')+' → '+(to||'?');
+  const L='en-GB';
+  const day=d=>d.toLocaleDateString(L,{day:'numeric'});
+  const monYear=d=>d.toLocaleDateString(L,{month:'long',year:'numeric'});
+  const full=d=>d.toLocaleDateString(L,{day:'numeric',month:'long',year:'numeric'});
+  if(a.getTime()===b.getTime())return full(a);
+  if(a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth())
+    return day(a)+' – '+day(b)+' '+monYear(a);
+  if(a.getFullYear()===b.getFullYear())
+    return day(a)+' '+a.toLocaleDateString(L,{month:'long'})+' – '+full(b);
+  return full(a)+' – '+full(b);
 }
 
 async function downloadSkillMatrixCSV(data, fromDate, toDate){
