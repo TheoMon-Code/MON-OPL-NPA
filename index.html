@@ -345,6 +345,23 @@
     .dnav-tab:not(.active):hover{color:var(--text2);background:#f8fafc}
     .dt-content{display:none}
     .dt-content.active{display:block}
+    .cov-filter-btn{padding:6px 12px;font-size:11px;font-weight:700;border:1.5px solid var(--border);border-radius:16px;background:var(--surface);color:var(--text2);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+    .cov-filter-btn:hover{border-color:#006eaf;color:#006eaf}
+    .cov-filter-btn.active{background:#006eaf;color:#fff;border-color:#006eaf}
+    .cov-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+    .cov-stat{flex:1;min-width:120px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+    .cov-stat-n{font-size:22px;font-weight:800;line-height:1.1}
+    .cov-stat-l{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+    .cov-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:10px}
+    .cov-bar-fill{height:100%;border-radius:3px;background:#008d36;transition:width .4s}
+    .cov-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--border)}
+    .cov-row:last-child{border-bottom:none}
+    .cov-ref{font-size:11px;font-weight:800;color:#004990;background:#eaf3fb;border-radius:5px;padding:2px 7px;white-space:nowrap}
+    .cov-ttl{flex:1;min-width:0;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .cov-tag{font-size:10px;font-weight:800;border-radius:10px;padding:2px 9px;white-space:nowrap}
+    .cov-ok{background:#e6f5ec;color:#00701f}
+    .cov-thin{background:#fff6e0;color:#a06b00}
+    .cov-missing{background:#fdeaec;color:#d31a2b}
     .report-period-btn{padding:7px 14px;font-size:12px;font-weight:600;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);color:var(--text2);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
     .report-period-btn:hover{border-color:#006eaf;color:#006eaf}
     .report-period-btn.active{background:#006eaf;color:#fff;border-color:#006eaf}
@@ -1139,6 +1156,21 @@
         </div>
       </div>
 
+      <!-- OPL COVERAGE -->
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-header">
+          <div><div class="panel-title" data-i18n="cov_title">🗂️ OPL coverage</div><div class="panel-sub" data-i18n="cov_sub">Which working instructions already have questions, and which ones still need writing</div></div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <button class="cov-filter-btn active" data-f="all"  onclick="renderCoverage('all')"  data-i18n="cov_all">All</button>
+            <button class="cov-filter-btn"        data-f="none" onclick="renderCoverage('none')" data-i18n="cov_missing">To write</button>
+            <button class="cov-filter-btn"        data-f="thin" onclick="renderCoverage('thin')" data-i18n="cov_thin">Only 1 question</button>
+            <button onclick="exportCoverage()" style="background:var(--surface);color:var(--text2);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">⬇️ Excel</button>
+          </div>
+        </div>
+        <div id="cov-summary" class="cov-summary"></div>
+        <div id="cov-list"><div style="color:#8a9ab5;font-size:13px">Loading…</div></div>
+      </div>
+
       <!-- QUESTION BANK -->
       <div class="panel">
         <div class="panel-header">
@@ -1723,6 +1755,23 @@ p2_mgrAccess:{th:'🔒 การเข้าถึงสำหรับหัว
 p2_mgrAccessSub:{th:'ระบบรู้จักบัตรของคุณแล้ว กรอกรหัสผ่านหัวหน้างานเพื่อเข้าแดชบอร์ด',en:'Badge recognized. Enter the manager password to access the dashboard.'},
 p2_password:{th:'รหัสผ่าน',en:'Password'},
 p2_wrongPwd:{th:'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่',en:'Incorrect password. Please try again.'},
+p2_noPwdSet:{th:'บัญชีนี้ยังไม่ได้ตั้งรหัสผ่าน กรุณาติดต่อผู้ดูแลระบบ',en:'No password set for this account yet. Ask the administrator.'},
+cov_title:{th:'ความครอบคลุม OPL',en:'OPL coverage'},
+cov_sub:{th:'OPL ใดมีคำถามแล้ว และ OPL ใดที่ยังต้องเขียน',en:'Which working instructions already have questions, and which ones still need writing'},
+cov_all:{th:'ทั้งหมด',en:'All'},
+cov_missing:{th:'ต้องเขียน',en:'To write'},
+cov_thin:{th:'มีแค่ 1 ข้อ',en:'Only 1 question'},
+cov_statTotal:{th:'OPL ทั้งหมด',en:'OPL in catalog'},
+cov_statCovered:{th:'มีคำถามแล้ว',en:'Covered'},
+cov_statThin:{th:'มีแค่ 1 ข้อ',en:'Only 1 question'},
+cov_statMissing:{th:'ยังไม่มี',en:'No question yet'},
+cov_statPct:{th:'ความครอบคลุม',en:'Coverage'},
+cov_question:{th:'ข้อ',en:'question'},
+cov_questions:{th:'ข้อ',en:'questions'},
+cov_tagMissing:{th:'ต้องเขียน',en:'TO WRITE'},
+cov_orphan:{th:'(ไม่อยู่ในแคตตาล็อก)',en:'(not in catalog)'},
+cov_none:{th:'ไม่มี OPL ในกลุ่มนี้',en:'Nothing in this category'},
+cov_nothing:{th:'ยังไม่มีข้อมูล',en:'No data to export yet'},
 p2_accessDash:{th:'เข้าแดชบอร์ด',en:'Access dashboard'},
 p2_cancel:{th:'ยกเลิก',en:'Cancel'},
 p2_todayQuiz:{th:'แบบทดสอบวันนี้',en:"Today's Quiz"},
@@ -1804,7 +1853,8 @@ function applyI18n(){
 }
 function toggleAppLang(){appLang=appLang==='th'?'en':'th';localStorage.setItem('mon-lang',appLang);applyI18n();if(document.getElementById('s-dash').classList.contains('active')){try{applyFilters();}catch(e){}try{loadTodayStrip();}catch(e){}}const _ov=document.getElementById('detail-overlay');if(_currentDetailBadge&&_ov&&_ov.classList.contains('active'))showEmployeeDetail(_currentDetailBadge);}
 
-const MGR_PASSWORD='MON2026'; // ← change this password here
+// Passwords live in employees.mgr_password, one per account (see SET_LOGINS.sql).
+// There is deliberately no shared fallback here: this file is public.
 
 let user=null,qs=[],qi=0,sc=0,ans=[],allT=[],dashResults=[],dashHistory=[],dashQuestions=[],weeklyRaw=[],dashEmployees=[];
 let chartRange=7;
@@ -2298,7 +2348,13 @@ function closePasswordModal(){
 }
 async function checkPassword(){
   const pwd=document.getElementById('pwd-input').value;
-  const expected=(user&&user.mgr_password)?user.mgr_password:MGR_PASSWORD;
+  const expected=(user&&user.mgr_password)?String(user.mgr_password):'';
+  if(!expected){                       // account has no password set yet
+    const e=document.getElementById('pwd-error');
+    e.textContent=t('p2_noPwdSet');e.style.display='block';
+    document.getElementById('pwd-input').value='';
+    return;
+  }
   if(pwd===expected){
     document.getElementById('modal-pwd').classList.remove('active');
     applyAccessRole(roleOf(user));
@@ -2306,7 +2362,8 @@ async function checkPassword(){
     _startSessionTimer(true);
     await loadDash();
   }else{
-    document.getElementById('pwd-error').style.display='block';
+    const e=document.getElementById('pwd-error');
+    e.textContent=t('p2_wrongPwd');e.style.display='block';
     document.getElementById('pwd-input').value='';
     document.getElementById('pwd-input').focus();
   }
@@ -3411,6 +3468,7 @@ function showDashTab(tab){
     if(mbn)mbn.classList.toggle('active',t===tab);
   });
   if(tab==='employees')renderEmpMgmtTable();
+  if(tab==='questions'&&!_covRows)loadCoverage();
   if(tab==='reports'){initReportsTab();renderMatrix();}
   // Tab memory: save last active tab
   try{localStorage.setItem('mon-dash-tab',tab);}catch(e){}
@@ -4299,6 +4357,118 @@ function handleImportDrop(e){
 // ── LAZY XLSX LOADER (900KB lib — only loaded when Excel import/export is used)
 let _xlsxPromise=null;
 
+// ── OPL COVERAGE ─────────────────────────────────────────────────────────────
+// Reads opl_catalog (the 37 references from NPA_Directory) and tells you which
+// ones no question covers yet. The catalog is reference data: if the table is
+// missing or empty the panel degrades to the references seen in questions.
+let _covRows=null,_covFilter='all';
+// the app has no global escape helper: every esc() in this file is local to
+// another function, so the panel carries its own.
+const covEsc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+async function loadCoverage(){
+  try{
+    let cat=[];
+    try{
+      cat=await sbGetAll('opl_catalog?select=reference,title,title_th,version,is_active,notes&order=reference');
+    }catch(e){ cat=[]; }                      // table not created yet
+
+    const qs=dashQuestions&&dashQuestions.length
+      ? dashQuestions
+      : await sbGetAll('questions?is_active=eq.true&select=id,wi_reference');
+
+    const byRef={};
+    (qs||[]).forEach(q=>{
+      const ref=(q.wi_reference||'').trim();if(!ref)return;
+      byRef[ref]=(byRef[ref]||0)+1;
+    });
+
+    if(!cat.length){                           // fall back on what questions mention
+      cat=Object.keys(byRef).sort().map(r=>({reference:r,title:'',is_active:true}));
+    }
+    const known=new Set(cat.map(c=>c.reference));
+    Object.keys(byRef).forEach(r=>{            // questions pointing at an unknown OPL
+      if(!known.has(r))cat.push({reference:r,title:'',is_active:true,orphan:true});
+    });
+
+    _covRows=cat.filter(c=>c.is_active!==false)
+      .map(c=>({ref:c.reference,title:c.title||'',titleTh:c.title_th||'',
+                version:c.version||'',orphan:!!c.orphan,n:byRef[c.reference]||0}))
+      .sort((a,b)=>a.n-b.n||a.ref.localeCompare(b.ref));
+    renderCoverage(_covFilter);
+  }catch(err){
+    const el=document.getElementById('cov-list');
+    if(el)el.innerHTML='<div style="color:#8a9ab5;font-size:13px">'+covEsc(err.message)+'</div>';
+  }
+}
+
+function renderCoverage(filter){
+  _covFilter=filter||'all';
+  document.querySelectorAll('.cov-filter-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.f===_covFilter));
+  const list=document.getElementById('cov-list'),sum=document.getElementById('cov-summary');
+  if(!list||!_covRows)return;
+
+  const total=_covRows.length;
+  const covered=_covRows.filter(r=>r.n>0).length;
+  const thin=_covRows.filter(r=>r.n===1).length;
+  const missing=total-covered;
+  const pct=total?Math.round(covered/total*100):0;
+  const th=appLang==='th';
+
+  sum.innerHTML=
+    stat(total,t('cov_statTotal'),'var(--text)')+
+    stat(covered,t('cov_statCovered'),'#008d36')+
+    stat(thin,t('cov_statThin'),'#f39200')+
+    stat(missing,t('cov_statMissing'),'#d31a2b')+
+    '<div class="cov-stat" style="flex:2"><div class="cov-stat-n" style="color:#006eaf">'+pct+'%</div>'+
+    '<div class="cov-stat-l">'+covEsc(t('cov_statPct'))+'</div>'+
+    '<div class="cov-bar"><div class="cov-bar-fill" style="width:'+pct+'%"></div></div></div>';
+
+  const rows=_covRows.filter(r=>
+    _covFilter==='none'?r.n===0:_covFilter==='thin'?r.n===1:true);
+
+  if(!rows.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">✅</div>'+
+      '<div class="empty-state-text">'+covEsc(t('cov_none'))+'</div></div>';
+    return;
+  }
+  list.innerHTML=rows.map(r=>{
+    const tag=r.n===0
+      ? '<span class="cov-tag cov-missing">'+covEsc(t('cov_tagMissing'))+'</span>'
+      : r.n===1
+      ? '<span class="cov-tag cov-thin">1 '+covEsc(t('cov_question'))+'</span>'
+      : '<span class="cov-tag cov-ok">'+r.n+' '+covEsc(t('cov_questions'))+'</span>';
+    const title=(th&&r.titleTh)?r.titleTh:r.title;
+    return '<div class="cov-row"><span class="cov-ref">'+covEsc(r.ref)+'</span>'+
+      '<span class="cov-ttl">'+covEsc(title||'—')+
+      (r.orphan?' <span style="color:#d31a2b;font-size:10px;font-weight:700">'+covEsc(t('cov_orphan'))+'</span>':'')+
+      '</span>'+tag+'</div>';
+  }).join('');
+}
+
+function stat(n,label,color){
+  return '<div class="cov-stat"><div class="cov-stat-n" style="color:'+color+'">'+n+'</div>'+
+         '<div class="cov-stat-l">'+covEsc(label)+'</div></div>';
+}
+
+function exportCoverage(){
+  if(!_covRows||!_covRows.length){showToast(t('cov_nothing'));return;}
+  const head=['OPL reference','Title','Title (TH)','Version','Questions','Status'];
+  const rows=_covRows.map(r=>[r.ref,r.title,r.titleTh,r.version,r.n,
+    r.n===0?'TO WRITE':r.n===1?'ONLY 1 QUESTION':'OK']);
+  const csv=[head].concat(rows)
+    .map(line=>line.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(','))
+    .join('\r\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='MON_OPL_coverage_'+new Date().bkk()+'.csv';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    BRANDED EXCEL EXPORT — MON corporate identity
    Self-contained writer: no CDN, works offline on the warehouse tablets.
@@ -4488,10 +4658,14 @@ Sheet.prototype.xml=function(){
   x+='<sheetViews><sheetView'+(o.gridlines===false?' showGridLines="0"':'')+
      (o.tabSelected?' tabSelected="1"':'')+' workbookViewId="0">';
   if(o.freeze){
-    var tl=colName(o.freeze.x+1)+(o.freeze.y+1);
-    x+='<pane'+(o.freeze.x?' xSplit="'+o.freeze.x+'"':'')+(o.freeze.y?' ySplit="'+o.freeze.y+'"':'')+
-       ' topLeftCell="'+tl+'" activePane="bottomRight" state="frozen"/>'+
-       '<selection pane="bottomRight" activeCell="'+tl+'" sqref="'+tl+'"/>';
+    var fx=o.freeze.x||0,fy=o.freeze.y||0;
+    var tl=colName(fx+1)+(fy+1);
+    // Excel only accepts the pane name that actually exists for the split:
+    // both splits -> bottomRight, rows only -> bottomLeft, columns only -> topRight.
+    var ap=(fx&&fy)?'bottomRight':(fy?'bottomLeft':'topRight');
+    x+='<pane'+(fx?' xSplit="'+fx+'"':'')+(fy?' ySplit="'+fy+'"':'')+
+       ' topLeftCell="'+tl+'" activePane="'+ap+'" state="frozen"/>'+
+       '<selection pane="'+ap+'" activeCell="'+tl+'" sqref="'+tl+'"/>';
   }
   x+='</sheetView></sheetViews>';
   x+='<sheetFormatPr defaultRowHeight="13.5" baseColWidth="10"/>';
