@@ -348,6 +348,7 @@
     .cov-filter-btn{padding:6px 12px;font-size:11px;font-weight:700;border:1.5px solid var(--border);border-radius:16px;background:var(--surface);color:var(--text2);cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
     .cov-filter-btn:hover{border-color:#006eaf;color:#006eaf}
     .cov-filter-btn.active{background:#006eaf;color:#fff;border-color:#006eaf}
+    .cov-warn{width:100%;background:#fff6e0;border:1px solid #f0d089;color:#8a5a00;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:600;margin-bottom:4px}
     .cov-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
     .cov-stat{flex:1;min-width:120px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
     .cov-stat-n{font-size:22px;font-weight:800;line-height:1.1}
@@ -1761,6 +1762,9 @@ cov_sub:{th:'OPL ใดมีคำถามแล้ว และ OPL ใดท
 cov_all:{th:'ทั้งหมด',en:'All'},
 cov_missing:{th:'ต้องเขียน',en:'To write'},
 cov_thin:{th:'มีแค่ 1 ข้อ',en:'Only 1 question'},
+cov_noCatalog:{th:'อ่านแคตตาล็อก OPL ไม่ได้ — แสดงเฉพาะ OPL ที่มีคำถามแล้ว กรุณารัน MISE_A_JOUR_BASE_complete.sql',en:'OPL catalog could not be read — only the OPL already used by questions are listed below, so coverage cannot be computed. Run MISE_A_JOUR_BASE_complete.sql to create opl_catalog.'},
+cov_noCatalogList:{th:'ต้องมีแคตตาล็อก OPL ก่อน',en:'The OPL catalog is needed to know which references have no question yet.'},
+cov_statSeen:{th:'OPL ที่พบในคำถาม',en:'OPL seen in questions'},
 cov_statTotal:{th:'OPL ทั้งหมด',en:'OPL in catalog'},
 cov_statCovered:{th:'มีคำถามแล้ว',en:'Covered'},
 cov_statThin:{th:'มีแค่ 1 ข้อ',en:'Only 1 question'},
@@ -4361,7 +4365,7 @@ let _xlsxPromise=null;
 // Reads opl_catalog (the 37 references from NPA_Directory) and tells you which
 // ones no question covers yet. The catalog is reference data: if the table is
 // missing or empty the panel degrades to the references seen in questions.
-let _covRows=null,_covFilter='all';
+let _covRows=null,_covFilter='all',_covCatOk=false;
 // the app has no global escape helper: every esc() in this file is local to
 // another function, so the panel carries its own.
 const covEsc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
@@ -4369,10 +4373,16 @@ const covEsc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 async function loadCoverage(){
   try{
-    let cat=[];
+    // No sbGetAll here: it appends order=id.asc for stable paging, and this
+    // table has no id column. 37 rows fit in one response anyway.
+    let cat=[];_covCatOk=false;
     try{
-      cat=await sbGetAll('opl_catalog?select=reference,title,title_th,version,is_active,notes&order=reference');
-    }catch(e){ cat=[]; }                      // table not created yet
+      const r=await sbFetch('opl_catalog?select=reference,title,title_th,version,is_active&order=reference.asc');
+      if(r.ok){
+        const j=await r.json();
+        if(Array.isArray(j)){cat=j;_covCatOk=true;}
+      }
+    }catch(e){ _covCatOk=false; }             // table missing, or blocked by RLS
 
     const qs=dashQuestions&&dashQuestions.length
       ? dashQuestions
@@ -4384,7 +4394,8 @@ async function loadCoverage(){
       byRef[ref]=(byRef[ref]||0)+1;
     });
 
-    if(!cat.length){                           // fall back on what questions mention
+    if(!cat.length){            // degraded view: only the OPL questions mention
+      _covCatOk=false;
       cat=Object.keys(byRef).sort().map(r=>({reference:r,title:'',is_active:true}));
     }
     const known=new Set(cat.map(c=>c.reference));
@@ -4417,18 +4428,32 @@ function renderCoverage(filter){
   const pct=total?Math.round(covered/total*100):0;
   const th=appLang==='th';
 
-  sum.innerHTML=
-    stat(total,t('cov_statTotal'),'var(--text)')+
-    stat(covered,t('cov_statCovered'),'#008d36')+
-    stat(thin,t('cov_statThin'),'#f39200')+
-    stat(missing,t('cov_statMissing'),'#d31a2b')+
-    '<div class="cov-stat" style="flex:2"><div class="cov-stat-n" style="color:#006eaf">'+pct+'%</div>'+
-    '<div class="cov-stat-l">'+covEsc(t('cov_statPct'))+'</div>'+
-    '<div class="cov-bar"><div class="cov-bar-fill" style="width:'+pct+'%"></div></div></div>';
+  if(!_covCatOk){
+    // Without the catalog we only know the OPL that questions already point at,
+    // so "covered" would always equal "total". Showing 100% here would be a lie.
+    sum.innerHTML=
+      '<div class="cov-warn">⚠️ '+covEsc(t('cov_noCatalog'))+'</div>'+
+      stat(total,t('cov_statSeen'),'var(--text)')+
+      stat(thin,t('cov_statThin'),'#f39200');
+  }else{
+    sum.innerHTML=
+      stat(total,t('cov_statTotal'),'var(--text)')+
+      stat(covered,t('cov_statCovered'),'#008d36')+
+      stat(thin,t('cov_statThin'),'#f39200')+
+      stat(missing,t('cov_statMissing'),'#d31a2b')+
+      '<div class="cov-stat" style="flex:2"><div class="cov-stat-n" style="color:#006eaf">'+pct+'%</div>'+
+      '<div class="cov-stat-l">'+covEsc(t('cov_statPct'))+'</div>'+
+      '<div class="cov-bar"><div class="cov-bar-fill" style="width:'+pct+'%"></div></div></div>';
+  }
 
   const rows=_covRows.filter(r=>
     _covFilter==='none'?r.n===0:_covFilter==='thin'?r.n===1:true);
 
+  if(_covFilter==='none'&&!_covCatOk){
+    list.innerHTML='<div class="empty-state"><div class="empty-state-icon">⚠️</div>'+
+      '<div class="empty-state-text">'+covEsc(t('cov_noCatalogList'))+'</div></div>';
+    return;
+  }
   if(!rows.length){
     list.innerHTML='<div class="empty-state"><div class="empty-state-icon">✅</div>'+
       '<div class="empty-state-text">'+covEsc(t('cov_none'))+'</div></div>';
